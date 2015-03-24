@@ -9,6 +9,6 @@ package edu.mclab1.nccu_story;
 
 public final class Manifest {
     public static final class permission {
-        public static final String MAPS_RECEIVE="edu.mclab1.nccu_story.permission.MAPS_RECEIVE";
+        public static final String MAPS_RECEIVE="mclab1.pages.permission.MAPS_RECEIVE";
     }
 }
