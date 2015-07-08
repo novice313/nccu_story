@@ -9,6 +9,9 @@ package edu.mclab1.nccu_story;
 
 public final class Manifest {
     public static final class permission {
+        /**  END file commander 
+ google map 
+         */
         public static final String MAPS_RECEIVE="mclab1.pages.permission.MAPS_RECEIVE";
     }
 }

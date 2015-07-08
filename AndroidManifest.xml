@@ -8,6 +8,17 @@
         android:minSdkVersion="18"
         android:targetSdkVersion="18" />
 
+    <!-- media player -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- END media player -->
+
+
+    <!-- file commander -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- END file commander -->
+
+
+    <!-- google map -->
     <permission
         android:name="mclab1.pages.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
@@ -27,19 +38,63 @@
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
+    <!-- PART END google map -->
+
+
+    <!-- camera -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="false" />
+    <!-- END camera -->
 
     <application
+        android:name="com.orm.SugarApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        
+
+        <!-- Sugar ORM -->
+        <meta-data
+            android:name="DATABASE"
+            android:value="sugar.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="2" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="mclab1.sugar" />
+        <!-- END Sugar ORM -->
+
+
+        <!-- google map -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBFpPvljCrRIrJY4noVtYlYpocmvS2Eq-Y" />
+            android:value="AIzaSyAtdXBrBZ051aQYqKquo1QGCG73OScJXIA" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <!-- END google map -->
+
+
+        <!-- facebook -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- END facebook -->
 
         <activity
             android:name=".MainActivity"
@@ -50,6 +105,49 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="mclab1.pages.UploadPage"
+            android:label="UploadPage" >
+        </activity>
+
+        <!-- file commander -->
+        <activity
+            android:name="com.example.fileexplorer.FileexplorerActivity"
+            android:label="@string/title_activity_fileexplorer"
+            android:theme="@android:style/Theme.Holo" >
+        </activity>
+        <activity
+            android:name="com.example.fileexplorer.FileChooser"
+            android:label="Choose File"
+            android:theme="@android:style/Theme.Holo" >
+            <action android:name="com.example.fileexplorer.FileChooser" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+        </activity>
+        <!-- END file commander -->
+
+
+        <!-- camera GalleryActivity -->
+        <activity
+            android:name="mclab1.pages.CameraPage"
+            android:label="@string/title_activity_CameraActivity" >
+        </activity>
+        
+        <activity
+            android:name="mclab1.service.camera.GalleryActivity"
+            android:label="@string/title_activity_GalleryActivity" >
+        </activity>
+        <activity
+            android:name="mclab1.service.camera.DetailsActivity"
+            android:label="@string/title_activity_DetailsActivity" >
+        </activity>
+        <!-- END camera GalleryActivity -->
+
+
+        <!-- music service -->
+        <service android:name="mclab1.service.music.MusicService" >
+        </service>
+        <!-- END music service -->
     </application>
 
 </manifest>

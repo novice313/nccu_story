@@ -4,5 +4,19 @@
     <string name="app_name">nccu_story</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_loginFacebook">login Facebook</string>
+    <string name="action_fastscroll">Fast scroll</string>
+    <string name="action_addpadding">Add padding</string>
+    <string name="action_showShadow">Show shadow</string>
+    <string name="action_showHeaderAndFooter">Show Header &amp; Footer</string>
+    <string name="action_updateDataset">Update dataset</string>
+    <string name="parse_app_id">wtSFcggR896xMJQUGblYuphkF6EVw4ChcLcpSowP</string>
+    <string name="parse_client_key">IwJ3gTRBe8cARlxMf3xh97eai2a7MNLP68vdL3IY</string>
+    <string name="facebook_app_id">1111296862217803</string>
+    <string name="test_String">Test</string>
+    <string name="title_activity_fileexplorer">FileexplorerActivity</string>
+    <string name="title_activity_GalleryActivity">GalleryActivity</string>
+    <string name="title_activity_CameraActivity">CameraActivity</string>
+    <string name="title_activity_DetailsActivity">DetailsActivity</string>
 
 </resources>
