@@ -8,6 +8,8 @@
     <string name="action_fastscroll">Fast scroll</string>
     <string name="action_addpadding">Add padding</string>
     <string name="action_showShadow">Show shadow</string>
+    <string name="action_camera">Open camera</string>
+    <string name="action_gallery">Open galley</string>
     <string name="action_showHeaderAndFooter">Show Header &amp; Footer</string>
     <string name="action_updateDataset">Update dataset</string>
     <string name="parse_app_id">wtSFcggR896xMJQUGblYuphkF6EVw4ChcLcpSowP</string>

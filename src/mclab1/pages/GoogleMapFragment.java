@@ -205,7 +205,7 @@ public class GoogleMapFragment extends Fragment
 					case 1://upload story
 						Log.d(tag, "list_uploadType "+list_uploadType[which]+" onclick");
 						Intent intent_uploadStory = new Intent();
-						intent_uploadStory.setClass(getActivity(), CameraPage.class);
+						intent_uploadStory.setClass(getActivity(), UploadPage.class);
 						Bundle bundle_uploadStory = new Bundle();
 						bundle_uploadStory.putDouble("longitude", point.longitude);
 						bundle_uploadStory.putDouble("latitude", point.latitude);

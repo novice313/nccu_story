@@ -682,6 +682,8 @@ containing a value of this type.
         public static final int TextView01=0x7f0b003d;
         public static final int TextView02=0x7f0b003e;
         public static final int TextViewDate=0x7f0b003f;
+        public static final int action_camera=0x7f0b0054;
+        public static final int action_gallery=0x7f0b0055;
         public static final int action_loginFacebook=0x7f0b0052;
         public static final int action_test=0x7f0b0053;
         public static final int adjust_height=0x7f0b0012;
@@ -794,6 +796,7 @@ containing a value of this type.
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
+        public static final int menu_upload_page=0x7f0a0001;
     }
     public static final class raw {
         public static final int gtm_analytics=0x7f040000;
@@ -801,12 +804,14 @@ containing a value of this type.
     public static final class string {
         public static final int accept=0x7f050013;
         public static final int action_addpadding=0x7f05003c;
+        public static final int action_camera=0x7f05003e;
         public static final int action_fastscroll=0x7f05003b;
+        public static final int action_gallery=0x7f05003f;
         public static final int action_loginFacebook=0x7f05003a;
         public static final int action_settings=0x7f050039;
-        public static final int action_showHeaderAndFooter=0x7f05003e;
+        public static final int action_showHeaderAndFooter=0x7f050040;
         public static final int action_showShadow=0x7f05003d;
-        public static final int action_updateDataset=0x7f05003f;
+        public static final int action_updateDataset=0x7f050041;
         public static final int app_name=0x7f050037;
         public static final int com_facebook_image_download_unknown_error=0x7f05000e;
         public static final int com_facebook_internet_permission_error_message=0x7f05000c;
@@ -935,18 +940,18 @@ containing a value of this type.
         public static final int create_calendar_message=0x7f050016;
         public static final int create_calendar_title=0x7f050015;
         public static final int decline=0x7f050014;
-        public static final int facebook_app_id=0x7f050042;
+        public static final int facebook_app_id=0x7f050044;
         public static final int hello_world=0x7f050038;
         public static final int messenger_send_button_text=0x7f050000;
-        public static final int parse_app_id=0x7f050040;
-        public static final int parse_client_key=0x7f050041;
+        public static final int parse_app_id=0x7f050042;
+        public static final int parse_client_key=0x7f050043;
         public static final int store_picture_message=0x7f050012;
         public static final int store_picture_title=0x7f050011;
-        public static final int test_String=0x7f050043;
-        public static final int title_activity_CameraActivity=0x7f050046;
-        public static final int title_activity_DetailsActivity=0x7f050047;
-        public static final int title_activity_GalleryActivity=0x7f050045;
-        public static final int title_activity_fileexplorer=0x7f050044;
+        public static final int test_String=0x7f050045;
+        public static final int title_activity_CameraActivity=0x7f050048;
+        public static final int title_activity_DetailsActivity=0x7f050049;
+        public static final int title_activity_GalleryActivity=0x7f050047;
+        public static final int title_activity_fileexplorer=0x7f050046;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */
