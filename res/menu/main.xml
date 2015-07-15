@@ -15,4 +15,9 @@
 		android:orderInCategory="10"
 		android:showAsAction="always"
 		android:title="@string/test_String"/>
+    <item
+        android:id="@+id/action_recorder"
+        android:icon="@drawable/ic_action_mic"
+		android:orderInCategory="30"
+		android:title="@string/action_recorder"/>
 </menu>

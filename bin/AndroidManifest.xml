@@ -50,7 +50,11 @@
         android:name="android.hardware.camera.front"
         android:required="false" />
     <!-- END camera -->
-
+    
+    <!-- record -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+	<!-- END record -->
+    
     <application
         android:name="com.orm.SugarApp"
         android:allowBackup="true"
@@ -143,6 +147,19 @@
         </activity>
         <!-- END camera GalleryActivity -->
 
+		<!-- upload -->
+		<activity
+            android:name="mclab1.service.upload.UploadMediaListActivity"
+            android:label="@string/title_activity_UploadMediaListActivity" >
+        </activity>
+		<!-- END upload -->
+		
+		<!-- detail page -->
+		<activity
+            android:name="mclab1.pages.DetailPage"
+            android:label="@string/title_activity_DetailPage" >
+        </activity>
+		<!-- END detail page -->
 
         <!-- music service -->
         <service android:name="mclab1.service.music.MusicService" >

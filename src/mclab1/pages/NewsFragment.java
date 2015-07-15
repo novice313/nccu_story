@@ -41,16 +41,7 @@ public class NewsFragment extends Fragment {
 	public static ArrayList<News> newsList;
 	public static ListView newsView;
 	NewsAdapter newsAdt;
-
-	// public static NewsFragment newInstance(int page, String title) {
-	// Log.d(tag, "newInstance.");
-	// NewsFragment newsFragment = new NewsFragment();
-	// Bundle args = new Bundle();
-	// args.putInt("someInt", page);
-	// args.putString("someTitle", title);
-	// newsFragment.setArguments(args);
-	// return newsFragment;
-	// }
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,31 +57,20 @@ public class NewsFragment extends Fragment {
 
 		// instantiate list
 		newsList = new ArrayList<News>();
-		// get songs from device
+		// get News from parse
 		getActivity().runOnUiThread(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
 				getNewsList();
 			}
 		});
-
-		// //test
-		// ArrayList<News> test_list = newsList;
-		// newsList = newsList.addAll(test_list);
-
-		//Log.d(tag, newsList.toString());
+		
 		// create and set adapter
 		newsAdt = new NewsAdapter(getActivity().getApplicationContext(),
 				newsList);
-
 		newsView.setAdapter(newsAdt);
-//		getActivity().runOnUiThread(new Runnable() {
-//			public void run() {
-//				newsAdt.notifyDataSetChanged();
-//			}
-//		});
 
 		return view;
 	}
@@ -105,7 +85,7 @@ public class NewsFragment extends Fragment {
 	public void getNewsList() {
 		ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
 				"story");
-		//parseQuery.whereEqualTo("userName", "Jeny Zheng Lan");
+		// parseQuery.whereEqualTo("userName", "Jeny Zheng Lan");
 		parseQuery.setLimit(LIMIT);
 		parseQuery.addDescendingOrder("createdAt");
 		parseQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -114,37 +94,53 @@ public class NewsFragment extends Fragment {
 			public void done(List<ParseObject> objects, ParseException e) {
 				// TODO Auto-generated method stub
 				if (!objects.isEmpty()) {
-					for(int i=0;i<objects.size();i++){
-					ParseObject parseObject = objects.get(i);
-					final String objectIdString = parseObject.getObjectId();
-					final String userNameString = parseObject
-							.getString("userName");
-					final String userUuidString = parseObject.getString("userUuid");  
-					final String titleString = parseObject.getString("title");
-					final int score = parseObject.getInt("score");
-					final String contentString = parseObject
-							.getString("content");
-					
-					final double latitude = parseObject.getDouble("latitude");
-					final double longitude = parseObject.getDouble("longitude");
+					for (int i = 0; i < objects.size(); i++) {
+						ParseObject parseObject = objects.get(i);
+						final String objectIdString = parseObject.getObjectId();
+						final String userNameString = parseObject
+								.getString("userName");
+						final String userUuidString = parseObject
+								.getString("userUuid");
+						final String titleString = parseObject
+								.getString("title");
+						final int score = parseObject.getInt("score");
+						final String contentString = parseObject
+								.getString("content");
 
-					ParseFile imageFile = (ParseFile) parseObject.get("image");
-					imageFile.getDataInBackground(new GetDataCallback() {
+						final double latitude = parseObject
+								.getDouble("latitude");
+						final double longitude = parseObject
+								.getDouble("longitude");
 
-						@Override
-						public void done(byte[] data, ParseException e) {
-							if (e == null) {
-								//Log.d(tag, "parseFile done");
-								Bitmap bmp = BitmapFactory.decodeByteArray(
-										data, 0, data.length);
-								newsList.add(new News(objectIdString, userNameString, userUuidString, 
-										titleString, score, bmp, contentString, latitude, longitude));
-								//Log.d(tag, newsList.toString());
-								newsAdt.notifyDataSetChanged();
-							}
+						ParseFile imageFile = (ParseFile) parseObject
+								.get("image");
+						if (imageFile != null) {
+							imageFile
+									.getDataInBackground(new GetDataCallback() {
+
+										@Override
+										public void done(byte[] data,
+												ParseException e) {
+											if (e == null) {
+												// Log.d(tag, "parseFile done");
+												Bitmap bmp = BitmapFactory
+														.decodeByteArray(data,
+																0, data.length);
+												newsList.add(new News(
+														objectIdString,
+														userNameString,
+														userUuidString,
+														titleString, score,
+														bmp, contentString,
+														latitude, longitude));
+												// Log.d(tag,
+												// newsList.toString());
+												newsAdt.notifyDataSetChanged();
+											}
+										}
+									});
 						}
-					});
-				}
+					}
 				}
 			}
 		});

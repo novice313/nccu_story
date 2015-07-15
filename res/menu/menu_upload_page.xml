@@ -16,5 +16,11 @@
 		android:orderInCategory="10"
 		android:showAsAction="always"
 		android:title="@string/action_gallery"/>
+    <item
+        android:id="@+id/action_media"
+        android:icon="@drawable/ic_action_slideshow"
+		android:orderInCategory="9"
+		android:showAsAction="always"
+		android:title="@string/action_media"/>
 </menu>
 

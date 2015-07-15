@@ -12,8 +12,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.xml.sax.Parser;
-
+import mclab1.service.upload.UploadMediaListActivity;
 import mclab1.sugar.Owner;
 
 import com.example.fileexplorer.FileexplorerActivity;
@@ -61,7 +60,7 @@ public class UploadPage extends Activity {
 	EditText title;
 	ImageView imageView;
 	EditText content;
-	TextView music_path_show;
+	TextView music_path;
 	Button btn_upload;
 	Spinner spinner_language;
 	boolean LogIn = false;
@@ -74,6 +73,7 @@ public class UploadPage extends Activity {
 	// photo & gallery
 	private final static int CAMERA = 66;
 	private final static int PHOTO = 99;
+	private final static int MEDIA = 33;
 	int currentUploadMode = 0;
 	Bitmap bitmap;
 
@@ -82,12 +82,13 @@ public class UploadPage extends Activity {
 	double latitude;
 
 	// temp
-	String imagePath = "";
-	String musicPath = "";
+	String musicPath = null;
 
 	// upload
 	// image
 	byte[] uploadImage = null;
+	// music
+	byte[] uploadMusic = null;
 	// initial score
 	private final int INITIAL_SCORE = 0;
 
@@ -103,7 +104,7 @@ public class UploadPage extends Activity {
 		title = (EditText) findViewById(R.id.title);
 		imageView = (ImageView) findViewById(R.id.imageView);
 		content = (EditText) findViewById(R.id.content);
-		music_path_show = (TextView) findViewById(R.id.music_path);
+		music_path = (TextView) findViewById(R.id.music_path);
 		btn_upload = (Button) findViewById(R.id.btn_upload);
 		spinner_language = (Spinner) findViewById(R.id.language_spinner);
 
@@ -129,18 +130,29 @@ public class UploadPage extends Activity {
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				Log.d(tag, "btn_upload onclick");
 				if (LogIn) {
 					runOnUiThread(new Runnable() {
 
 						@Override
 						public void run() {
-							// TODO Auto-generated method stub
-							Toast.makeText(getApplicationContext(),
-									"Start uploading", Toast.LENGTH_SHORT)
-									.show();
-							Upload();
+
+							if (uploadImage == null) {
+								Toast.makeText(getApplicationContext(),
+										"You must select one picture!",
+										Toast.LENGTH_SHORT);
+							} else {
+								Toast.makeText(getApplicationContext(),
+										"Start uploading", Toast.LENGTH_SHORT)
+										.show();
+								try {
+									Upload();
+								} catch (ParseException e) {
+									e.printStackTrace();
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+							}
 						}
 					});
 				} else {
@@ -160,61 +172,31 @@ public class UploadPage extends Activity {
 
 	}
 
-	protected void Upload() {
-		// TODO Auto-generated method stub
+	protected void Upload() throws ParseException, IOException {
+		ParseFile imageFile = null;
+		ParseFile musicFile = null;
 
-		File SDCardpath = Environment.getExternalStorageDirectory();
-		// File temp[] = SDCardpath.listFiles();
-		// for (int i = 0; i < temp.length; i++) {
-		// SDCardpath.listFiles();
-		// Log.d(tag, "File = " + temp[i].getAbsolutePath());
-		// }
-		File FilePath = new File(SDCardpath.getPath().toString() + "/"
-				+ "media/audio/notifications/");
-		// imagePath = FilePath.getAbsolutePath() + "/"
-		// + "Department_of_Diplomacy.png";
-		musicPath = FilePath.getAbsolutePath() + "/"
-				+ "facebook_ringtone_pop.m4a";
-
-		// File testFile = new File(imagePath);
-		// if (testFile.isFile()) {
-		// Log.d(tag, "imagePath = " + imagePath.toString());
-		// }
-		//
-		// try {
-		// uploadImage = readInFile(imagePath.toString());
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-
-		ParseFile imageFile = new ParseFile("uploadImage", uploadImage);
-		imageFile.saveInBackground();
-		Log.d(tag, "upload imageFile complete");
+		// image
+		if (uploadImage != null) {
+			imageFile = new ParseFile("uploadImage", uploadImage);
+			imageFile.save();
+			Log.d(tag, "upload imageFile complete");
+		} else {
+			Log.d(tag, "no image file.");
+		}
 
 		// END image
 
-		// //image
-		// // Locate the image in res > drawable-hdpi
-		// Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-		// // Convert it to byte
-		// ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		// // Compress image to lower quality scale 1 - 100
-		// bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-		// byte[] uploadImage = stream.toByteArray();
-		// // Create the ParseFile
-		// ParseFile imagefile = new ParseFile("uploadImage", uploadImage);
-		// // Upload the image into Parse Cloud
-		// try {
-		// imagefile.save();
-		// Log.d(tag, "upload imageFile complete");
-		// } catch (ParseException e1) {
-		// // TODO Auto-generated catch block
-		// e1.printStackTrace();
-		// }
-		// //END image
-
-		byte[] uploadMusic = null;
+		// music
+		if (musicPath != null) {
+			uploadMusic = readInFile(musicPath);
+			musicFile = new ParseFile("uploadMusic.mp3", uploadMusic);
+			musicFile.save();
+			Log.d(tag, "upload musicFile complete");
+		} else {
+			Log.d(tag, "no music file.");
+		}
+		// END music
 
 		ParseObject uploadObject = new ParseObject("story");
 		uploadObject.put("userName", userName.getText().toString());
@@ -222,34 +204,21 @@ public class UploadPage extends Activity {
 		uploadObject
 				.put("language", language[spinner_language
 						.getSelectedItemPosition()].toString());
-		uploadObject.put("image", imageFile);
+		if (imageFile != null) {
+			uploadObject.put("image", imageFile);
+		}
+		if (musicFile != null) {
+			uploadObject.put("music", musicFile);
+		}
 		uploadObject.put("content", content.getText().toString());
 		uploadObject.put("score", INITIAL_SCORE);
 		uploadObject.put("latitude", latitude);
 		uploadObject.put("longitude", longitude);
 
-		// music
-		if (musicPath != null) {
-			try {
-				uploadMusic = readInFile(musicPath.toString());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			ParseFile musicFile = new ParseFile("uploadMusic", uploadMusic);
-			musicFile.saveInBackground();
-			Log.d(tag, "upload musicFile complete");
-			uploadObject.put("music", musicFile);
-		} else {
-			Log.d(tag, "no music file.");
-		}
-		// END music
-
 		uploadObject.saveInBackground(new SaveCallback() {
 
 			@Override
 			public void done(ParseException e) {
-				// TODO Auto-generated method stub
 				Log.d(tag, "upload complete");
 				Toast.makeText(getApplicationContext(), "Upload complete",
 						Toast.LENGTH_SHORT).show();
@@ -310,7 +279,7 @@ public class UploadPage extends Activity {
 
 			break;
 		case R.id.action_gallery:
-			Log.d(tag, "gallery onClick");
+			Log.d(tag, "gallery icon onClick");
 
 			// 開啟相簿相片集，須由startActivityForResult且帶入requestCode進行呼叫，原因為點選相片後返回程式呼叫onActivityResult
 			Intent intent_gallery = new Intent();
@@ -319,57 +288,77 @@ public class UploadPage extends Activity {
 			startActivityForResult(intent_gallery, PHOTO);
 
 			break;
+
+		case R.id.action_media:
+			Log.d(tag, "media icon onClick");
+
+			Intent intent_media = new Intent();
+			intent_media.setClass(this, UploadMediaListActivity.class);
+			startActivityForResult(intent_media, MEDIA);
+
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// 藉由requestCode判斷是否為開啟相機或開啟相簿而呼叫的，且data不為null
-		if ((requestCode == CAMERA) && data != null) {
-			bitmap = (Bitmap) data.getExtras().get("data");
-			// Log.d(tag, "uri = "+data.getExtras().get);
-		} else if (requestCode == PHOTO && data != null) {
-			Uri uri = (Uri) data.getData();
-			Log.d(tag, "uri = " + uri.getPath());
-			ContentResolver cr = this.getContentResolver();
-			try {
-				bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if (requestCode == CAMERA || requestCode == PHOTO) {
+			// 藉由requestCode判斷是否為開啟相機或開啟相簿而呼叫的，且data不為null
+			if ((requestCode == CAMERA) && data != null) {
+				bitmap = (Bitmap) data.getExtras().get("data");
+				// Log.d(tag, "uri = "+data.getExtras().get);
+			} else if (requestCode == PHOTO && data != null) {
+				Uri uri = (Uri) data.getData();
+				Log.d(tag, "uri = " + uri.getPath());
+				ContentResolver cr = this.getContentResolver();
+				try {
+					bitmap = BitmapFactory
+							.decodeStream(cr.openInputStream(uri));
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
+			}
+			// orientation or horizontal
+			// ExifInterface exif = new ExifInterface(filename);
+
+			// calculate scale
+			float mScale = ScalePic(bitmap, mPhone.heightPixels,
+					mPhone.widthPixels);
+
+			// // 判斷照片為橫向或者為直向，並進入ScalePic判斷圖片是否要進行縮放
+			// if (bitmap.getWidth() > bitmap.getHeight()) {
+			// ScalePic(bitmap, mPhone.heightPixels);
+			// } else {
+			// ScalePic(bitmap, mPhone.widthPixels);
+			// }
+
+			Matrix mMat = new Matrix();
+			final ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			mMat.setScale(mScale, mScale);
+
+			Bitmap mScaleBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+					bitmap.getWidth(), bitmap.getHeight(), mMat, false);
+			imageView.setImageBitmap(mScaleBitmap);
+			mScaleBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+			runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					uploadImage = stream.toByteArray();
+				}
+			});
 		}
-		// orientation or horizontal
-		// ExifInterface exif = new ExifInterface(filename);
-
-		// calculate scale
-		float mScale = ScalePic(bitmap, mPhone.heightPixels, mPhone.widthPixels);
-
-		// // 判斷照片為橫向或者為直向，並進入ScalePic判斷圖片是否要進行縮放
-		// if (bitmap.getWidth() > bitmap.getHeight()) {
-		// ScalePic(bitmap, mPhone.heightPixels);
-		// } else {
-		// ScalePic(bitmap, mPhone.widthPixels);
-		// }
-
-		Matrix mMat = new Matrix();
-		final ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		mMat.setScale(mScale, mScale);
-
-		Bitmap mScaleBitmap = Bitmap.createBitmap(bitmap, 0, 0,
-				bitmap.getWidth(), bitmap.getHeight(), mMat, false);
-		imageView.setImageBitmap(mScaleBitmap);
-		mScaleBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-		runOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				uploadImage = stream.toByteArray();
-			}
-		});
+		if (requestCode == MEDIA) {
+			musicPath = data.getExtras().getString("musicPath");
+			Log.d(tag, "musicPath = " + musicPath);
+			String[] temp_filePathString = musicPath.split("/");
+			music_path
+					.setText(temp_filePathString[temp_filePathString.length - 1]);
+		}
 
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -388,7 +377,7 @@ public class UploadPage extends Activity {
 			mScale = (float) (((float) phone_height / 1.5) / (float) bitmap
 					.getHeight());
 			Log.d(tag, "mScale = " + mScale);
-		} else {//too small situation
+		} else {// too small situation
 			float mScale_width = (float) phone_width
 					/ (float) bitmap.getWidth();
 			float mScale_height = (float) (((float) phone_height / 1.5) / (float) bitmap

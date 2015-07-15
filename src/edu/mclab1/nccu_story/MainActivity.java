@@ -1,6 +1,15 @@
 package edu.mclab1.nccu_story;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import junit.framework.Test;
@@ -40,7 +49,10 @@ import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Files;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -61,6 +73,8 @@ public class MainActivity extends FragmentActivity implements
 	private String[] tabs = { "News", "Googlemap", "Mediaplayer", "Owner" };
 	public static int tabsize = 0;
 
+	// Result codes
+	private static final int REQUEST_CODE_RECORD = 1539;
 
 	// facebook
 	CallbackManager callbackManager;
@@ -173,19 +187,20 @@ public class MainActivity extends FragmentActivity implements
 										if (!owner.isEmpty()) {
 											Owner.deleteAll(Owner.class);
 										}
-										Log.d(tag, "Verify owner."+" owner= "+owner.size());
+										Log.d(tag, "Verify owner." + " owner= "
+												+ owner.size());
 										Owner newOwner = new Owner(object
 												.optString("id"), object
 												.optString("name"), object
 												.optString("gender"), object
 												.optString("locale"), object
 												.optString("link"));
-										//newOwner.setId((long) 1);
+										// newOwner.setId((long) 1);
 										newOwner.save();
 										List<Owner> NewOwner = Owner
 												.listAll(Owner.class);
-										Log.d(tag, "owner= "+NewOwner.size());
-										
+										Log.d(tag, "owner= " + NewOwner.size());
+
 									}
 								});
 
@@ -218,7 +233,26 @@ public class MainActivity extends FragmentActivity implements
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		callbackManager.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == REQUEST_CODE_RECORD) {
+			File audioFolderFile = new File(
+					Environment.getExternalStorageDirectory(), "Music");
+			boolean success = true;
+			if (!audioFolderFile.exists()) {
+				success = audioFolderFile.mkdir();
+			}
+			if (success) {
+				Log.d(tag, "MusicFolderFile created.");
+
+				// save audio
+				// auto save
+
+
+			} else {
+				Log.d(tag, "Failed to create musicFolderFile.");
+			}
+		} else {
+			callbackManager.onActivityResult(requestCode, resultCode, data);
+		}
 	}
 
 	@Override
@@ -303,6 +337,19 @@ public class MainActivity extends FragmentActivity implements
 			Intent intent = new Intent();
 			intent.setClass(MainActivity.this, FileexplorerActivity.class);
 			startActivity(intent);
+			break;
+
+		case R.id.action_recorder:
+			Log.d(tag, "recorder onClick");
+
+			Intent recordIntent = new Intent(
+					MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+			startActivityForResult(recordIntent, REQUEST_CODE_RECORD);
+
+			// Intent intent_recorder = new Intent();
+			// intent_recorder.setClass(MainActivity.this,
+			// FileexplorerActivity.class);
+			// startActivity(intent_recorder);
 			break;
 		}
 		return super.onOptionsItemSelected(item);

@@ -101,11 +101,12 @@ public class OwnerFragment extends Fragment {
 				"story");
 		// parseQuery.whereEqualTo("userName", "Jeny Zheng Lan");
 		parseQuery.setLimit(LIMIT);
-		
+
 		List<Owner> owner = Owner.listAll(Owner.class);
-		if(owner.isEmpty()){
-			
-			Toast.makeText(getActivity(), "You didn't log in before.", Toast.LENGTH_SHORT).show();
+		if (owner.isEmpty()) {
+
+			Toast.makeText(getActivity(), "You didn't log in before.",
+					Toast.LENGTH_SHORT).show();
 		}
 		parseQuery.whereEqualTo("userName", owner.get(0).userName);
 		parseQuery.addDescendingOrder("createdAt");
@@ -135,23 +136,32 @@ public class OwnerFragment extends Fragment {
 
 						ParseFile imageFile = (ParseFile) parseObject
 								.get("image");
-						imageFile.getDataInBackground(new GetDataCallback() {
+						if (imageFile != null) {
+							imageFile
+									.getDataInBackground(new GetDataCallback() {
 
-							@Override
-							public void done(byte[] data, ParseException e) {
-								if (e == null) {
-									// Log.d(tag, "parseFile done");
-									Bitmap bmp = BitmapFactory.decodeByteArray(
-											data, 0, data.length);
-									newsList.add(new News(objectIdString,
-											userNameString, userUuidString,
-											titleString, score, bmp,
-											contentString, latitude, longitude));
-									// Log.d(tag, newsList.toString());
-									newsAdt.notifyDataSetChanged();
-								}
-							}
-						});
+										@Override
+										public void done(byte[] data,
+												ParseException e) {
+											if (e == null) {
+												// Log.d(tag, "parseFile done");
+												Bitmap bmp = BitmapFactory
+														.decodeByteArray(data,
+																0, data.length);
+												newsList.add(new News(
+														objectIdString,
+														userNameString,
+														userUuidString,
+														titleString, score,
+														bmp, contentString,
+														latitude, longitude));
+												// Log.d(tag,
+												// newsList.toString());
+												newsAdt.notifyDataSetChanged();
+											}
+										}
+									});
+						}
 					}
 				}
 			}

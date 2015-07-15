@@ -9,20 +9,18 @@
         android:layout_height="wrap_content"
         android:layout_weight="1" >
 
-        <EditText
+        <TextView
             android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:ems="5"
             android:inputType="textPersonName" />
 
-        <EditText
+        <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="9"
-            android:ems="5" />
+            android:layout_weight="9"/>
 
     </LinearLayout>
 
@@ -33,7 +31,7 @@
         android:layout_weight="5"
         android:src="@drawable/common_full_open_on_phone" />
 
-    <EditText
+    <TextView
         android:id="@+id/userContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,6 +40,6 @@
         android:inputType="textMultiLine" >
 
         <requestFocus />
-    </EditText>
+    </TextView>
 
 </LinearLayout>

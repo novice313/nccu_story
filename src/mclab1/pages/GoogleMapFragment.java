@@ -1,6 +1,9 @@
 package mclab1.pages;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import mclab1.custom.listview.News;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -15,11 +18,14 @@ import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -29,6 +35,8 @@ import android.app.Notification.Builder;
 import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.NetworkInfo.DetailedState;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -46,6 +54,7 @@ import edu.mclab1.nccu_story.R;
 public class GoogleMapFragment extends Fragment
 /* implements OnMapReadyCallback */implements OnMapReadyCallback {
 
+	public static ArrayList<News> newsList;
 	private final static String tag = "GoogleMapFragment";
 	private static final String MAP_FRAGMENT_TAG = "map";
 	final LatLng NCCU = new LatLng(24.986233, 121.575843);
@@ -62,6 +71,9 @@ public class GoogleMapFragment extends Fragment
 		super.onCreate(savedInstanceState);
 		// setContentView(R.layout.googlemap);
 		Log.d(tag, "oncreated.");
+
+		// instantiate list
+		newsList = new ArrayList<News>();
 		
 
 	}
@@ -144,10 +156,15 @@ public class GoogleMapFragment extends Fragment
 	@Override
 	public void onMapReady(GoogleMap map) {
 		Log.d(tag, "onMapReady.");
+		this.map=map;
 		// nccu: 24°58'46"N 121°34'15"E
 		// map.addMarker(new MarkerOptions().position(new LatLng(24.5846,
 		// 121.3415)).title("Marker"));
-		map.addMarker(new MarkerOptions().position(NCCU).title("NCCU"));
+		map.addMarker(new MarkerOptions()
+				.position(NCCU)
+				.title("NCCU")
+				.icon(BitmapDescriptorFactory
+						.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(NCCU,
 				initial_zoom_size));
 
@@ -164,13 +181,12 @@ public class GoogleMapFragment extends Fragment
 
 			@Override
 			public void onMapLongClick(LatLng point) {
-				// TODO Auto-generated method stub
+				// longclick upload
 				ShowAlertDialogAndList(point);
 			}
 		});
 
 		getActivity().runOnUiThread(new Runnable() {
-
 			@Override
 			public void run() {
 				query_Story();
@@ -184,36 +200,40 @@ public class GoogleMapFragment extends Fragment
 	private void ShowAlertDialogAndList(final LatLng point) {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle("標題");
+		builder.setTitle("Upload");
 		// 建立選擇的事件
 		DialogInterface.OnClickListener ListClick = new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
-					case 0://broadcast
-						Log.d(tag, "list_uploadType "+list_uploadType[which]+" onclick");
-//						Intent intent_broadcast = new Intent();
-//						intent_broadcast.setClass(getActivity(), Broadcast.class);
-//						Bundle bundle_broadcast = new Bundle();
-//						bundle_broadcast.putDouble("longitude", point.longitude);
-//						bundle_broadcast.putDouble("latitude", point.latitude);
-//						//將Bundle物件assign給intent
-//						intent_broadcast.putExtras(bundle_broadcast);
-//
-//			            //切換Activity
-//			            startActivity(intent_broadcast);
-			            break;
-					case 1://upload story
-						Log.d(tag, "list_uploadType "+list_uploadType[which]+" onclick");
-						Intent intent_uploadStory = new Intent();
-						intent_uploadStory.setClass(getActivity(), UploadPage.class);
-						Bundle bundle_uploadStory = new Bundle();
-						bundle_uploadStory.putDouble("longitude", point.longitude);
-						bundle_uploadStory.putDouble("latitude", point.latitude);
-						//將Bundle物件assign給intent
-						intent_uploadStory.putExtras(bundle_uploadStory);
+				case 0:// broadcast
+					Log.d(tag, "list_uploadType " + list_uploadType[which]
+							+ " onclick");
+					// Intent intent_broadcast = new Intent();
+					// intent_broadcast.setClass(getActivity(),
+					// Broadcast.class);
+					// Bundle bundle_broadcast = new Bundle();
+					// bundle_broadcast.putDouble("longitude", point.longitude);
+					// bundle_broadcast.putDouble("latitude", point.latitude);
+					// //將Bundle物件assign給intent
+					// intent_broadcast.putExtras(bundle_broadcast);
+					//
+					// //切換Activity
+					// startActivity(intent_broadcast);
+					break;
+				case 1:// upload story
+					Log.d(tag, "list_uploadType " + list_uploadType[which]
+							+ " onclick");
+					Intent intent_uploadStory = new Intent();
+					intent_uploadStory
+							.setClass(getActivity(), UploadPage.class);
+					Bundle bundle_uploadStory = new Bundle();
+					bundle_uploadStory.putDouble("longitude", point.longitude);
+					bundle_uploadStory.putDouble("latitude", point.latitude);
+					// 將Bundle物件assign給intent
+					intent_uploadStory.putExtras(bundle_uploadStory);
 
-			            //切換Activity
-			            startActivity(intent_uploadStory);
+					// 切換Activity
+					startActivity(intent_uploadStory);
 				}
 
 			}
@@ -224,9 +244,19 @@ public class GoogleMapFragment extends Fragment
 			}
 		};
 		builder.setItems(list_uploadType, ListClick);
-		builder.setNeutralButton("取消", OkClick);
+		builder.setNeutralButton("cancel", OkClick);
 		builder.show();
 
+	}
+	
+	private void addMarker(String objectId, String title, LatLng point, int score) {
+		// TODO Auto-generated method stub
+		this.map.addMarker(new MarkerOptions()
+		.position(point)
+		.snippet(objectId)
+		.title(title)
+		.icon(BitmapDescriptorFactory
+				.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 	}
 
 	private void query_Story() {
@@ -239,7 +269,56 @@ public class GoogleMapFragment extends Fragment
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
 				// TODO Auto-generated method stub
+				if (!objects.isEmpty()) {
+					for (int i = 0; i < objects.size(); i++) {
+						ParseObject parseObject = objects.get(i);
+						final String objectIdString = parseObject.getObjectId();
+						final String userNameString = parseObject
+								.getString("userName");
+						final String userUuidString = parseObject
+								.getString("userUuid");
+						final String titleString = parseObject
+								.getString("title");
+						final int score = parseObject.getInt("score");
+						final String contentString = parseObject
+								.getString("content");
 
+						final double latitude = parseObject
+								.getDouble("latitude");
+						final double longitude = parseObject
+								.getDouble("longitude");
+
+						ParseFile imageFile = (ParseFile) parseObject
+								.get("image");
+						if (imageFile != null) {
+							imageFile
+									.getDataInBackground(new GetDataCallback() {
+
+										@Override
+										public void done(byte[] data,
+												ParseException e) {
+											if (e == null) {
+												// Log.d(tag, "parseFile done");
+												Bitmap bmp = BitmapFactory
+														.decodeByteArray(data,
+																0, data.length);
+												newsList.add(new News(
+														objectIdString,
+														userNameString,
+														userUuidString,
+														titleString, score,
+														bmp, contentString,
+														latitude, longitude));
+												
+												LatLng point = new LatLng(latitude, longitude);
+												addMarker(objectIdString, titleString, point, score);
+												
+											}
+										}
+									});
+						}
+					}
+				}
 			}
 		});
 	}
@@ -259,26 +338,24 @@ public class GoogleMapFragment extends Fragment
 
 			// Defines the contents of the InfoWindow
 			@Override
-			public View getInfoContents(Marker arg0) {
+			public View getInfoContents(Marker marker) {
 
 				// Getting view from the layout file info_window_layout
 				View v = getActivity().getLayoutInflater().inflate(
 						R.layout.info_window_layout, null);
 
 				// Getting the position from the marker
-				LatLng latLng = arg0.getPosition();
-
-				// Getting reference to the TextView to set latitude
-				TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
-
-				// Getting reference to the TextView to set longitude
-				TextView tvLng = (TextView) v.findViewById(R.id.tv_lng);
+				LatLng latLng = marker.getPosition();
+				
+				TextView tvLat = (TextView) v.findViewById(R.id.userName);
+				TextView tvLng = (TextView) v.findViewById(R.id.title);
+				//TextView tvLng = (TextView) v.findViewById(R.id.score);
 
 				// Setting the latitude
-				tvLat.setText("Latitude:" + latLng.latitude);
+				tvLat.setText(marker.getSnippet());
 
 				// Setting the longitude
-				tvLng.setText("Longitude:" + latLng.longitude);
+				tvLng.setText(marker.getTitle());
 
 				// Returning the view containing InfoWindow contents
 				return v;
@@ -292,8 +369,16 @@ public class GoogleMapFragment extends Fragment
 			public void onInfoWindowClick(Marker marker) {
 				// TODO Auto-generated method stub
 				Log.d(tag, "onInfoWindowClick: " + marker.getTitle());
-				// Intent detailIntent = new Intent(getActivity(),
-				// Detail.class);
+				for(int i=0;i<newsList.size();i++){
+					String objectId = marker.getSnippet();
+					if(objectId.compareTo(newsList.get(i).getobjectId())==0){
+						Intent intent_detail = new Intent();
+						intent_detail.putExtra("objectId", objectId);
+						intent_detail.setClass(getActivity(), DetailPage.class);
+						startActivity(intent_detail);
+						break;
+					}
+				}
 			}
 		});
 	}

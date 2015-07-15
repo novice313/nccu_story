@@ -98,26 +98,7 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		setController();
 		//controller.show();
 	}
-
-	// // connect to the service
-	// private ServiceConnection musicConnection = new ServiceConnection() {
-	//
-	// @Override
-	// public void onServiceConnected(ComponentName name, IBinder service) {
-	// MusicBinder binder = (MusicBinder) service;
-	// // get service
-	// musicSrv = binder.getService();
-	// // pass list
-	// musicSrv.setList(songList);
-	// musicBound = true;
-	// }
-	//
-	// @Override
-	// public void onServiceDisconnected(ComponentName name) {
-	// musicBound = false;
-	// }
-	// };
-	//
+	
 	// start and bind the service when the activity starts
 	@Override
 	public void onStart() {
@@ -126,43 +107,6 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		musicSrv.setList(songList);
 	}
 
-	//
-	// // user song select
-	// public void songPicked(View view) {
-	// musicSrv.setSong(Integer.parseInt(view.getTag().toString()));
-	// musicSrv.playSong();
-	// if (playbackPaused) {
-	// setController();
-	// playbackPaused = false;
-	// }
-	// controller.show(0);
-	// }
-	//
-	// // @Override
-	// // public boolean onCreateOptionsMenu(Menu menu) {
-	// // // Inflate the menu; this adds items to the action bar if it is
-	// present.
-	// // getMenuInflater().inflate(R.menu.main, menu);
-	// // return true;
-	// // }
-	// //
-	// // @Override
-	// // public boolean onOptionsItemSelected(MenuItem item) {
-	// // // menu item selected
-	// // switch (item.getItemId()) {
-	// // case R.id.action_shuffle:
-	// // musicSrv.setShuffle();
-	// // break;
-	// // case R.id.action_end:
-	// // getActivity().stopService(playIntent);
-	// // musicSrv = null;
-	// // System.exit(0);
-	// // break;
-	// // }
-	// // return super.onOptionsItemSelected(item);
-	// // }
-	//
-	// // method to retrieve song info from device
 	public void getSongList() {
 		// query external audio
 		ContentResolver musicResolver = getActivity().getContentResolver();
@@ -187,72 +131,7 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 			} while (musicCursor.moveToNext());
 		}
 	}
-
-	//
-	// @Override
-	// public boolean canPause() {
-	// return true;
-	// }
-	//
-	// @Override
-	// public boolean canSeekBackward() {
-	// return true;
-	// }
-	//
-	// @Override
-	// public boolean canSeekForward() {
-	// return true;
-	// }
-	//
-	// @Override
-	// public int getAudioSessionId() {
-	// return 0;
-	// }
-	//
-	// @Override
-	// public int getBufferPercentage() {
-	// return 0;
-	// }
-	//
-	// @Override
-	// public int getCurrentPosition() {
-	// if (musicSrv != null && musicBound && musicSrv.isPng())
-	// return musicSrv.getPosn();
-	// else
-	// return 0;
-	// }
-	//
-	// @Override
-	// public int getDuration() {
-	// if (musicSrv != null && musicBound && musicSrv.isPng())
-	// return musicSrv.getDur();
-	// else
-	// return 0;
-	// }
-	//
-	// @Override
-	// public boolean isPlaying() {
-	// if (musicSrv != null && musicBound)
-	// return musicSrv.isPng();
-	// return false;
-	// }
-	//
-	// @Override
-	// public void pause() {
-	// playbackPaused = true;
-	// musicSrv.pausePlayer();
-	// }
-	//
-	// @Override
-	// public void seekTo(int pos) {
-	// musicSrv.seek(pos);
-	// }
-	//
-	// @Override
-	// public void start() {
-	// musicSrv.go();
-	// }
-	//
+	
 	// set the controller up
 	private void setController() {
 		controller = new MusicController(getActivity());
