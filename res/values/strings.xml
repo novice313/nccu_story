@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">nccu_story</string>
+    <string name="app_running">pttdroid is running</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_loginFacebook">login Facebook</string>
@@ -14,9 +15,9 @@
     <string name="action_recorder">Open recorder</string>
     <string name="action_showHeaderAndFooter">Show Header &amp; Footer</string>
     <string name="action_updateDataset">Update dataset</string>
+    <string name="facebook_app_id">1111296862217803</string>
     <string name="parse_app_id">wtSFcggR896xMJQUGblYuphkF6EVw4ChcLcpSowP</string>
     <string name="parse_client_key">IwJ3gTRBe8cARlxMf3xh97eai2a7MNLP68vdL3IY</string>
-    <string name="facebook_app_id">1111296862217803</string>
     <string name="test_String">Test</string>
     <string name="title_activity_fileexplorer">FileexplorerActivity</string>
     <string name="title_activity_GalleryActivity">GalleryActivity</string>
@@ -24,5 +25,100 @@
     <string name="title_activity_DetailsActivity">DetailsActivity</string>
     <string name="title_activity_UploadMediaListActivity">UploadMediaListActivity</string>
     <string name="title_activity_DetailPage">DetailPage</string>
+    <string name="title_activity_TestWifiScan">TestWifiScan</string>
+    <string name="title_activity_Main">Main</string>
+    <string name="title_activity_UploadPage">UploadPage</string>
+    <string name="wifi_status">Status</string>
+    <string name="wifi_connect_to">Connect to %s</string>
+    <!-- Wi-Fi IP address label -->
+    <string name="ip_address">IP address</string>
+    <!-- Label for the signal strength -->
+    <string name="signal">Signal strength</string>
+    <string name="toastFailed">Failed!</string>
+    <string name="ptt">Push To Talk</string>
+    <string name="buttonOp">More&#8230;</string>
+    <string name="setting_reset_all_confirm">All settings were restored to their default values</string>
+    <string name="quit_label">Quit</string>
+    <string name="enable_p2p_button">P2P On/Off</string>
+    <string name="p2p_off_warning">Enable P2P from action bar button above or system settings</string>
+
+    <!-- Button label to connect to a wifi network -->
+    <string name="connect">Connect</string>
+
+    <!-- Button caption to forget a wifi network -->
+    <string name="forget_network">Forget</string>
+    <!-- Label for status of connection -->
+    <!-- Wi-Fi settings screen, summary text for network when connected -->
+    <string name="status_connected">Connected</string>
+    <string name="status_connecting">Connecting&#8230;</string>
+    <!-- Label for link speed (wifi) -->
+    <string name="wifi_link_speed">Speed</string>
+    <!-- Verbose wifi signal strength.  This is the best out of 4 levels. -->
+    <string name="wifi_signal_3">Excellent</string>
+    <!-- Verbose wifi signal strength.  This is the 2nd best out of 4 levels. -->
+    <string name="wifi_signal_2">Good</string>
+    <!-- Verbose wifi signal strength.  This is the 3rd best out of 4 levels. -->
+    <string name="wifi_signal_1">Fair</string>
+    <!-- Verbose wifi signal strength.  This is the worst out of 4 levels. -->
+    <string name="wifi_signal_0">Poor</string>
+    <!-- Label for the security of a wifi network -->
+    <string name="security">Security</string>
+    <!-- Value for the wifi security.  This means no encryption. -->
+    <string name="wifi_security_open">Open</string>
+    <!-- Value for the wifi security -->
+    <string name="wifi_security_wep">WEP</string>
+    <!-- Value for the wifi security -->
+    <string name="wifi_security_wpa">WPA</string>
+    <!-- Value for the wifi security -->
+    <string name="wifi_security_wpa2">WPA2</string>
+    <!-- Value for the wifi security -->
+    <string name="wifi_security_wpa_eap">WPA-EAP</string>
+    <!-- Value for the wifi security -->
+    <string name="wifi_security_ieee8021x">IEEE8021X</string>
+    <string name="please_type_passphrase">Wireless password</string>
+    <string name="wifi_show_password">Show password.</string>
+    <string name="wifi_change_password">Change password</string>
+    <string name="button_change_password">Modify</string>
+    <!-- An edit field's grayed out value when it has not been modified -->
+    <string name="wifi_password_unchanged">(unchanged)</string>
+    <!-- Button caption to save a configuration wifi -->
+    <string name="wifi_save_config">Save</string>
+    <string name="adhoc_not_supported_yet">AdHoc is not supported by Android platform yet!</string>
+    <string name="dummy_content_description">""</string>
+    <string name="broadcast_addr_title">Broadcast address</string>
+    <string name="broadcast_addr_summary">Audio data will be received by all devices witch are on the same network.</string>
+    <string name="broadcast_addr_default">255.255.255.255</string>
+    <string name="multicast_addr_title">Multicast address</string>
+    <string name="multicast_addr_summary">Audio data zxxjcwsawill be received only by devices registered on the given address and are on the same network.</string>
+    <string name="multicast_addr_default">239.255.255.251</string>
+    <string name="unicast_addr_title">Unicast address</string>
+    <string name="unicast_addr_summary">Audio data will be received only by one device, designated by the given address.</string>
+    <string name="unicast_addr_default">192.168.49.1</string>
+    <string name="port_title">Port</string>
+    <string name="port_summary"></string>
+    <string name="port_default">8988</string>
+    <string name="use_speex_title">Use codec</string>
+    <string name="use_speex_on">Turn off</string>
+    <string name="use_speex_off">Turn on</string>
+    <string name="speex_quality_title">Codec bit rate</string>
+    <string name="speex_quality_summary"></string>
+    <string name="echo_title">Echo</string>
+    <string name="echo_on">Turn off</string>
+    <string name="echo_off">Turn on</string>
+    <string name="set_cast_and_port">Cast &amp; port</string>
+    <string name="cast_type_title">Cast type</string>
+    <string name="cast_type_summary">Choose how many devices will receive the audio data.</string>
+    <string name="set_ip_addr">IP addresses</string>
+    <string name="connect_peer_button">Connect</string>
+    <string name="disconnect_peer_button">Disconnect</string>
+    <string name="get_file_button">Launch Gallery</string>
+    <string name="group_owner_text">"Am I the Group Owner? "</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+    <string name="empty"></string>
+    <string name="label_me">ME</string>
+    <string name="label_peers">PEERS</string>
+    <string name="empty_message">No devices found. Turn on P2P and perform discovery from the Action Bar</string>
+    
 
 </resources>

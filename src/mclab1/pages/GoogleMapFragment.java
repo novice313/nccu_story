@@ -5,6 +5,7 @@ import java.util.List;
 
 import mclab1.custom.listview.News;
 
+import com.farproc.wifi.connecter.TestWifiScan;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -208,17 +209,17 @@ public class GoogleMapFragment extends Fragment
 				case 0:// broadcast
 					Log.d(tag, "list_uploadType " + list_uploadType[which]
 							+ " onclick");
-					// Intent intent_broadcast = new Intent();
-					// intent_broadcast.setClass(getActivity(),
-					// Broadcast.class);
-					// Bundle bundle_broadcast = new Bundle();
-					// bundle_broadcast.putDouble("longitude", point.longitude);
-					// bundle_broadcast.putDouble("latitude", point.latitude);
-					// //將Bundle物件assign給intent
-					// intent_broadcast.putExtras(bundle_broadcast);
-					//
-					// //切換Activity
-					// startActivity(intent_broadcast);
+					 Intent intent_broadcast = new Intent();
+					 intent_broadcast.setClass(getActivity(),
+							 TestWifiScan.class);
+					 Bundle bundle_broadcast = new Bundle();
+					 bundle_broadcast.putDouble("longitude", point.longitude);
+					 bundle_broadcast.putDouble("latitude", point.latitude);
+					 //將Bundle物件assign給intent
+					 intent_broadcast.putExtras(bundle_broadcast);
+					
+					 //切換Activity
+					 startActivity(intent_broadcast);
 					break;
 				case 1:// upload story
 					Log.d(tag, "list_uploadType " + list_uploadType[which]

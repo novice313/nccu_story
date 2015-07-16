@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" > 
+
+        <LinearLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/microphone_image"
+                android:layout_width="100dip"
+                android:layout_height="100dip"
+                android:contentDescription="@string/ptt"
+                android:src="@drawable/microphone_normal_image" />
+
+          <!--   <ImageView
+                android:id="@+id/writing"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="right"
+                android:padding="20dp"
+                android:src="@drawable/circle_green"
+                android:visibility="invisible" /> -->
+
+           <!--  <Spinner
+                android:id="@+id/mySpinner"
+                android:layout_width="90dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="3dp"
+                android:layout_weight="1"
+                android:textColor="#8B008B"
+                
+                android:drawSelectorOnTop="true" /> -->
+
+           <!--  <Spinner
+                android:id="@+id/mySpinner2"
+                android:layout_width="90dp"
+                android:layout_height="45dp" 
+                android:layout_marginTop="7dp"
+                android:layout_weight="1"
+                android:textColor="#8B008B"     
+                android:drawSelectorOnTop="true" />  -->
+
+        </LinearLayout>
+
+
+        <FrameLayout
+            android:id="@+id/outer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <FrameLayout
+                android:id="@+id/content_holder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/old_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone" >
+
+                <fragment
+                    android:id="@+id/frag_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/phone_list_height"
+                    class="com.example.android.wifidirect.DeviceListFragment" >
+
+                    <!-- Preview: layout=@layout/row_devices -->
+                </fragment>
+
+                <Button
+                    android:id="@+id/force"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Force connect" />
+
+                <Button
+                    android:id="@+id/btn_test_mp3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Test Convert Mp3" />
+
+                <fragment
+                    android:id="@+id/frag_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    class="com.example.android.wifidirect.DeviceDetailFragment" >
+
+                    <!-- Preview: layout=@layout/device_detail -->
+                </fragment>
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+</LinearLayout>

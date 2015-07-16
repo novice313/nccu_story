@@ -54,6 +54,11 @@
     <!-- record -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 	<!-- END record -->
+	
+	<!-- wifi -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <!-- END wifi -->
     
     <application
         android:name="com.orm.SugarApp"
@@ -160,6 +165,23 @@
             android:label="@string/title_activity_DetailPage" >
         </activity>
 		<!-- END detail page -->
+		
+		<!-- broadcast -->
+		<activity
+            android:name="com.farproc.wifi.connecter.TestWifiScan"
+            android:label="@string/title_activity_TestWifiScan" >
+        </activity>
+        
+        <activity
+            android:name="ro.ui.pttdroid.Main"
+            android:label="@string/title_activity_Main" >
+        </activity>
+        
+        <activity
+            android:name="ro.ui.pttdroid.UploadPage"
+            android:label="@string/title_activity_UploadPage" >
+        </activity>
+		<!-- END beoadcast -->
 
         <!-- music service -->
         <service android:name="mclab1.service.music.MusicService" >

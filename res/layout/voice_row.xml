@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/panel_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corner"
+    android:descendantFocusability="blocksDescendants" >
+
+    <ImageView
+        android:id="@+id/voice_row_image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/placeholder" />
+
+    <TextView
+        android:id="@+id/voice_row_guidername"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/voice_row_image"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/voice_row_image"
+        android:text="Guider"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/voice_row_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/voice_row_guidername"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="4dp"
+        android:layout_toRightOf="@+id/voice_row_image"
+        android:text="2014/10/17"
+        android:textSize="14sp" />
+
+    <RatingBar
+        android:id="@+id/voice_row_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignLeft="@+id/voice_row_date"
+        android:layout_below="@+id/voice_row_date"
+        android:layout_marginTop="4dp"
+        android:progressDrawable="@drawable/custom_rating_bar_selector" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/play" />
+    
+
+</RelativeLayout>

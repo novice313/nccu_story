@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+ <!--    <item
+        android:id="@+id/btn_wifi_direct"
+        android:icon="@drawable/wi_fi_direct"
+        android:showAsAction="ifRoom|withText"
+        android:title="Connect Guider"/> -->
+    <item
+        android:id="@+id/btn_change_mode"
+        android:icon="@drawable/touchscreen"
+        android:showAsAction="ifRoom|withText"
+        android:title="Change Guide Mode"/>
+
+</menu>

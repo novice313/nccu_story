@@ -36,15 +36,6 @@ public class OwnerFragment extends Fragment {
 	public static ListView newsView;
 	NewsAdapter newsAdt;
 
-	// public static NewsFragment newInstance(int page, String title) {
-	// Log.d(tag, "newInstance.");
-	// NewsFragment newsFragment = new NewsFragment();
-	// Bundle args = new Bundle();
-	// args.putInt("someInt", page);
-	// args.putString("someTitle", title);
-	// newsFragment.setArguments(args);
-	// return newsFragment;
-	// }
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,21 +61,11 @@ public class OwnerFragment extends Fragment {
 			}
 		});
 
-		// //test
-		// ArrayList<News> test_list = newsList;
-		// newsList = newsList.addAll(test_list);
-
-		// Log.d(tag, newsList.toString());
 		// create and set adapter
 		newsAdt = new NewsAdapter(getActivity().getApplicationContext(),
 				newsList);
 
 		newsView.setAdapter(newsAdt);
-		// getActivity().runOnUiThread(new Runnable() {
-		// public void run() {
-		// newsAdt.notifyDataSetChanged();
-		// }
-		// });
 
 		return view;
 	}
@@ -155,8 +136,8 @@ public class OwnerFragment extends Fragment {
 														titleString, score,
 														bmp, contentString,
 														latitude, longitude));
-												// Log.d(tag,
-												// newsList.toString());
+												
+												//redo if data change
 												newsAdt.notifyDataSetChanged();
 											}
 										}

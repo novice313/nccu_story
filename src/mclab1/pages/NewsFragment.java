@@ -92,7 +92,7 @@ public class NewsFragment extends Fragment {
 
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
-				// TODO Auto-generated method stub
+				
 				if (!objects.isEmpty()) {
 					for (int i = 0; i < objects.size(); i++) {
 						ParseObject parseObject = objects.get(i);
@@ -133,8 +133,7 @@ public class NewsFragment extends Fragment {
 														titleString, score,
 														bmp, contentString,
 														latitude, longitude));
-												// Log.d(tag,
-												// newsList.toString());
+												
 												newsAdt.notifyDataSetChanged();
 											}
 										}
@@ -154,7 +153,6 @@ public class NewsFragment extends Fragment {
 
 	public void onResume() {
 		super.onResume();
-		// textView.setText(tag);
 	}
 
 	@Override
