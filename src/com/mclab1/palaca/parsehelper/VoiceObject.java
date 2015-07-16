@@ -17,6 +17,7 @@ public class VoiceObject {
 	public static final String table_name = "Broadcast";
 	public static final String column_audio_file = "mp3file";
 	public static final String NumberTag="numberTag";
+	public static final String subnumberTag = "subnumberTag";
 	ParseFile file;
 	//int Tagi=0;
 

@@ -41,7 +41,7 @@ public class NewsFragment extends Fragment {
 	public static ArrayList<News> newsList;
 	public static ListView newsView;
 	NewsAdapter newsAdt;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,7 +66,7 @@ public class NewsFragment extends Fragment {
 				getNewsList();
 			}
 		});
-		
+
 		// create and set adapter
 		newsAdt = new NewsAdapter(getActivity().getApplicationContext(),
 				newsList);
@@ -92,52 +92,56 @@ public class NewsFragment extends Fragment {
 
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
-				
-				if (!objects.isEmpty()) {
-					for (int i = 0; i < objects.size(); i++) {
-						ParseObject parseObject = objects.get(i);
-						final String objectIdString = parseObject.getObjectId();
-						final String userNameString = parseObject
-								.getString("userName");
-						final String userUuidString = parseObject
-								.getString("userUuid");
-						final String titleString = parseObject
-								.getString("title");
-						final int score = parseObject.getInt("score");
-						final String contentString = parseObject
-								.getString("content");
+				if (e == null) {
+					if (!objects.isEmpty()) {
+						for (int i = 0; i < objects.size(); i++) {
+							ParseObject parseObject = objects.get(i);
+							final String objectIdString = parseObject
+									.getObjectId();
+							final String userNameString = parseObject
+									.getString("userName");
+							final String userUuidString = parseObject
+									.getString("userUuid");
+							final String titleString = parseObject
+									.getString("title");
+							final int score = parseObject.getInt("score");
+							final String contentString = parseObject
+									.getString("content");
 
-						final double latitude = parseObject
-								.getDouble("latitude");
-						final double longitude = parseObject
-								.getDouble("longitude");
+							final double latitude = parseObject
+									.getDouble("latitude");
+							final double longitude = parseObject
+									.getDouble("longitude");
 
-						ParseFile imageFile = (ParseFile) parseObject
-								.get("image");
-						if (imageFile != null) {
-							imageFile
-									.getDataInBackground(new GetDataCallback() {
+							ParseFile imageFile = (ParseFile) parseObject
+									.get("image");
+							if (imageFile != null) {
+								imageFile
+										.getDataInBackground(new GetDataCallback() {
 
-										@Override
-										public void done(byte[] data,
-												ParseException e) {
-											if (e == null) {
-												// Log.d(tag, "parseFile done");
-												Bitmap bmp = BitmapFactory
-														.decodeByteArray(data,
-																0, data.length);
-												newsList.add(new News(
-														objectIdString,
-														userNameString,
-														userUuidString,
-														titleString, score,
-														bmp, contentString,
-														latitude, longitude));
-												
-												newsAdt.notifyDataSetChanged();
+											@Override
+											public void done(byte[] data,
+													ParseException e) {
+												if (e == null) {
+													// Log.d(tag,
+													// "parseFile done");
+													Bitmap bmp = BitmapFactory
+															.decodeByteArray(
+																	data, 0,
+																	data.length);
+													newsList.add(new News(
+															objectIdString,
+															userNameString,
+															userUuidString,
+															titleString, score,
+															bmp, contentString,
+															latitude, longitude));
+
+													newsAdt.notifyDataSetChanged();
+												}
 											}
-										}
-									});
+										});
+							}
 						}
 					}
 				}

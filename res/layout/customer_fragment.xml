@@ -17,24 +17,26 @@
         android:layout_height="80dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" >
-
+<!-- 
         <Spinner
-            android:id="@+id/mySpinner2"
+            android:id="@+id/mySpinner"
             android:layout_width="fill_parent"
             android:layout_height="45dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_weight="1"
             android:drawSelectorOnTop="true" />
-
+ 
         <Spinner
-            android:id="@+id/mySpinner"
+            android:id="@+id/mySpinner2" 
             android:layout_width="fill_parent"
             android:layout_height="45dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_weight="1"
-            android:drawSelectorOnTop="true" />
+            android:drawSelectorOnTop="true" /> 
+            
+             -->
 
     </RelativeLayout>
 

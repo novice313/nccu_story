@@ -19,12 +19,14 @@
     <string name="parse_app_id">wtSFcggR896xMJQUGblYuphkF6EVw4ChcLcpSowP</string>
     <string name="parse_client_key">IwJ3gTRBe8cARlxMf3xh97eai2a7MNLP68vdL3IY</string>
     <string name="test_String">Test</string>
+    <string name="title_activity_Client_Main">TestWifiScan</string>
     <string name="title_activity_fileexplorer">FileexplorerActivity</string>
     <string name="title_activity_GalleryActivity">GalleryActivity</string>
     <string name="title_activity_CameraActivity">CameraActivity</string>
     <string name="title_activity_DetailsActivity">DetailsActivity</string>
     <string name="title_activity_UploadMediaListActivity">UploadMediaListActivity</string>
     <string name="title_activity_DetailPage">DetailPage</string>
+    <string name="title_activity_Wificonnection_easy">TestWifiScan</string>
     <string name="title_activity_TestWifiScan">TestWifiScan</string>
     <string name="title_activity_Main">Main</string>
     <string name="title_activity_UploadPage">UploadPage</string>

@@ -181,7 +181,19 @@
             android:name="ro.ui.pttdroid.UploadPage"
             android:label="@string/title_activity_UploadPage" >
         </activity>
-		<!-- END beoadcast -->
+		<!-- END broadcast -->
+		
+		<!-- listen broadcast -->
+		<activity
+            android:name="ro.ui.pttdroid.Wificonnection_easy"
+            android:label="@string/title_activity_Wificonnection_easy" >
+        </activity>
+        
+		<activity
+            android:name="ro.ui.pttdroid.Client_Main"
+            android:label="@string/title_activity_Client_Main" >
+        </activity>
+		<!-- END listen broadcast -->
 
         <!-- music service -->
         <service android:name="mclab1.service.music.MusicService" >

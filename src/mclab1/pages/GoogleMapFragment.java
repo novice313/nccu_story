@@ -75,7 +75,6 @@ public class GoogleMapFragment extends Fragment
 
 		// instantiate list
 		newsList = new ArrayList<News>();
-		
 
 	}
 
@@ -157,7 +156,7 @@ public class GoogleMapFragment extends Fragment
 	@Override
 	public void onMapReady(GoogleMap map) {
 		Log.d(tag, "onMapReady.");
-		this.map=map;
+		this.map = map;
 		// nccu: 24°58'46"N 121°34'15"E
 		// map.addMarker(new MarkerOptions().position(new LatLng(24.5846,
 		// 121.3415)).title("Marker"));
@@ -209,17 +208,17 @@ public class GoogleMapFragment extends Fragment
 				case 0:// broadcast
 					Log.d(tag, "list_uploadType " + list_uploadType[which]
 							+ " onclick");
-					 Intent intent_broadcast = new Intent();
-					 intent_broadcast.setClass(getActivity(),
-							 TestWifiScan.class);
-					 Bundle bundle_broadcast = new Bundle();
-					 bundle_broadcast.putDouble("longitude", point.longitude);
-					 bundle_broadcast.putDouble("latitude", point.latitude);
-					 //將Bundle物件assign給intent
-					 intent_broadcast.putExtras(bundle_broadcast);
-					
-					 //切換Activity
-					 startActivity(intent_broadcast);
+					Intent intent_broadcast = new Intent();
+					intent_broadcast
+							.setClass(getActivity(), TestWifiScan.class);
+					Bundle bundle_broadcast = new Bundle();
+					bundle_broadcast.putDouble("longitude", point.longitude);
+					bundle_broadcast.putDouble("latitude", point.latitude);
+					// 將Bundle物件assign給intent
+					intent_broadcast.putExtras(bundle_broadcast);
+
+					// 切換Activity
+					startActivity(intent_broadcast);
 					break;
 				case 1:// upload story
 					Log.d(tag, "list_uploadType " + list_uploadType[which]
@@ -249,15 +248,16 @@ public class GoogleMapFragment extends Fragment
 		builder.show();
 
 	}
-	
-	private void addMarker(String objectId, String title, LatLng point, int score) {
+
+	private void addMarker(String objectId, String title, LatLng point,
+			int score) {
 		// TODO Auto-generated method stub
 		this.map.addMarker(new MarkerOptions()
-		.position(point)
-		.snippet(objectId)
-		.title(title)
-		.icon(BitmapDescriptorFactory
-				.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+				.position(point)
+				.snippet(objectId)
+				.title(title)
+				.icon(BitmapDescriptorFactory
+						.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 	}
 
 	private void query_Story() {
@@ -270,53 +270,61 @@ public class GoogleMapFragment extends Fragment
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
 				// TODO Auto-generated method stub
-				if (!objects.isEmpty()) {
-					for (int i = 0; i < objects.size(); i++) {
-						ParseObject parseObject = objects.get(i);
-						final String objectIdString = parseObject.getObjectId();
-						final String userNameString = parseObject
-								.getString("userName");
-						final String userUuidString = parseObject
-								.getString("userUuid");
-						final String titleString = parseObject
-								.getString("title");
-						final int score = parseObject.getInt("score");
-						final String contentString = parseObject
-								.getString("content");
+				if (e == null) {
+					if (!objects.isEmpty()) {
+						for (int i = 0; i < objects.size(); i++) {
+							ParseObject parseObject = objects.get(i);
+							final String objectIdString = parseObject
+									.getObjectId();
+							final String userNameString = parseObject
+									.getString("userName");
+							final String userUuidString = parseObject
+									.getString("userUuid");
+							final String titleString = parseObject
+									.getString("title");
+							final int score = parseObject.getInt("score");
+							final String contentString = parseObject
+									.getString("content");
 
-						final double latitude = parseObject
-								.getDouble("latitude");
-						final double longitude = parseObject
-								.getDouble("longitude");
+							final double latitude = parseObject
+									.getDouble("latitude");
+							final double longitude = parseObject
+									.getDouble("longitude");
 
-						ParseFile imageFile = (ParseFile) parseObject
-								.get("image");
-						if (imageFile != null) {
-							imageFile
-									.getDataInBackground(new GetDataCallback() {
+							ParseFile imageFile = (ParseFile) parseObject
+									.get("image");
+							if (imageFile != null) {
+								imageFile
+										.getDataInBackground(new GetDataCallback() {
 
-										@Override
-										public void done(byte[] data,
-												ParseException e) {
-											if (e == null) {
-												// Log.d(tag, "parseFile done");
-												Bitmap bmp = BitmapFactory
-														.decodeByteArray(data,
-																0, data.length);
-												newsList.add(new News(
-														objectIdString,
-														userNameString,
-														userUuidString,
-														titleString, score,
-														bmp, contentString,
-														latitude, longitude));
-												
-												LatLng point = new LatLng(latitude, longitude);
-												addMarker(objectIdString, titleString, point, score);
-												
+											@Override
+											public void done(byte[] data,
+													ParseException e) {
+												if (e == null) {
+													// Log.d(tag,
+													// "parseFile done");
+													Bitmap bmp = BitmapFactory
+															.decodeByteArray(
+																	data, 0,
+																	data.length);
+													newsList.add(new News(
+															objectIdString,
+															userNameString,
+															userUuidString,
+															titleString, score,
+															bmp, contentString,
+															latitude, longitude));
+
+													LatLng point = new LatLng(
+															latitude, longitude);
+													addMarker(objectIdString,
+															titleString, point,
+															score);
+
+												}
 											}
-										}
-									});
+										});
+							}
 						}
 					}
 				}
@@ -347,10 +355,10 @@ public class GoogleMapFragment extends Fragment
 
 				// Getting the position from the marker
 				LatLng latLng = marker.getPosition();
-				
+
 				TextView tvLat = (TextView) v.findViewById(R.id.userName);
 				TextView tvLng = (TextView) v.findViewById(R.id.title);
-				//TextView tvLng = (TextView) v.findViewById(R.id.score);
+				// TextView tvLng = (TextView) v.findViewById(R.id.score);
 
 				// Setting the latitude
 				tvLat.setText(marker.getSnippet());
@@ -370,9 +378,9 @@ public class GoogleMapFragment extends Fragment
 			public void onInfoWindowClick(Marker marker) {
 				// TODO Auto-generated method stub
 				Log.d(tag, "onInfoWindowClick: " + marker.getTitle());
-				for(int i=0;i<newsList.size();i++){
+				for (int i = 0; i < newsList.size(); i++) {
 					String objectId = marker.getSnippet();
-					if(objectId.compareTo(newsList.get(i).getobjectId())==0){
+					if (objectId.compareTo(newsList.get(i).getobjectId()) == 0) {
 						Intent intent_detail = new Intent();
 						intent_detail.putExtra("objectId", objectId);
 						intent_detail.setClass(getActivity(), DetailPage.class);
