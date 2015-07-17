@@ -271,7 +271,7 @@ super.onResume();
 
 microphoneSwitcher = new MicrophoneSwitcher();
 microphoneSwitcher.init();
-
+System.out.println("Client_Main");
 /*wifiReceiver = new WifiReceiver();         // *******
 registerReceiver(wifiReceiver, filter);
 receiver = new WiFiDirectBroadcastReceiver(manager, channel, this);

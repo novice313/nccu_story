@@ -60,6 +60,11 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <!-- END wifi -->
     
+    <!--READ_PHONE_STATE-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--READ_PHONE_STATE-->
+    
+    
     <application
         android:name="com.orm.SugarApp"
         android:allowBackup="true"
@@ -199,6 +204,11 @@
         <service android:name="mclab1.service.music.MusicService" >
         </service>
         <!-- END music service -->
+        
+        <service android:name="ro.ui.pttdroid.Player" > </service>
+        <service android:name="ro.ui.pttdroid.Client_Player" >
+        </service>
+        
     </application>
 
 </manifest>
