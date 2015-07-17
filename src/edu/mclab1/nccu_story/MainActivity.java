@@ -244,6 +244,13 @@ public class MainActivity extends FragmentActivity implements
 					}
 				});
 		// END set facebook
+		
+	    //若wifi狀態為關閉則將它開啟
+    	wiFiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+    	   if (!wiFiManager.isWifiEnabled()) {
+    		     wiFiManager.setWifiEnabled(true);
+    		  }
+
 
 	}
 
@@ -351,7 +358,6 @@ public class MainActivity extends FragmentActivity implements
 			break;
 		case R.id.action_test:
 			Log.d(tag, "Test onClick");
-        	wiFiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         	System.out.println("wiFiManagergetConnectionInfo"+wiFiManager.getConnectionInfo()+"$"+
         			wiFiManager.getWifiState()+" ");
 
@@ -373,7 +379,7 @@ public class MainActivity extends FragmentActivity implements
                 }
         	
 			 System.out.println("GOGOGO");            //network module connect 
-			 String networkSSID = "NCCU_Wang";        //以後柏要傳進來的變數 WIRELESS NCCU_Tsai
+			 String networkSSID = "NCCU_Tsai";        //以後柏要傳進來的變數 WIRELESS NCCU_Tsai
 			                                                      //TOTOLINK A2004NS 2.4G"
 			                                                      //NCCU_Wang   WIRELESS
 			 String networkPass = ""; 
