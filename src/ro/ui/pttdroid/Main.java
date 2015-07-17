@@ -501,10 +501,10 @@ public class Main extends FragmentActivity implements ChannelListener,
 			}
 			invalidateOptionsMenu();
 			return true;
-		case R.id.client_to_list:
+		/*case R.id.client_to_list:
 			Intent intent3 =new Intent(this,TestWifiScan.class);
 			startActivity(intent3);
-			return true;
+			return true;*/
 		/*case R.id.atn_direct_discover:
 			if (!isWifiP2pEnabled) {
 				Toast.makeText(Main.this, R.string.p2p_off_warning,
