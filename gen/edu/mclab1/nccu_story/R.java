@@ -858,10 +858,10 @@ containing a value of this type.
         public static final int TextView01=0x7f080061;
         public static final int TextView02=0x7f080062;
         public static final int TextViewDate=0x7f080063;
-        public static final int action_camera=0x7f08009d;
-        public static final int action_gallery=0x7f08009e;
+        public static final int action_camera=0x7f08009c;
+        public static final int action_gallery=0x7f08009d;
         public static final int action_loginFacebook=0x7f080097;
-        public static final int action_media=0x7f08009f;
+        public static final int action_media=0x7f08009e;
         public static final int action_recorder=0x7f080099;
         public static final int action_test=0x7f080098;
         public static final int adjust_height=0x7f080001;
@@ -890,7 +890,6 @@ containing a value of this type.
         public static final int cast_notification_id=0x7f080000;
         public static final int center=0x7f080028;
         public static final int classic=0x7f080016;
-        public static final int client_to_list=0x7f08009c;
         public static final int com_facebook_body_frame=0x7f08003f;
         public static final int com_facebook_button_xout=0x7f080041;
         public static final int com_facebook_fragment_container=0x7f08003d;
@@ -939,7 +938,7 @@ containing a value of this type.
         public static final int large=0x7f08001d;
         public static final int left=0x7f080029;
         public static final int linearLayout1=0x7f08007b;
-        public static final int list_to_client=0x7f0800a0;
+        public static final int list_to_client=0x7f08009f;
         public static final int main=0x7f08007c;
         public static final int map=0x7f08006d;
         public static final int match_parent=0x7f080010;
@@ -1078,7 +1077,7 @@ containing a value of this type.
         public static final int action_showHeaderAndFooter=0x7f070049;
         public static final int action_showShadow=0x7f070044;
         public static final int action_updateDataset=0x7f07004a;
-        public static final int adhoc_not_supported_yet=0x7f07007b;
+        public static final int adhoc_not_supported_yet=0x7f07007a;
         public static final int app_name=0x7f07003d;
         public static final int app_running=0x7f070040;
         /**  Brand name for Facebook [DO NOT TRANSLATE] 
@@ -1087,11 +1086,11 @@ containing a value of this type.
         /**  Brand name for Google [DO NOT TRANSLATE] 
          */
         public static final int auth_google_play_services_client_google_display_name=0x7f070006;
-        public static final int broadcast_addr_default=0x7f07007f;
-        public static final int broadcast_addr_summary=0x7f07007e;
-        public static final int broadcast_addr_title=0x7f07007d;
-        public static final int buttonOp=0x7f070060;
-        public static final int button_change_password=0x7f070078;
+        public static final int broadcast_addr_default=0x7f07007e;
+        public static final int broadcast_addr_summary=0x7f07007d;
+        public static final int broadcast_addr_title=0x7f07007c;
+        public static final int buttonOp=0x7f07005f;
+        public static final int button_change_password=0x7f070077;
         /**  Message of the notification to indicate an active cast display connection.  [CHAR LIMIT=80] NOTE: Same text as msgid="794424023757290105" 
          */
         public static final int cast_notification_connected_message=0x7f070009;
@@ -1101,8 +1100,8 @@ containing a value of this type.
         /**  Label of a button to disconnect an active cast display connection.  [CHAR LIMIT=25] NOTE: Same text as msgid="9024230238785261495" 
          */
         public static final int cast_notification_disconnect=0x7f07000a;
-        public static final int cast_type_summary=0x7f070093;
-        public static final int cast_type_title=0x7f070092;
+        public static final int cast_type_summary=0x7f070092;
+        public static final int cast_type_title=0x7f070091;
         public static final int com_facebook_image_download_unknown_error=0x7f07003a;
         public static final int com_facebook_internet_permission_error_message=0x7f070038;
         public static final int com_facebook_internet_permission_error_title=0x7f070037;
@@ -1233,61 +1232,61 @@ containing a value of this type.
         public static final int common_signin_button_text_long=0x7f070026;
         /**  Button label to connect to a wifi network 
          */
-        public static final int connect=0x7f070065;
-        public static final int connect_peer_button=0x7f070095;
+        public static final int connect=0x7f070064;
+        public static final int connect_peer_button=0x7f070094;
         public static final int create_calendar_message=0x7f070005;
         public static final int create_calendar_title=0x7f070004;
         public static final int decline=0x7f070003;
-        public static final int disconnect_peer_button=0x7f070096;
-        public static final int dummy_content_description=0x7f07007c;
-        public static final int echo_off=0x7f070090;
-        public static final int echo_on=0x7f07008f;
-        public static final int echo_title=0x7f07008e;
-        public static final int empty=0x7f07009b;
-        public static final int empty_message=0x7f07009e;
-        public static final int enable_p2p_button=0x7f070063;
+        public static final int disconnect_peer_button=0x7f070095;
+        public static final int dummy_content_description=0x7f07007b;
+        public static final int echo_off=0x7f07008f;
+        public static final int echo_on=0x7f07008e;
+        public static final int echo_title=0x7f07008d;
+        public static final int empty=0x7f07009a;
+        public static final int empty_message=0x7f07009d;
+        public static final int enable_p2p_button=0x7f070062;
         public static final int facebook_app_id=0x7f07004b;
         /**  Button caption to forget a wifi network 
          */
-        public static final int forget_network=0x7f070066;
-        public static final int get_file_button=0x7f070097;
-        public static final int group_owner_text=0x7f070098;
+        public static final int forget_network=0x7f070065;
+        public static final int get_file_button=0x7f070096;
+        public static final int group_owner_text=0x7f070097;
         public static final int hello_world=0x7f07003e;
         /**  Wi-Fi IP address label 
          */
-        public static final int ip_address=0x7f07005c;
-        public static final int label_me=0x7f07009c;
-        public static final int label_peers=0x7f07009d;
+        public static final int ip_address=0x7f07005b;
+        public static final int label_me=0x7f07009b;
+        public static final int label_peers=0x7f07009c;
         public static final int messenger_send_button_text=0x7f07002c;
-        public static final int multicast_addr_default=0x7f070082;
-        public static final int multicast_addr_summary=0x7f070081;
-        public static final int multicast_addr_title=0x7f070080;
-        public static final int no=0x7f07009a;
-        public static final int p2p_off_warning=0x7f070064;
+        public static final int multicast_addr_default=0x7f070081;
+        public static final int multicast_addr_summary=0x7f070080;
+        public static final int multicast_addr_title=0x7f07007f;
+        public static final int no=0x7f070099;
+        public static final int p2p_off_warning=0x7f070063;
         public static final int parse_app_id=0x7f07004c;
         public static final int parse_client_key=0x7f07004d;
-        public static final int please_type_passphrase=0x7f070075;
-        public static final int port_default=0x7f070088;
-        public static final int port_summary=0x7f070087;
-        public static final int port_title=0x7f070086;
-        public static final int ptt=0x7f07005f;
-        public static final int quit_label=0x7f070062;
+        public static final int please_type_passphrase=0x7f070074;
+        public static final int port_default=0x7f070087;
+        public static final int port_summary=0x7f070086;
+        public static final int port_title=0x7f070085;
+        public static final int ptt=0x7f07005e;
+        public static final int quit_label=0x7f070061;
         /**  Label for the security of a wifi network 
          */
-        public static final int security=0x7f07006e;
-        public static final int set_cast_and_port=0x7f070091;
-        public static final int set_ip_addr=0x7f070094;
-        public static final int setting_reset_all_confirm=0x7f070061;
+        public static final int security=0x7f07006d;
+        public static final int set_cast_and_port=0x7f070090;
+        public static final int set_ip_addr=0x7f070093;
+        public static final int setting_reset_all_confirm=0x7f070060;
         /**  Label for the signal strength 
          */
-        public static final int signal=0x7f07005d;
-        public static final int speex_quality_summary=0x7f07008d;
-        public static final int speex_quality_title=0x7f07008c;
+        public static final int signal=0x7f07005c;
+        public static final int speex_quality_summary=0x7f07008c;
+        public static final int speex_quality_title=0x7f07008b;
         /**  Label for status of connection 
  Wi-Fi settings screen, summary text for network when connected 
          */
-        public static final int status_connected=0x7f070067;
-        public static final int status_connecting=0x7f070068;
+        public static final int status_connected=0x7f070066;
+        public static final int status_connecting=0x7f070067;
         public static final int store_picture_message=0x7f070001;
         public static final int store_picture_title=0x7f070000;
         public static final int test_String=0x7f07004e;
@@ -1296,67 +1295,66 @@ containing a value of this type.
         public static final int title_activity_DetailPage=0x7f070055;
         public static final int title_activity_DetailsActivity=0x7f070053;
         public static final int title_activity_GalleryActivity=0x7f070051;
-        public static final int title_activity_Main=0x7f070058;
-        public static final int title_activity_TestWifiScan=0x7f070057;
+        public static final int title_activity_Main=0x7f070057;
+        public static final int title_activity_TestWifiScan=0x7f070056;
         public static final int title_activity_UploadMediaListActivity=0x7f070054;
-        public static final int title_activity_UploadPage=0x7f070059;
-        public static final int title_activity_Wificonnection_easy=0x7f070056;
+        public static final int title_activity_UploadPage=0x7f070058;
         public static final int title_activity_fileexplorer=0x7f070050;
-        public static final int toastFailed=0x7f07005e;
-        public static final int unicast_addr_default=0x7f070085;
-        public static final int unicast_addr_summary=0x7f070084;
-        public static final int unicast_addr_title=0x7f070083;
-        public static final int use_speex_off=0x7f07008b;
-        public static final int use_speex_on=0x7f07008a;
-        public static final int use_speex_title=0x7f070089;
+        public static final int toastFailed=0x7f07005d;
+        public static final int unicast_addr_default=0x7f070084;
+        public static final int unicast_addr_summary=0x7f070083;
+        public static final int unicast_addr_title=0x7f070082;
+        public static final int use_speex_off=0x7f07008a;
+        public static final int use_speex_on=0x7f070089;
+        public static final int use_speex_title=0x7f070088;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */
         public static final int wallet_buy_button_place_holder=0x7f07002b;
-        public static final int wifi_change_password=0x7f070077;
-        public static final int wifi_connect_to=0x7f07005b;
+        public static final int wifi_change_password=0x7f070076;
+        public static final int wifi_connect_to=0x7f07005a;
         /**  Label for link speed (wifi) 
          */
-        public static final int wifi_link_speed=0x7f070069;
+        public static final int wifi_link_speed=0x7f070068;
         /**  An edit field's grayed out value when it has not been modified 
          */
-        public static final int wifi_password_unchanged=0x7f070079;
+        public static final int wifi_password_unchanged=0x7f070078;
         /**  Button caption to save a configuration wifi 
          */
-        public static final int wifi_save_config=0x7f07007a;
+        public static final int wifi_save_config=0x7f070079;
         /**  Value for the wifi security 
          */
-        public static final int wifi_security_ieee8021x=0x7f070074;
+        public static final int wifi_security_ieee8021x=0x7f070073;
         /**  Value for the wifi security.  This means no encryption. 
          */
-        public static final int wifi_security_open=0x7f07006f;
+        public static final int wifi_security_open=0x7f07006e;
         /**  Value for the wifi security 
          */
-        public static final int wifi_security_wep=0x7f070070;
+        public static final int wifi_security_wep=0x7f07006f;
         /**  Value for the wifi security 
          */
-        public static final int wifi_security_wpa=0x7f070071;
+        public static final int wifi_security_wpa=0x7f070070;
         /**  Value for the wifi security 
          */
-        public static final int wifi_security_wpa2=0x7f070072;
+        public static final int wifi_security_wpa2=0x7f070071;
         /**  Value for the wifi security 
          */
-        public static final int wifi_security_wpa_eap=0x7f070073;
-        public static final int wifi_show_password=0x7f070076;
+        public static final int wifi_security_wpa_eap=0x7f070072;
+        public static final int wifi_show_password=0x7f070075;
         /**  Verbose wifi signal strength.  This is the worst out of 4 levels. 
          */
-        public static final int wifi_signal_0=0x7f07006d;
+        public static final int wifi_signal_0=0x7f07006c;
         /**  Verbose wifi signal strength.  This is the 3rd best out of 4 levels. 
          */
-        public static final int wifi_signal_1=0x7f07006c;
+        public static final int wifi_signal_1=0x7f07006b;
         /**  Verbose wifi signal strength.  This is the 2nd best out of 4 levels. 
          */
-        public static final int wifi_signal_2=0x7f07006b;
+        public static final int wifi_signal_2=0x7f07006a;
         /**  Verbose wifi signal strength.  This is the best out of 4 levels. 
          */
-        public static final int wifi_signal_3=0x7f07006a;
-        public static final int wifi_status=0x7f07005a;
-        public static final int yes=0x7f070099;
+        public static final int wifi_signal_3=0x7f070069;
+        public static final int wifi_status=0x7f070059;
+        public static final int yes=0x7f070098;
     }
     public static final class style {
         /** 

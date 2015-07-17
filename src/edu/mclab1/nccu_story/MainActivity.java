@@ -20,7 +20,6 @@ import org.json.JSONObject;
 import ro.ui.pttdroid.Client_Main;
 import ro.ui.pttdroid.Client_Player;
 import ro.ui.pttdroid.Main;
-import ro.ui.pttdroid.Wificonnection_easy;
 
 import com.example.fileexplorer.FileexplorerActivity;
 import com.facebook.AccessToken;

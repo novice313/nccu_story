@@ -412,10 +412,11 @@ case R.id.btn_quit_icon:
 	return true;
 	
 	
-case R.id.client_to_list:
-	Intent intent3 =new Intent(this,Wificonnection_easy.class);
+/*case R.id.client_to_list:
+	Intent intent3 =new Intent(this,edu.mclab1.MainActivity.class);
 	startActivity(intent3);
-	return true;
+	return true;*/
+	
 
 
 
