@@ -195,6 +195,12 @@
             android:label="@string/title_activity_Client_Main" >
 		    
         </activity>
+        
+		<activity
+            android:name="com.mclab1.palace.customer.CustomerDetailActivity"
+            android:label="CustomDetail" >
+
+        </activity>
 		<!-- END listen broadcast -->
 
         <!-- music service -->

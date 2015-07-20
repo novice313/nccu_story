@@ -10,6 +10,8 @@ public class Globalvariable {
 	public static final String Uuid="";
 	public static final String Longitude="";
 	public static final String Latitude="121";
+	public static String guiderid="";
+	
 	
 
 
