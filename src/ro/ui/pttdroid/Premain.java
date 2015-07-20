@@ -133,10 +133,10 @@ public class Premain extends Activity  {
 	switch (item.getItemId()) {
 	
 	
-	case R.id.client_to_list:
+	/*case R.id.client_to_list:
 		Intent intent3 =new Intent(this,Main.class);
 		startActivity(intent3);
-		return true;
+		return true;*/
 
 
 	default:
