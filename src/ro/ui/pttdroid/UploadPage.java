@@ -111,8 +111,8 @@ public class UploadPage extends Activity {
 	byte[] uploadMusic = null;
 	// initial score
 	private final int INITIAL_SCORE = 0;
-	public static String latitudeString="24.98";
-	public static String longitudeString="121.575";
+	public static double latitudeString=24.98;
+	public static double longitudeString=121.575;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

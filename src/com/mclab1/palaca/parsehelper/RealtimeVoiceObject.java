@@ -59,7 +59,7 @@ public class RealtimeVoiceObject {
 	
 	
 	public void saveVoiceObject(final String mp3_file_path,final String tempFile, final String Tagi,final int SubTagi
-			,final String latitudestring,final String longitudestring,final int if_Final_normal) {
+			,final double latitudestring,final double longitudestring,final int if_Final_normal) {
 		//new Thread() {
 		//	@Override
 		//	public void run() {

@@ -346,7 +346,8 @@ public class MainActivity extends FragmentActivity implements
 			break;
 		case R.id.action_test:
 			Log.d(tag, "Test onClick");
-        	wiFiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        	//parse broadcast
+			wiFiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         	System.out.println("wiFiManagergetConnectionInfo"+wiFiManager.getConnectionInfo()+"$"+
         			wiFiManager.getWifiState()+" ");
 
@@ -413,7 +414,8 @@ public class MainActivity extends FragmentActivity implements
 			    Intent intent = new Intent(MainActivity.this,Client_Main.class);   // 改寫成TestWifiScan.this
 				intent .putExtra("if_Global_local",if_Global_local);//可放所有基本類別
 				startActivity(intent);            	
-        }         
+        }
+			//END parse broadcast
 
 			
 			

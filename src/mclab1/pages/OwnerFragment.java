@@ -6,6 +6,9 @@ import java.util.List;
 import mclab1.custom.listview.News;
 import mclab1.custom.listview.NewsAdapter;
 import mclab1.sugar.Owner;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -14,10 +17,15 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.farproc.wifi.connecter.TestWifiScan;
+import com.google.android.gms.maps.model.LatLng;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -35,6 +43,8 @@ public class OwnerFragment extends Fragment {
 	public static ArrayList<News> newsList;
 	public static ListView newsView;
 	NewsAdapter newsAdt;
+	
+	String[] list_uploadType = { "delete" };
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +76,18 @@ public class OwnerFragment extends Fragment {
 				newsList);
 
 		newsView.setAdapter(newsAdt);
+		newsView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int pos, long id) {
+				String objectString = newsList.get(pos).getobjectId();
+				
+				//alert window
+				ShowAlertDialogAndList(objectString);
+
+				return true;
+			}
+		});
 
 		return view;
 	}
@@ -74,6 +96,58 @@ public class OwnerFragment extends Fragment {
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		Log.d(tag, "onActivityCreated");
 		super.onActivityCreated(savedInstanceState);
+
+	}
+	
+	private void ShowAlertDialogAndList(final String objectIdString) {
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle("Delete");
+		// 建立選擇的事件
+		DialogInterface.OnClickListener ListClick = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+				case 0:// broadcast
+					Log.d(tag, "list_uploadType " + list_uploadType[which]
+							+ " onclick");
+					
+					//delete
+					ParseQuery<ParseObject> query_delete = new ParseQuery<ParseObject>(
+							"story");
+					query_delete.whereEqualTo("objectId", objectIdString);
+					query_delete.findInBackground(new FindCallback<ParseObject>() {
+
+						@Override
+						public void done(List<ParseObject> objects, ParseException e) {
+							if (e == null) {
+								for (ParseObject delete : objects) {
+									delete.deleteInBackground();
+									Toast.makeText(
+											getActivity().getApplicationContext(),
+											"deleted", Toast.LENGTH_SHORT).show();
+								}
+							} else {
+								Toast.makeText(
+										getActivity().getApplicationContext(),
+										"error in deleting", Toast.LENGTH_SHORT)
+										.show();
+							}
+						}
+					});
+					
+					break;
+				}
+
+			}
+		};
+		// 建立按下取消什麼事情都不做的事件
+		DialogInterface.OnClickListener OkClick = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+			}
+		};
+		builder.setItems(list_uploadType, ListClick);
+		builder.setNeutralButton("cancel", OkClick);
+		builder.show();
 
 	}
 
@@ -136,8 +210,8 @@ public class OwnerFragment extends Fragment {
 														titleString, score,
 														bmp, contentString,
 														latitude, longitude));
-												
-												//redo if data change
+
+												// redo if data change
 												newsAdt.notifyDataSetChanged();
 											}
 										}
