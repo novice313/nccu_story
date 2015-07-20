@@ -40,6 +40,7 @@ public class RealtimeVoiceObject {
 	public static final String latitude="latitude";
 	public static final String longitude="longitude";
 	public static final String State="State";  //做online  offline state
+	public static final String Guiderid="Guiderid";
 	
 	
 	
@@ -59,7 +60,9 @@ public class RealtimeVoiceObject {
 	
 	
 	public void saveVoiceObject(final String mp3_file_path,final String tempFile, final String Tagi,final int SubTagi
-			,final double latitudestring,final double longitudestring,final int if_Final_normal) {
+			,final double latitudestring,final double longitudestring,final String guiderid,final int if_Final_normal) {
+			 
+
 		//new Thread() {
 		//	@Override
 		//	public void run() {
@@ -120,6 +123,7 @@ public class RealtimeVoiceObject {
 								parseObject.put(longitude, longitudestring);
 								parseObject.put(NumberTag, Tagi);
 								parseObject.put(SubNumberTag, SubTagi);
+								parseObject.put(Guiderid, guiderid);     //上傳Guiderid
 								parseObject.put(column_audio_file, file);
 								if(if_Final_normal==0){
 								parseObject.put(State,"Offline");
@@ -130,6 +134,8 @@ public class RealtimeVoiceObject {
 
 
 								parseObject.saveEventually();
+								                                     //update offline table
+							
 								
 								EventBus.getDefault()
 								.postSticky(
