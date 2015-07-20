@@ -439,7 +439,7 @@ public class GuiderRecorder extends Thread
 				
 				RealtimeVoiceObject realtimeVoiceObject = new RealtimeVoiceObject();
 				if_Final_normal=0;
-				realtimeVoiceObject.saveVoiceObject(mp3File,tempFile,numberTag,SubnumbeTag,UploadPage.latitudeString,UploadPage.longitudeString,if_Final_normal); 
+				realtimeVoiceObject.saveVoiceObject(mp3File,tempFile,numberTag,SubnumbeTag,UploadPage.latitudeString,UploadPage.longitudeString,Globalvariable.guiderid ,if_Final_normal); 
 				//parse to cloud, after you can input where are you(not yet) ;從Uploadpage latitudeString longitudeString
 				//SubnumbeTag=0;
 				//numberTag = UUID.randomUUID().toString(); 
@@ -531,7 +531,7 @@ public class GuiderRecorder extends Thread
 						new DisplayEvent("Saving Realtime mp3!"));
 				RealtimeVoiceObject realtimeVoiceObject = new RealtimeVoiceObject();
 				if_Final_normal=1;
-				realtimeVoiceObject.saveVoiceObject(mp3File,tempFile,numberTag,SubnumbeTag,UploadPage.latitudeString,UploadPage.longitudeString,if_Final_normal); //parse to cloud
+				realtimeVoiceObject.saveVoiceObject(mp3File,tempFile,numberTag,SubnumbeTag,UploadPage.latitudeString,UploadPage.longitudeString,Globalvariable.guiderid,if_Final_normal); //parse to cloud
 				//SubnumbeTag=0;
 				//numberTag = UUID.randomUUID().toString(); 
 				/*if(file.delete()){

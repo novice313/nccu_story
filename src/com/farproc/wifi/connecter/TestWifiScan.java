@@ -79,7 +79,7 @@ public class TestWifiScan extends ListActivity {
     	getListView().setOnItemClickListener(mItemOnClick);
     	
     	Bundle extras = getIntent().getExtras();
-		longitude = extras.getDouble("longitude");
+    	longitude = extras.getDouble("longitude");
 		latitude = extras.getDouble("latitude");
 	}
 	

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
@@ -46,6 +47,7 @@ import mclab1.sugar.Owner;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import android.bluetooth.le.ScanResult;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -82,7 +84,10 @@ public class MainActivity extends FragmentActivity implements
 	public static int tabsize = 0;
     private WifiManager wiFiManager;
     int if_Global_local=-1;
-
+    List<android.net.wifi.ScanResult> mWifiScanResultList;
+    String SSID;
+    Boolean if_find_wificonnect=false;
+    ArrayList<String> SSIDList = new ArrayList<String>(); 
 
 
 	// Result codes
@@ -239,6 +244,13 @@ public class MainActivity extends FragmentActivity implements
 					}
 				});
 		// END set facebook
+		
+	    //若wifi狀態為關閉則將它開啟
+    	wiFiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+    	   if (!wiFiManager.isWifiEnabled()) {
+    		     wiFiManager.setWifiEnabled(true);
+    		  }
+
 
 	}
 
@@ -346,7 +358,6 @@ public class MainActivity extends FragmentActivity implements
 			break;
 		case R.id.action_test:
 			Log.d(tag, "Test onClick");
-        	wiFiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         	System.out.println("wiFiManagergetConnectionInfo"+wiFiManager.getConnectionInfo()+"$"+
         			wiFiManager.getWifiState()+" ");
 
@@ -354,10 +365,21 @@ public class MainActivity extends FragmentActivity implements
         	 Toast.makeText(this, "要開啟網路(Wifi/3G)!", Toast.LENGTH_SHORT).show();
 
         	}else{
-
+        		
+        	    //重新掃描Wi-Fi資訊
+        		wiFiManager.startScan();
+                //偵測周圍的Wi-Fi環境(因為會有很多組Wi-Fi，所以型態為List)
+                mWifiScanResultList = wiFiManager.getScanResults();
+                for(int i = 0 ; i < mWifiScanResultList.size() ; i++ )
+                {
+                     //手機目前周圍的Wi-Fi環境
+                     SSID  = mWifiScanResultList.get(i).SSID;
+                     SSIDList.add(SSID);
+                     
+                }
         	
 			 System.out.println("GOGOGO");            //network module connect 
-			 String networkSSID = "NCCU_Wang";        //以後柏要傳進來的變數 WIRELESS NCCU_Tsai
+			 String networkSSID = "NCCU_Tsai";        //以後柏要傳進來的變數 WIRELESS NCCU_Tsai
 			                                                      //TOTOLINK A2004NS 2.4G"
 			                                                      //NCCU_Wang   WIRELESS
 			 String networkPass = ""; 
@@ -372,43 +394,32 @@ public class MainActivity extends FragmentActivity implements
 			 WifiManager wifiManager2 = (WifiManager)getSystemService(Context.WIFI_SERVICE); 
 			 wifiManager2.addNetwork(conf);
 
-			 if_Global_local=0;
 			 List<WifiConfiguration> list = wifiManager2.getConfiguredNetworks();
-			 for( WifiConfiguration i : list ) {
-			     /*if(i.SSID != null && i.SSID.equals("\"" + networkSSID + "\"")) { //核心做連線的部分
-			    	 if_Global_local=1; 
-					 System.out.println("GOGOGO3"+if_Global_local);
+			 if_Global_local=0;
+		for( WifiConfiguration wificonfig : list ) {    //解決ap遇到不在現場就會無法連線的問題
+		     if(if_find_wificonnect==true){
+	             	System.out.println("Main_configwifi");
+		    	 if_find_wificonnect=false;
+		          break;
+
+		     }
+             for(int i=0;i<SSIDList.size();i++){
+             	System.out.println("Main_configwifi"+" "+SSIDList.get(i));
+             	
+			     if(SSIDList.get(i) != null && SSIDList.get(i).equals(networkSSID)&&
+			    		 wificonfig.SSID.equals("\"" + networkSSID + "\"")) { //核心做連線的部分
+			    	 System.out.println("Main_configwifi2"+SSIDList.get(i)+" "+networkSSID);
 			    	 
-			     }*/
-			     System.out.println("networkSSID"+networkSSID+" "+i.SSID);
-			     if(i.SSID != null && i.SSID.equals("\"" + networkSSID + "\"")) { //核心做連線的部分
 					  wifiManager2.disconnect();
-			          wifiManager2.enableNetwork(i.networkId, true);
+			          wifiManager2.enableNetwork(wificonfig.networkId, true);
 					  wifiManager2.reconnect();
-
-
+					  if_find_wificonnect=true;
+					  if_Global_local=1;
 			          break;
-			     }
-
-			     
-			     
+			     }	
 			  }
-			 
-			 List<android.net.wifi.ScanResult> scanResults = wifiManager2.getScanResults();
-		        Iterator<android.net.wifi.ScanResult> iter = scanResults.iterator();
-		        while (iter.hasNext()) {
-		        	if(iter.next().SSID.equals(networkSSID)){
-				    	 if_Global_local=1; 
-						 System.out.println("GOGOGO3"+if_Global_local);
-		        		   
-				          // System.out.println("iterr"+iter.next().SSID);
-		        	}
-		        }
-		        if(if_Global_local==0){
-		        	 wiFiManager.reconnect();
-					 System.out.println("GOGOGO3.5");
-
-		        }
+             
+             }
 			 System.out.println("GOGOGO4"+if_Global_local);
 			    Intent intent = new Intent(MainActivity.this,Client_Main.class);   // 改寫成TestWifiScan.this
 				intent .putExtra("if_Global_local",if_Global_local);//可放所有基本類別
