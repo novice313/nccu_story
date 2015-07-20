@@ -157,6 +157,7 @@ public class GoogleMapFragment extends Fragment
 	public void onMapReady(GoogleMap map) {
 		Log.d(tag, "onMapReady.");
 		this.map = map;
+		map.clear();
 		// nccu: 24°58'46"N 121°34'15"E
 		// map.addMarker(new MarkerOptions().position(new LatLng(24.5846,
 		// 121.3415)).title("Marker"));
@@ -198,7 +199,7 @@ public class GoogleMapFragment extends Fragment
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				//query_offlineStory();
+				query_offlineStory();
 			}
 		});
 
@@ -345,6 +346,7 @@ public class GoogleMapFragment extends Fragment
 		// TODO Auto-generated method stub
 		ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
 				"offline");
+		parseQuery.whereEqualTo("State", "offline");
 		parseQuery.setLimit(PARSE_LIMIT);
 		parseQuery.addDescendingOrder("createdAt");
 		parseQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -376,6 +378,7 @@ public class GoogleMapFragment extends Fragment
 							ParseFile imageFile = (ParseFile) parseObject
 									.get("image");
 							if (imageFile != null) {
+								Log.d(tag, "parseObjectId = "+objectIdString);
 								imageFile
 										.getDataInBackground(new GetDataCallback() {
 

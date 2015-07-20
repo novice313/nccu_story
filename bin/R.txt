@@ -444,7 +444,8 @@ int menu menu_client 0x7f0c0002
 int menu menu_client_local 0x7f0c0003
 int menu menu_client_offline 0x7f0c0004
 int menu menu_upload_page 0x7f0c0005
-int menu net_to_client 0x7f0c0006
+int menu menu_upload_page_offline 0x7f0c0006
+int menu net_to_client 0x7f0c0007
 int raw gtm_analytics 0x7f050000
 int string accept 0x7f070002
 int string action_addpadding 0x7f07003d

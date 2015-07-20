@@ -1051,7 +1051,8 @@ containing a value of this type.
         public static final int menu_client_local=0x7f0c0003;
         public static final int menu_client_offline=0x7f0c0004;
         public static final int menu_upload_page=0x7f0c0005;
-        public static final int net_to_client=0x7f0c0006;
+        public static final int menu_upload_page_offline=0x7f0c0006;
+        public static final int net_to_client=0x7f0c0007;
     }
     public static final class raw {
         public static final int gtm_analytics=0x7f050000;

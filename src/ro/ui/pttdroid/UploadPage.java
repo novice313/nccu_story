@@ -158,14 +158,14 @@ public class UploadPage extends Activity {
 						@Override
 						public void run() {
 
-						//	if (uploadImage == null) {
-						//		Toast.makeText(getApplicationContext(),
-						//				"You must select one picture!",
-						//				Toast.LENGTH_SHORT);
-						//	} else {
-						//		Toast.makeText(getApplicationContext(),
-						//				"Start uploading", Toast.LENGTH_SHORT)
-						//				.show();
+							if (uploadImage == null) {
+								Toast.makeText(getApplicationContext(),
+										"You must select one picture!",
+										Toast.LENGTH_SHORT);
+							} else {
+								Toast.makeText(getApplicationContext(),
+										"Start uploading", Toast.LENGTH_SHORT)
+										.show();
 								try {
 									Upload();
 								} catch (ParseException e) {
@@ -173,7 +173,7 @@ public class UploadPage extends Activity {
 								} catch (IOException e) {
 									e.printStackTrace();
 								}
-					   //}
+					   }
 						}
 					});
 			    uuid = UUID.randomUUID().toString(); 
@@ -218,7 +218,7 @@ public class UploadPage extends Activity {
 		uploadObject.put(longitude, longitudeString);    //取得UUID後，上傳parse，為了offfline和Broadcast的結合
 		uploadObject.put(GuiderID,Globalvariable.guiderid);
 		
-		//uploadObject.put("score", INITIAL_SCORE);
+		uploadObject.put("score", INITIAL_SCORE);
 		//uploadObject.put("latitude", latitude);
 		//uploadObject.put("longitude", longitude);
 
@@ -241,36 +241,36 @@ public class UploadPage extends Activity {
 		
 
 	}
-/*
-	// parse read in file
-	private byte[] readInFile(String path) throws IOException {
-		byte[] data = null;
-		File file = new File(path);
-		InputStream input_stream = new BufferedInputStream(new FileInputStream(
-				file));
-		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-		data = new byte[16384]; // 16K
-		int bytes_read;
-		while ((bytes_read = input_stream.read(data, 0, data.length)) != -1) {
-			buffer.write(data, 0, bytes_read);
-		}
-		input_stream.close();
-		return buffer.toByteArray();
 
-	}*/
-/*
+	// parse read in file
+//	private byte[] readInFile(String path) throws IOException {
+//		byte[] data = null;
+//		File file = new File(path);
+//		InputStream input_stream = new BufferedInputStream(new FileInputStream(
+//				file));
+//		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+//		data = new byte[16384]; // 16K
+//		int bytes_read;
+//		while ((bytes_read = input_stream.read(data, 0, data.length)) != -1) {
+//			buffer.write(data, 0, bytes_read);
+//		}
+//		input_stream.close();
+//		return buffer.toByteArray();
+//
+//	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_upload_page, menu);
+		getMenuInflater().inflate(R.menu.menu_upload_page_offline, menu);
 		return true;
 	}
-	*/
+	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// menu item selected
-		/*switch (item.getItemId()) {
+		switch (item.getItemId()) {
 		case R.id.action_camera:
 			Log.d(tag, "camera icon onclick.");
 
@@ -304,6 +304,7 @@ public class UploadPage extends Activity {
 
 			break;
 
+		/*
 		case R.id.action_media:
 			Log.d(tag, "media icon onClick");
 
@@ -312,7 +313,8 @@ public class UploadPage extends Activity {
 			startActivityForResult(intent_media, MEDIA);
 
 			break;
-		}*/
+		*/
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
