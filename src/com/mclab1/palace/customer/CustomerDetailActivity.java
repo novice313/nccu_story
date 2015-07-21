@@ -288,8 +288,8 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 				.getQuery(VoiceObject.table_name);
 		//query.orderByAscending("numberTag");
 		//query.orderByAscending("subnumberTag");
-		 query.whereEqualTo("latitude", 24.99);    //柏傳給我經緯度，我做經緯度限制
-		 query.whereEqualTo("longitude", 121.575);    //柏傳給我經緯度，我做經緯度限制
+		 query.whereEqualTo("latitude", Globalvariable.latitude);    //柏傳給我經緯度，我做經緯度限制
+		 query.whereEqualTo("longitude", Globalvariable.longitude);    //柏傳給我經緯度，我做經緯度限制
 		query.setLimit(300);
 		query.findInBackground(new FindCallback<ParseObject>() {
 			@Override

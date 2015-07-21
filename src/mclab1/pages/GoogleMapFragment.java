@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ro.ui.pttdroid.Client_Main;
+import ro.ui.pttdroid.Globalvariable;
 
 import mclab1.custom.listview.News;
 
@@ -25,7 +26,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.mclab1.palace.customer.CustomerDetailActivity;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -170,6 +173,31 @@ public class GoogleMapFragment extends Fragment
 	public void onStart() {
 		super.onStart();
 		Log.d(tag, "onStart");
+		
+		getActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				query_Story();
+			}
+		});
+
+		getActivity().runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				query_offlineStory();
+			}
+		});
+
+		getActivity().runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				query_onlineStory();
+			}
+		});
 	}
 
 	@Override
@@ -205,30 +233,7 @@ public class GoogleMapFragment extends Fragment
 			}
 		});
 
-		getActivity().runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				query_Story();
-			}
-		});
-
-		getActivity().runOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				query_offlineStory();
-			}
-		});
-
-		getActivity().runOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				query_onlineStory();
-			}
-		});
+		
 
 		// set googlaMap infoWindow
 		setGoogleMapInfoWindow(map);
@@ -301,10 +306,10 @@ public class GoogleMapFragment extends Fragment
 
 	private void addMarker_Broadcast(String objectIdString,
 			String userNameString, String title, LatLng point, int score,
-			int type) {
+			int type, String SSIDString) {
 
 		String snippet = objectIdString + "," + userNameString + "," + score
-				+ "," + type;
+				+ "," + type+","+SSIDString;
 		this.map.addMarker(new MarkerOptions()
 				.position(point)
 				.snippet(snippet)
@@ -500,6 +505,8 @@ public class GoogleMapFragment extends Fragment
 							final int score = parseObject.getInt("score");
 							final String contentString = parseObject
 									.getString("content");
+							final String SSIDString = parseObject
+									.getString("SSID");
 
 							final double latitude = parseObject
 									.getDouble("latitude");
@@ -542,7 +549,7 @@ public class GoogleMapFragment extends Fragment
 															userNameString,
 															titleString, point,
 															score,
-															TYPE_ONLINE_BROADCAST);
+															TYPE_ONLINE_BROADCAST,SSIDString);
 
 												}
 											}
@@ -611,6 +618,9 @@ public class GoogleMapFragment extends Fragment
 				String snippet = marker.getSnippet();
 				String[] temp = snippet.split(",");
 				String objectId = temp[0];
+				LatLng point = marker.getPosition();
+				final double latitude = point.latitude;
+				final double longitude = point.longitude;
 				int type = Integer.parseInt(temp[3]);
 				if (type == TYPE_STORY) {
 					Log.d(tag, "Icon TYPE_STORY onclick.");
@@ -620,8 +630,29 @@ public class GoogleMapFragment extends Fragment
 					startActivity(intent_detail);
 				} else if (type == TYPE_OFFLINE_STORY) {
 					Log.d(tag, "Icon TYPE_OFFLINE_STORY onclick.");
+					ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
+					// Retrieve the object by id
+					query.getInBackground(objectId, new GetCallback<ParseObject>() {  //以後博要給我object ID
+					    public void done(ParseObject offline, ParseException e) {
+					        if (e == null) {
+					       Globalvariable.titleString =	(String) offline.get("title");
+					       Globalvariable.contentString=(String) offline.get("content");
+					       Globalvariable.latitude =latitude;	
+					       Globalvariable.longitude=longitude;
+					       System.out.println("Globalvariable"+Globalvariable.titleString);
+					       System.out.println("Globalvariable"+Globalvariable.contentString);
+								Intent intent = new Intent(getActivity(),
+										CustomerDetailActivity.class);
+								getActivity().startActivity(intent);
+
+					        }
+					    }
+					});
+					
 				} else if (type == TYPE_ONLINE_BROADCAST) {
 					Log.d(tag, "Icon TYPE_ONLINE_BROADCAST onclick.");
+					
+					String SSIDstring = temp[4];
 					// parse broadcast
 					// 若wifi狀態為關閉則將它開啟
 					wiFiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
@@ -650,11 +681,12 @@ public class GoogleMapFragment extends Fragment
 
 						}
 
-						System.out.println("GOGOGO"); // network module connect
-						String networkSSID = "NCCU_Tsai"; // 以後柏要傳進來的變數 WIRELESS
+						String networkSSID = SSIDstring; // 以後柏要傳進來的變數 WIRELESS
 															// NCCU_Tsai
 															// TOTOLINK A2004NS 2.4G"
 															// NCCU_Wang WIRELESS
+						networkSSID=networkSSID.substring(1, networkSSID.length()-1);
+						System.out.println("GOGOGO"+networkSSID+" "+networkSSID.length()); // network module connect
 						String networkPass = "";
 						WifiConfiguration conf = new WifiConfiguration();
 						conf.SSID = "\"" + networkSSID + "\""; // Please note the
