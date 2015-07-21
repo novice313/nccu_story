@@ -83,7 +83,7 @@ public class CommSettings extends PreferenceActivity
 		{
     		castType = Integer.parseInt(prefs.getString(
     				"cast_type", 
-    				res.getStringArray(R.array.cast_types_values)[0]));			
+    				res.getStringArray(R.array.cast_types_values)[1]));	 //array String		
     		broadcastAddr = InetAddress.getByName(prefs.getString(
     				"broadcast_addr", 
     				res.getString(R.string.broadcast_addr_default)));			

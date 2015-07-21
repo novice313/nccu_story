@@ -7,7 +7,6 @@ import com.mclab1.palace.guider.DisplayEvent;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 
@@ -16,31 +15,30 @@ import de.greenrobot.event.EventBus;
 public class VoiceObject {
 	public static final String table_name = "Broadcast";
 	public static final String column_audio_file = "mp3file";
-	public static final String NumberTag="numberTag";
+	public static final String numberTag = "numberTag";
 	public static final String subnumberTag = "subnumberTag";
+
 	ParseFile file;
-	//int Tagi=0;
 
 	public VoiceObject() {
 
 	}
 
 	public void saveVoiceObject(final String mp3_file_path) {
-
 		EventBus.getDefault().postSticky(
 				new DisplayEvent("Saving voice file to parse..."));
 		new Thread() {
 			@Override
 			public void run() {
 				try {
-					
+
 					File mp3File = new File(mp3_file_path);
 					byte[] data = new byte[(int) mp3File.length()];
 					FileInputStream fileInputStream = null;
 					fileInputStream = new FileInputStream(mp3File);
 					fileInputStream.read(data);
 					fileInputStream.close();
-					file = new ParseFile("A.mp3", data);//change
+					file = new ParseFile("A_man.mp3", data);
 					file.saveInBackground(new SaveCallback() {
 						@Override
 						public void done(ParseException e) {
@@ -99,12 +97,6 @@ public class VoiceObject {
 				}
 			}
 		}.start();
-		
-
-		
 
 	}
-	
-	
-
 }

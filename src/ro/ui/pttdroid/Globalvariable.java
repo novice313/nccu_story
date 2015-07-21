@@ -3,8 +3,8 @@ package ro.ui.pttdroid;
 public class Globalvariable {
 	public static final String nicknameString="yuachuan";
 	public static final String languageString="中";
-	public static final String titleString="肉形石";
-	public static final String contentString="外觀看過去就像一塊肥嫩的東坡肉，因而稱「肉形石」。";
+	public static String titleString="";
+	public static String contentString="";
 	public static final String Macaddress="";
 	public static final String photopath="";
 	public static final String Uuid="";

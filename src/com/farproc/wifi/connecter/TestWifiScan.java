@@ -178,7 +178,7 @@ public class TestWifiScan extends ListActivity {
 				CurrentSSID=result.SSID;
 				System.out.println("Currentlevel"+Currentlevel+CurrentSSID+result.SSID);
 			}
-			if(count!=0&&result.SSID.contains("NCCU")){
+			if(count!=0&&result.SSID.contains("NCCU")){   //NCCU都抓出來
 			System.out.println("Currentlevel2"+Currentlevel+CurrentSSID+result.SSID);
 			((TwoLineListItem) convertView).getText1().setText(result.SSID);
 			((TwoLineListItem)convertView).getText1().setTextColor(0xFF008080);

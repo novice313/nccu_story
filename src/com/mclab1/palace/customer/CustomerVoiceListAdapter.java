@@ -2,6 +2,9 @@ package com.mclab1.palace.customer;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import com.mclab1.palaca.parsehelper.VoiceDataElement;
+
 import edu.mclab1.nccu_story.R;
 import android.app.Activity;
 import android.content.Context;
