@@ -43,7 +43,7 @@ public class OwnerFragment extends Fragment {
 	public static ArrayList<News> newsList;
 	public static ListView newsView;
 	NewsAdapter newsAdt;
-	
+
 	String[] list_uploadType = { "delete" };
 
 	@Override
@@ -58,18 +58,27 @@ public class OwnerFragment extends Fragment {
 		Log.d(tag, "onCreateView");
 		View view = inflater.inflate(R.layout.fragment_news, container, false);
 		newsView = (ListView) view.findViewById(R.id.news_list);
-
+		
 		// instantiate list
 		newsList = new ArrayList<News>();
-		// get songs from device
-		getActivity().runOnUiThread(new Runnable() {
 
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				getNewsList();
-			}
-		});
+		List<Owner> owner = Owner.listAll(Owner.class);
+		if (owner.isEmpty()) {
+
+			Toast.makeText(getActivity(), "You didn't log in before.",
+					Toast.LENGTH_SHORT).show();
+		} else {
+			final String userName = owner.get(owner.size() - 1).userName;
+			// get songs from device
+			getActivity().runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					getNewsList(userName);
+				}
+			});
+		}
 
 		// create and set adapter
 		newsAdt = new NewsAdapter(getActivity().getApplicationContext(),
@@ -81,8 +90,8 @@ public class OwnerFragment extends Fragment {
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					int pos, long id) {
 				String objectString = newsList.get(pos).getobjectId();
-				
-				//alert window
+
+				// alert window
 				ShowAlertDialogAndList(objectString);
 
 				return true;
@@ -98,9 +107,9 @@ public class OwnerFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 
 	}
-	
+
 	private void ShowAlertDialogAndList(final String objectIdString) {
-		
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle("Delete");
 		// 建立選擇的事件
@@ -110,31 +119,36 @@ public class OwnerFragment extends Fragment {
 				case 0:// broadcast
 					Log.d(tag, "list_uploadType " + list_uploadType[which]
 							+ " onclick");
-					
-					//delete
+
+					// delete
 					ParseQuery<ParseObject> query_delete = new ParseQuery<ParseObject>(
 							"story");
 					query_delete.whereEqualTo("objectId", objectIdString);
-					query_delete.findInBackground(new FindCallback<ParseObject>() {
+					query_delete
+							.findInBackground(new FindCallback<ParseObject>() {
 
-						@Override
-						public void done(List<ParseObject> objects, ParseException e) {
-							if (e == null) {
-								for (ParseObject delete : objects) {
-									delete.deleteInBackground();
-									Toast.makeText(
-											getActivity().getApplicationContext(),
-											"deleted", Toast.LENGTH_SHORT).show();
+								@Override
+								public void done(List<ParseObject> objects,
+										ParseException e) {
+									if (e == null) {
+										for (ParseObject delete : objects) {
+											delete.deleteInBackground();
+											Toast.makeText(
+													getActivity()
+															.getApplicationContext(),
+													"deleted",
+													Toast.LENGTH_SHORT).show();
+										}
+									} else {
+										Toast.makeText(
+												getActivity()
+														.getApplicationContext(),
+												"error in deleting",
+												Toast.LENGTH_SHORT).show();
+									}
 								}
-							} else {
-								Toast.makeText(
-										getActivity().getApplicationContext(),
-										"error in deleting", Toast.LENGTH_SHORT)
-										.show();
-							}
-						}
-					});
-					
+							});
+
 					break;
 				}
 
@@ -151,19 +165,13 @@ public class OwnerFragment extends Fragment {
 
 	}
 
-	public void getNewsList() {
+	public void getNewsList(String userName) {
 		ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
 				"story");
 		// parseQuery.whereEqualTo("userName", "Jeny Zheng Lan");
 		parseQuery.setLimit(LIMIT);
 
-		List<Owner> owner = Owner.listAll(Owner.class);
-		if (owner.isEmpty()) {
-
-			Toast.makeText(getActivity(), "You didn't log in before.",
-					Toast.LENGTH_SHORT).show();
-		}
-		parseQuery.whereEqualTo("userName", owner.get(0).userName);
+		parseQuery.whereEqualTo("userName", userName);
 		parseQuery.addDescendingOrder("createdAt");
 		parseQuery.findInBackground(new FindCallback<ParseObject>() {
 
