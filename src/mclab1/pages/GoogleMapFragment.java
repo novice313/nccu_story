@@ -157,6 +157,7 @@ public class GoogleMapFragment extends Fragment
 	public void onMapReady(GoogleMap map) {
 		Log.d(tag, "onMapReady.");
 		this.map = map;
+		map.clear();
 		// nccu: 24°58'46"N 121°34'15"E
 		// map.addMarker(new MarkerOptions().position(new LatLng(24.5846,
 		// 121.3415)).title("Marker"));
@@ -190,6 +191,15 @@ public class GoogleMapFragment extends Fragment
 			@Override
 			public void run() {
 				query_Story();
+			}
+		});
+		
+		getActivity().runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				query_offlineStory();
 			}
 		});
 
@@ -249,7 +259,7 @@ public class GoogleMapFragment extends Fragment
 
 	}
 
-	private void addMarker(String objectId, String title, LatLng point,
+	private void addMarker_Story(String objectId, String title, LatLng point,
 			int score) {
 		// TODO Auto-generated method stub
 		this.map.addMarker(new MarkerOptions()
@@ -317,7 +327,82 @@ public class GoogleMapFragment extends Fragment
 
 													LatLng point = new LatLng(
 															latitude, longitude);
-													addMarker(objectIdString,
+													addMarker_Story(objectIdString,
+															titleString, point,
+															score);
+
+												}
+											}
+										});
+							}
+						}
+					}
+				}
+			}
+		});
+	}
+	
+	private void query_offlineStory() {
+		// TODO Auto-generated method stub
+		ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
+				"offline");
+		parseQuery.whereEqualTo("State", "offline");
+		parseQuery.setLimit(PARSE_LIMIT);
+		parseQuery.addDescendingOrder("createdAt");
+		parseQuery.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+				if (e == null) {
+					if (!objects.isEmpty()) {
+						for (int i = 0; i < objects.size(); i++) {
+							ParseObject parseObject = objects.get(i);
+							final String objectIdString = parseObject
+									.getObjectId();
+							final String userNameString = parseObject
+									.getString("userName");
+							final String userUuidString = parseObject
+									.getString("userUuid");
+							final String titleString = parseObject
+									.getString("title");
+							final int score = parseObject.getInt("score");
+							final String contentString = parseObject
+									.getString("content");
+
+							final double latitude = parseObject
+									.getDouble("latitude");
+							final double longitude = parseObject
+									.getDouble("longitude");
+
+							ParseFile imageFile = (ParseFile) parseObject
+									.get("image");
+							if (imageFile != null) {
+								Log.d(tag, "parseObjectId = "+objectIdString);
+								imageFile
+										.getDataInBackground(new GetDataCallback() {
+
+											@Override
+											public void done(byte[] data,
+													ParseException e) {
+												if (e == null) {
+													// Log.d(tag,
+													// "parseFile done");
+													Bitmap bmp = BitmapFactory
+															.decodeByteArray(
+																	data, 0,
+																	data.length);
+													newsList.add(new News(
+															objectIdString,
+															userNameString,
+															userUuidString,
+															titleString, score,
+															bmp, contentString,
+															latitude, longitude));
+
+													LatLng point = new LatLng(
+															latitude, longitude);
+													addMarker_Story(objectIdString,
 															titleString, point,
 															score);
 

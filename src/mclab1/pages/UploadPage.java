@@ -80,6 +80,10 @@ public class UploadPage extends Activity {
 	// google map location
 	double longitude;
 	double latitude;
+	
+	//current user
+	String userNameString = null;
+	String uuidString = null;
 
 	// temp
 	String musicPath = null;
@@ -119,10 +123,14 @@ public class UploadPage extends Activity {
 		// imageView.setRotation(90);
 
 		List<Owner> owner = Owner.listAll(Owner.class);
+		
 		if (owner.isEmpty()) {
 			userName.setText("You didn't log in before.");
 		} else {
-			userName.setText(owner.get(0).userName);
+			int currentUser = owner.size()-1;
+			userNameString = owner.get(currentUser).userName;
+			uuidString = owner.get(currentUser).uuid;
+			userName.setText(userNameString);
 			LogIn = true;
 		}
 
@@ -199,7 +207,8 @@ public class UploadPage extends Activity {
 		// END music
 
 		ParseObject uploadObject = new ParseObject("story");
-		uploadObject.put("userName", userName.getText().toString());
+		uploadObject.put("userName", userNameString);
+		uploadObject.put("userUuid", uuidString);
 		uploadObject.put("title", title.getText().toString());
 		uploadObject
 				.put("language", language[spinner_language
