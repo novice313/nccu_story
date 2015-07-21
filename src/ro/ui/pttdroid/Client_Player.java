@@ -365,6 +365,8 @@ public class Client_Player extends Service
 				{
 					case CommSettings.BROADCAST:
 						try{
+							
+					    System.out.println("ReadytoBROADCAST");
 						android.util.Log.i("pttdroid", "Broadcast!");
 						socket = new DatagramSocket(CommSettings.getPort());
 						socket.setBroadcast(true);
@@ -375,6 +377,7 @@ public class Client_Player extends Service
 					break;
 					case CommSettings.MULTICAST:
 						try{
+							System.out.println("Readytomulticast");
 						socket = new MulticastSocket(CommSettings.getPort());
 						((MulticastSocket) socket).joinGroup(addr50_51);
 						

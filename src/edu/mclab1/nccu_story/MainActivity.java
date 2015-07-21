@@ -379,7 +379,7 @@ public class MainActivity extends FragmentActivity implements
                 }
         	
 			 System.out.println("GOGOGO");            //network module connect 
-			 String networkSSID = "NCCU_Tsai";        //以後柏要傳進來的變數 WIRELESS NCCU_Tsai
+			 String networkSSID = "NCCU_Wang";        //以後柏要傳進來的變數 WIRELESS NCCU_Tsai
 			                                                      //TOTOLINK A2004NS 2.4G"
 			                                                      //NCCU_Wang   WIRELESS
 			 String networkPass = ""; 
