@@ -579,21 +579,21 @@ public class GoogleMapFragment extends Fragment
 				// Getting the position from the marker
 				LatLng latLng = marker.getPosition();
 
-				TextView tvLat = (TextView) v.findViewById(R.id.userName);
-				TextView tvLng = (TextView) v.findViewById(R.id.title);
-				// TextView tvLng = (TextView) v.findViewById(R.id.score);
+				TextView userNameTextView = (TextView) v.findViewById(R.id.userName);
+				TextView titleTextView = (TextView) v.findViewById(R.id.title);
+				TextView scoreTextView = (TextView) v.findViewById(R.id.score);
 
 				String snippet = marker.getSnippet();
 				String[] temp = snippet.split(",");
 				String objectId = temp[0];
 				String userName = temp[1];
+				String score = temp[2];
 				int type = Integer.parseInt(temp[3]);
 				
-				// Setting the latitude
-				tvLat.setText(userName);
-
-				// Setting the longitude
-				tvLng.setText(marker.getTitle());
+				// Setting TextView
+				userNameTextView.setText(userName);
+				titleTextView.setText(marker.getTitle());
+				scoreTextView.setText(score);
 
 				// Returning the view containing InfoWindow contents
 				return v;
