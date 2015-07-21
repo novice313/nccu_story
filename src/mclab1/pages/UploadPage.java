@@ -36,6 +36,7 @@ import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -80,8 +81,8 @@ public class UploadPage extends Activity {
 	// google map location
 	double longitude;
 	double latitude;
-	
-	//current user
+
+	// current user
 	String userNameString = null;
 	String uuidString = null;
 
@@ -123,11 +124,11 @@ public class UploadPage extends Activity {
 		// imageView.setRotation(90);
 
 		List<Owner> owner = Owner.listAll(Owner.class);
-		
+
 		if (owner.isEmpty()) {
 			userName.setText("You didn't log in before.");
 		} else {
-			int currentUser = owner.size()-1;
+			int currentUser = owner.size() - 1;
 			userNameString = owner.get(currentUser).userName;
 			uuidString = owner.get(currentUser).uuid;
 			userName.setText(userNameString);
@@ -320,18 +321,42 @@ public class UploadPage extends Activity {
 			} else if (requestCode == PHOTO && data != null) {
 				Uri uri = (Uri) data.getData();
 				Log.d(tag, "uri = " + uri.getPath());
+
+				// orientation or horizontal
+				Matrix matrix = new Matrix();
+				try {
+					Log.d(tag, "getFileDescriptor = "+openFile(uri).getFileDescriptor());
+					ExifInterface exif = new ExifInterface(uri.getPath());
+					int rotation = exif.getAttributeInt(
+							ExifInterface.TAG_ORIENTATION,
+							ExifInterface.ORIENTATION_NORMAL);
+					int rotationInDegrees = exifToDegrees(rotation);
+					Log.d(tag, "rotation = "+rotation);
+					Log.d(tag, "rotationInDegrees = "+rotationInDegrees);
+					if (rotation != 0f) {
+						matrix.preRotate(rotationInDegrees);
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				// END orientation or horizontal
+
+				// uri to bitmap
 				ContentResolver cr = this.getContentResolver();
 				try {
 					bitmap = BitmapFactory
 							.decodeStream(cr.openInputStream(uri));
+//					Bitmap adjustedBitmap = Bitmap
+//							.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+//									bitmap.getHeight(), matrix, true);
+//					bitmap = adjustedBitmap;
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
 			}
-			// orientation or horizontal
-			// ExifInterface exif = new ExifInterface(filename);
 
 			// calculate scale
 			float mScale = ScalePic(bitmap, mPhone.heightPixels,
@@ -370,6 +395,22 @@ public class UploadPage extends Activity {
 		}
 
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	private static int exifToDegrees(int exifOrientation) {
+		if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+			return 90;
+		} else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+			return 180;
+		} else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+			return 270;
+		}
+		return 0;
+	}
+	
+	public ParcelFileDescriptor openFile(Uri uri) throws FileNotFoundException {
+	    File privateFile = new File(this.getFilesDir(), uri.getPath());
+	    return ParcelFileDescriptor.open(privateFile, ParcelFileDescriptor.MODE_READ_ONLY);
 	}
 
 	private float ScalePic(Bitmap bitmap, int phone_height, int phone_width) {
