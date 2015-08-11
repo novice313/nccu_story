@@ -182,6 +182,7 @@ fragmentManager.beginTransaction()
 }
 
 private void change_to_client_offline_fragment() { 
+System.out.println("INchange_to_client_offline_fragment");
 
 microphoneSwitcher.hide();
 
@@ -278,6 +279,11 @@ receiver = new WiFiDirectBroadcastReceiver(manager, channel, this);
 registerReceiver(receiver, intentFilter);*/
 
 
+change_to_client_offline_fragment();
+
+
+/****************** 之後要改變頁面的地方
+/*
 if (if_guider) {
 	//test_create_group();
 	FragmentManager fragmentManager = getSupportFragmentManager();
@@ -288,12 +294,18 @@ if (if_guider) {
 } else {
 	
 	if(if_Global_local==1){
-		System.out.println("local");
+		//System.out.println("local");
 		//if (if_clientL_offline_mode) {
 		//	if_clientL_offline_mode = false;
-		  change_to_client_online_fragment();
-		  playerIntent = new Intent(Client_Main.this, Client_Player.class);
-		  startService(playerIntent);
+		
+		
+		//change_to_client_offline_fragment();		
+
+		  change_to_client_offline_fragment();	
+		  if_clientL_offline_mode = false;
+			change_to_client_online_fragment();
+			playerIntent = new Intent(this, Client_Player.class);
+			startService(playerIntent);
 		//	} else {
 		//		if_clientL_offline_mode = true;
 		//		change_to_client_offline_fragment();
@@ -315,7 +327,7 @@ if (if_guider) {
 			
 		}
 	//change_to_client_offline_fragment();
-}
+}*/
 
 
     
@@ -347,7 +359,7 @@ if (if_guider) {
 	} 
 	else if(!if_clientL_offline_mode) 
 	{
-		System.out.println("menu_client_local");
+		System.out.println("menu_client_local");                 //會選擇是不是Local
 
 		getMenuInflater().inflate(R.menu.menu_client_local, menu);
 	}
@@ -375,10 +387,7 @@ case R.id.btn_change_mode:
 			change_to_client_online_fragment();
 			playerIntent = new Intent(this, Client_Player.class);
 			startService(playerIntent);
-			} else {
-				if_clientL_offline_mode = true;
-				change_to_client_offline_fragment();
-				}
+			} 
 		}
 	
 	if(if_Global_local==0){
@@ -387,23 +396,17 @@ case R.id.btn_change_mode:
 				if_clientL_offline_mode=false;
 
 				change_to_client_Global_online_fragment();
-			} else{
-				if_clientL_offline_mode=true;
-				change_to_client_offline_fragment();		
-			}
+			} 
 			invalidateOptionsMenu();
-			//return true;
 			
 		}
 		
 	invalidateOptionsMenu(); 
 	return true;
 
-case R.id.btn_quit_icon:
+case R.id.btn_quit_icon:     //一個箭頭的符號
 	
 	if (if_clientL_offline_mode) {
-		if_clientL_offline_mode = false;
-		change_to_client_online_fragment();
 	} else {
 		if_clientL_offline_mode = true;
 		change_to_client_offline_fragment();
@@ -412,10 +415,6 @@ case R.id.btn_quit_icon:
 	return true;
 	
 	
-/*case R.id.client_to_list:
-	Intent intent3 =new Intent(this,edu.mclab1.MainActivity.class);
-	startActivity(intent3);
-	return true;*/
 	
 
 
@@ -426,12 +425,6 @@ default:
 }
 
 
-/*@Override
-public void onActivityResult(int requestCode, int resultCode, Intent data) {
-System.out.println("onActivityResult");
-CommSettings.getSettings(this);
-AudioSettings.getSettings(this);
-}*/
 
 
 

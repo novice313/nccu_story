@@ -36,7 +36,7 @@
         android:ems="10"
         android:hint="廣播的內容~" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

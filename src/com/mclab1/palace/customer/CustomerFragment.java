@@ -59,7 +59,7 @@ public class CustomerFragment extends Fragment {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.customer_fragment, container,
 				false);
-		init_view(view);
+		//init_view(view);
 
 		return view;
 	}

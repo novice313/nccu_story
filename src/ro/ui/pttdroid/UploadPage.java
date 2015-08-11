@@ -120,6 +120,7 @@ public class UploadPage extends Activity {
 		setContentView(R.layout.page_upload_offline);
 		ParseHelper.initParse(this);
 		
+		System.out.println("UploadPage");
 		 wifi_service = (WifiManager) getSystemService(WIFI_SERVICE);
 		 wifiinfo = wifi_service.getConnectionInfo();
 		 System.out.println("getBssid"+wifiinfo.getBSSID()+wifiinfo.getSSID());
