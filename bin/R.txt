@@ -6,8 +6,8 @@ int attr adSize 0x7f010000
 int attr adSizes 0x7f010001
 int attr adUnitId 0x7f010002
 int attr appTheme 0x7f010016
-int attr border_color 0x7f010030
-int attr border_width 0x7f01002f
+int attr border_color 0x7f01003c
+int attr border_width 0x7f01003b
 int attr buyButtonAppearance 0x7f01001d
 int attr buyButtonHeight 0x7f01001a
 int attr buyButtonText 0x7f01001c
@@ -18,32 +18,32 @@ int attr cameraTargetLng 0x7f010009
 int attr cameraTilt 0x7f01000a
 int attr cameraZoom 0x7f01000b
 int attr circleCrop 0x7f010005
-int attr column_count 0x7f010026
-int attr column_count_landscape 0x7f010028
-int attr column_count_portrait 0x7f010027
-int attr com_facebook_auxiliary_view_position 0x7f01003d
-int attr com_facebook_confirm_logout 0x7f010033
-int attr com_facebook_foreground_color 0x7f010039
-int attr com_facebook_horizontal_alignment 0x7f01003e
-int attr com_facebook_is_cropped 0x7f010038
-int attr com_facebook_login_text 0x7f010034
-int attr com_facebook_logout_text 0x7f010035
-int attr com_facebook_object_id 0x7f01003a
-int attr com_facebook_object_type 0x7f01003b
-int attr com_facebook_preset_size 0x7f010037
-int attr com_facebook_style 0x7f01003c
-int attr com_facebook_tooltip_mode 0x7f010036
-int attr corner_radius 0x7f01002e
+int attr column_count 0x7f010032
+int attr column_count_landscape 0x7f010034
+int attr column_count_portrait 0x7f010033
+int attr com_facebook_auxiliary_view_position 0x7f010030
+int attr com_facebook_confirm_logout 0x7f010026
+int attr com_facebook_foreground_color 0x7f01002c
+int attr com_facebook_horizontal_alignment 0x7f010031
+int attr com_facebook_is_cropped 0x7f01002b
+int attr com_facebook_login_text 0x7f010027
+int attr com_facebook_logout_text 0x7f010028
+int attr com_facebook_object_id 0x7f01002d
+int attr com_facebook_object_type 0x7f01002e
+int attr com_facebook_preset_size 0x7f01002a
+int attr com_facebook_style 0x7f01002f
+int attr com_facebook_tooltip_mode 0x7f010029
+int attr corner_radius 0x7f01003a
 int attr environment 0x7f010017
 int attr fragmentMode 0x7f010019
 int attr fragmentStyle 0x7f010018
-int attr grid_paddingBottom 0x7f01002d
-int attr grid_paddingLeft 0x7f01002a
-int attr grid_paddingRight 0x7f01002b
-int attr grid_paddingTop 0x7f01002c
+int attr grid_paddingBottom 0x7f010039
+int attr grid_paddingLeft 0x7f010036
+int attr grid_paddingRight 0x7f010037
+int attr grid_paddingTop 0x7f010038
 int attr imageAspectRatio 0x7f010004
 int attr imageAspectRatioAdjust 0x7f010003
-int attr item_margin 0x7f010029
+int attr item_margin 0x7f010035
 int attr liteMode 0x7f01000c
 int attr mapType 0x7f010006
 int attr maskedWalletDetailsBackground 0x7f010020
@@ -53,8 +53,8 @@ int attr maskedWalletDetailsHeaderTextAppearance 0x7f01001f
 int attr maskedWalletDetailsLogoImageType 0x7f010024
 int attr maskedWalletDetailsLogoTextColor 0x7f010023
 int attr maskedWalletDetailsTextAppearance 0x7f01001e
-int attr mutate_background 0x7f010031
-int attr oval 0x7f010032
+int attr mutate_background 0x7f01003d
+int attr oval 0x7f01003e
 int attr uiCompass 0x7f01000d
 int attr uiMapToolbar 0x7f010015
 int attr uiRotateGestures 0x7f01000e
@@ -451,7 +451,8 @@ int menu menu_client 0x7f0d0002
 int menu menu_client_local 0x7f0d0003
 int menu menu_client_offline 0x7f0d0004
 int menu menu_upload_page 0x7f0d0005
-int menu net_to_client 0x7f0d0006
+int menu menu_upload_page_offline 0x7f0d0006
+int menu net_to_client 0x7f0d0007
 int raw gtm_analytics 0x7f050000
 int string accept 0x7f070002
 int string action_addpadding 0x7f070043
@@ -667,14 +668,14 @@ int styleable MapAttrs_uiZoomControls 11
 int styleable MapAttrs_uiZoomGestures 12
 int styleable MapAttrs_useViewLifecycle 13
 int styleable MapAttrs_zOrderOnTop 14
-int[] styleable RoundedImageView { 0x0101011d, 0x7f01002e, 0x7f01002f, 0x7f010030, 0x7f010031, 0x7f010032 }
+int[] styleable RoundedImageView { 0x0101011d, 0x7f01003a, 0x7f01003b, 0x7f01003c, 0x7f01003d, 0x7f01003e }
 int styleable RoundedImageView_android_scaleType 0
 int styleable RoundedImageView_border_color 3
 int styleable RoundedImageView_border_width 2
 int styleable RoundedImageView_corner_radius 1
 int styleable RoundedImageView_mutate_background 4
 int styleable RoundedImageView_oval 5
-int[] styleable StaggeredGridView { 0x7f010026, 0x7f010027, 0x7f010028, 0x7f010029, 0x7f01002a, 0x7f01002b, 0x7f01002c, 0x7f01002d }
+int[] styleable StaggeredGridView { 0x7f010032, 0x7f010033, 0x7f010034, 0x7f010035, 0x7f010036, 0x7f010037, 0x7f010038, 0x7f010039 }
 int styleable StaggeredGridView_column_count 0
 int styleable StaggeredGridView_column_count_landscape 2
 int styleable StaggeredGridView_column_count_portrait 1
@@ -700,19 +701,19 @@ int styleable WalletFragmentStyle_maskedWalletDetailsHeaderTextAppearance 5
 int styleable WalletFragmentStyle_maskedWalletDetailsLogoImageType 10
 int styleable WalletFragmentStyle_maskedWalletDetailsLogoTextColor 9
 int styleable WalletFragmentStyle_maskedWalletDetailsTextAppearance 4
-int[] styleable com_facebook_like_view { 0x7f010039, 0x7f01003a, 0x7f01003b, 0x7f01003c, 0x7f01003d, 0x7f01003e }
+int[] styleable com_facebook_like_view { 0x7f01002c, 0x7f01002d, 0x7f01002e, 0x7f01002f, 0x7f010030, 0x7f010031 }
 int styleable com_facebook_like_view_com_facebook_auxiliary_view_position 4
 int styleable com_facebook_like_view_com_facebook_foreground_color 0
 int styleable com_facebook_like_view_com_facebook_horizontal_alignment 5
 int styleable com_facebook_like_view_com_facebook_object_id 1
 int styleable com_facebook_like_view_com_facebook_object_type 2
 int styleable com_facebook_like_view_com_facebook_style 3
-int[] styleable com_facebook_login_view { 0x7f010033, 0x7f010034, 0x7f010035, 0x7f010036 }
+int[] styleable com_facebook_login_view { 0x7f010026, 0x7f010027, 0x7f010028, 0x7f010029 }
 int styleable com_facebook_login_view_com_facebook_confirm_logout 0
 int styleable com_facebook_login_view_com_facebook_login_text 1
 int styleable com_facebook_login_view_com_facebook_logout_text 2
 int styleable com_facebook_login_view_com_facebook_tooltip_mode 3
-int[] styleable com_facebook_profile_picture_view { 0x7f010037, 0x7f010038 }
+int[] styleable com_facebook_profile_picture_view { 0x7f01002a, 0x7f01002b }
 int styleable com_facebook_profile_picture_view_com_facebook_is_cropped 1
 int styleable com_facebook_profile_picture_view_com_facebook_preset_size 0
 int xml settings_audio 0x7f040000

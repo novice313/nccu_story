@@ -34,9 +34,12 @@ import com.parse.SaveCallback;
 
 
 
+
+import android.annotation.SuppressLint;
 //import edu.mclab1.nccu_story.MainActivity;
 //import edu.mclab1.nccu_story.R;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -112,15 +115,20 @@ public class UploadPage extends Activity {
 	byte[] uploadMusic = null;
 	// initial score
 	private final int INITIAL_SCORE = 0;
-	public static String latitudeString="24.98";
-	public static String longitudeString="121.575";
+	public static double latitudeString=24.98;
+	public static double longitudeString=121.575;
+	ProgressDialog dialog;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.page_upload_offline);
 		ParseHelper.initParse(this);
 		
-		System.out.println("UploadPage");
+		System.out.println("UploadPage");    //conflict過
+		Bundle extras = getIntent().getExtras();
+		longitudeString = extras.getDouble("longitude");
+    	latitudeString = extras.getDouble("latitude");
+		
 		 wifi_service = (WifiManager) getSystemService(WIFI_SERVICE);
 		 wifiinfo = wifi_service.getConnectionInfo();
 		 System.out.println("getBssid"+wifiinfo.getBSSID()+wifiinfo.getSSID());
@@ -159,14 +167,14 @@ public class UploadPage extends Activity {
 						@Override
 						public void run() {
 
-						//	if (uploadImage == null) {
-						//		Toast.makeText(getApplicationContext(),
-						//				"You must select one picture!",
-						//				Toast.LENGTH_SHORT);
-						//	} else {
-						//		Toast.makeText(getApplicationContext(),
-						//				"Start uploading", Toast.LENGTH_SHORT)
-						//				.show();
+							if (uploadImage == null) {
+								Toast.makeText(getApplicationContext(),
+										"You must select one picture!",
+										Toast.LENGTH_SHORT);
+							} else {
+								Toast.makeText(getApplicationContext(),
+										"Start uploading", Toast.LENGTH_SHORT)
+										.show();
 								try {
 									Upload();
 								} catch (ParseException e) {
@@ -174,26 +182,40 @@ public class UploadPage extends Activity {
 								} catch (IOException e) {
 									e.printStackTrace();
 								}
-					   //}
+					   }
 						}
 					});
 			    uuid = UUID.randomUUID().toString(); 
-				Intent intent = new Intent();
-				intent.setClass(UploadPage.this, Main.class);
-				startActivity(intent);
+
 			}
 		});
 
 		languageList = new ArrayAdapter<String>(UploadPage.this,
 				android.R.layout.simple_spinner_item, language);
 		spinner_language.setAdapter(languageList);
+		
 
 	}
+	
+	public void onResume(){
+		super.onResume();
+		System.out.println("Resume");
+
+		
+	}
+	public void onStop(){
+		super.onStop();
+		
+	}
+	
 
 	protected void Upload() throws ParseException, IOException {
 		ParseFile imageFile = null;
 		ParseFile musicFile = null;
-
+		
+		
+        dialog = ProgressDialog.show(UploadPage.this,
+                "正在上傳資料中", "請 稍 等 . . . . ",true);
 		// image
 		if (uploadImage != null) {
 			imageFile = new ParseFile("uploadImage", uploadImage);
@@ -221,7 +243,7 @@ public class UploadPage extends Activity {
 		uploadObject.put(longitude, longitudeString);    //取得UUID後，上傳parse，為了offfline和Broadcast的結合
 		uploadObject.put(GuiderID,Globalvariable.guiderid);
 		
-		//uploadObject.put("score", INITIAL_SCORE);
+		uploadObject.put("score", INITIAL_SCORE);
 		//uploadObject.put("latitude", latitude);
 		//uploadObject.put("longitude", longitude);
 
@@ -232,6 +254,9 @@ public class UploadPage extends Activity {
 				Log.d(tag, "upload complete");
 				Toast.makeText(getApplicationContext(), "Upload complete",
 						Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent();
+				intent.setClass(UploadPage.this, Main.class);
+				startActivity(intent);
 				finish();
 			}
 		});
@@ -241,36 +266,36 @@ public class UploadPage extends Activity {
 		
 
 	}
-/*
-	// parse read in file
-	private byte[] readInFile(String path) throws IOException {
-		byte[] data = null;
-		File file = new File(path);
-		InputStream input_stream = new BufferedInputStream(new FileInputStream(
-				file));
-		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-		data = new byte[16384]; // 16K
-		int bytes_read;
-		while ((bytes_read = input_stream.read(data, 0, data.length)) != -1) {
-			buffer.write(data, 0, bytes_read);
-		}
-		input_stream.close();
-		return buffer.toByteArray();
 
-	}*/
-/*
+	// parse read in file
+//	private byte[] readInFile(String path) throws IOException {
+//		byte[] data = null;
+//		File file = new File(path);
+//		InputStream input_stream = new BufferedInputStream(new FileInputStream(
+//				file));
+//		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+//		data = new byte[16384]; // 16K
+//		int bytes_read;
+//		while ((bytes_read = input_stream.read(data, 0, data.length)) != -1) {
+//			buffer.write(data, 0, bytes_read);
+//		}
+//		input_stream.close();
+//		return buffer.toByteArray();
+//
+//	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_upload_page, menu);
+		getMenuInflater().inflate(R.menu.menu_upload_page_offline, menu);
 		return true;
 	}
-	*/
+	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// menu item selected
-		/*switch (item.getItemId()) {
+		switch (item.getItemId()) {
 		case R.id.action_camera:
 			Log.d(tag, "camera icon onclick.");
 
@@ -301,9 +326,10 @@ public class UploadPage extends Activity {
 			intent_gallery.setType("image/*");
 			intent_gallery.setAction(Intent.ACTION_GET_CONTENT);
 			startActivityForResult(intent_gallery, PHOTO);
-
+			
 			break;
 
+		/*
 		case R.id.action_media:
 			Log.d(tag, "media icon onClick");
 
@@ -312,12 +338,18 @@ public class UploadPage extends Activity {
 			startActivityForResult(intent_media, MEDIA);
 
 			break;
-		}*/
+		*/
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		if (bitmap!=null) {   //free your memory
+			bitmap.recycle();
+			bitmap=null;	
+		}
 		if (requestCode == CAMERA || requestCode == PHOTO) {
 			// 藉由requestCode判斷是否為開啟相機或開啟相簿而呼叫的，且data不為null
 			if ((requestCode == CAMERA) && data != null) {
@@ -331,18 +363,27 @@ public class UploadPage extends Activity {
 					bitmap = BitmapFactory
 							.decodeStream(cr.openInputStream(uri));
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					// TODO Auto-generated catch block	
+					
+			          Toast toast = Toast.makeText(getApplicationContext(),
+			        		  "照片不好，選別張!", Toast.LENGTH_SHORT);
+			        		                  //顯示Toast
+			        		                  toast.show();
+
+					
+					//e.printStackTrace();
 				}
 
 			}
+			//以下調整照片和顯示照片
 			// orientation or horizontal
 			// ExifInterface exif = new ExifInterface(filename);
 
 			// calculate scale
+			if(bitmap.getWidth()+50>=bitmap.getHeight()){
+				System.out.println("bitmap"+bitmap.getWidth()+" "+bitmap.getHeight());
 			float mScale = ScalePic(bitmap, mPhone.heightPixels,
 					mPhone.widthPixels);
-
 			// // 判斷照片為橫向或者為直向，並進入ScalePic判斷圖片是否要進行縮放
 			// if (bitmap.getWidth() > bitmap.getHeight()) {
 			// ScalePic(bitmap, mPhone.heightPixels);
@@ -353,19 +394,37 @@ public class UploadPage extends Activity {
 			Matrix mMat = new Matrix();
 			final ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			mMat.setScale(mScale, mScale);
-
+			
 			Bitmap mScaleBitmap = Bitmap.createBitmap(bitmap, 0, 0,
 					bitmap.getWidth(), bitmap.getHeight(), mMat, false);
-			imageView.setImageBitmap(mScaleBitmap);
+			imageView.setImageBitmap(mScaleBitmap);   //顯示照片
+
 			mScaleBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
 			runOnUiThread(new Runnable() {
 
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
 					uploadImage = stream.toByteArray();
+					
 				}
 			});
+			
+
+			}
+			else{
+				System.out.println("照片不好，選別張");
+		          Toast toast = Toast.makeText(getApplicationContext(),
+		        		  "照片不好，選別張!", Toast.LENGTH_SHORT);
+		        		                  //顯示Toast
+		        		                  toast.show();
+				
+
+			
+			}
+			
+			
 		}
 		if (requestCode == MEDIA) {
 			musicPath = data.getExtras().getString("musicPath");
@@ -377,6 +436,9 @@ public class UploadPage extends Activity {
 
 		super.onActivityResult(requestCode, resultCode, data);
 	}
+	
+	
+	
 
 	private float ScalePic(Bitmap bitmap, int phone_height, int phone_width) {
 		// 縮放比例預設為1

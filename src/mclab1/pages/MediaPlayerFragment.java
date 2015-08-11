@@ -24,6 +24,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,19 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(tag, "onCreate.");
+		
+		//set recorder icon at action bar
+		setHasOptionsMenu(true);
 
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		if (menu != null) {
+
+	        menu.findItem(R.id.action_recorder).setVisible(true);
+	    }
 	}
 
 	@Override
