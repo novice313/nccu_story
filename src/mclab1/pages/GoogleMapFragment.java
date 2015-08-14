@@ -95,6 +95,7 @@ public class GoogleMapFragment extends Fragment
 		super.onCreate(savedInstanceState);
 		// setContentView(R.layout.googlemap);
 		Log.d(tag, "oncreated.");
+
 		// instantiate list
 		storyList = new ArrayList<News>();
 	}
@@ -375,6 +376,7 @@ public class GoogleMapFragment extends Fragment
 																	contentString,
 																	latitude,
 																	longitude));
+													bmp.recycle();
 
 													LatLng point = new LatLng(
 															latitude, longitude);
@@ -456,6 +458,7 @@ public class GoogleMapFragment extends Fragment
 																	contentString,
 																	latitude,
 																	longitude));
+													bmp.recycle();
 
 													LatLng point = new LatLng(
 															latitude, longitude);
@@ -540,6 +543,7 @@ public class GoogleMapFragment extends Fragment
 																	contentString,
 																	latitude,
 																	longitude));
+													bmp.recycle();
 
 													LatLng point = new LatLng(
 															latitude, longitude);

@@ -343,47 +343,74 @@ public class UploadPage extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	
+	
+	
+	private static int exifToDegrees(int exifOrientation) {        
+	    if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; } 
+	    else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; } 
+	    else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }            
+	    return 0;    
+	 }
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
-		if (bitmap!=null) {   //free your memory
-			bitmap.recycle();
-			bitmap=null;	
-		}
-		if (requestCode == CAMERA || requestCode == PHOTO) {
+		if ((requestCode == CAMERA || requestCode == PHOTO) && data != null) {
 			// 藉由requestCode判斷是否為開啟相機或開啟相簿而呼叫的，且data不為null
-			if ((requestCode == CAMERA) && data != null) {
+			if ((requestCode == CAMERA)) {
 				bitmap = (Bitmap) data.getExtras().get("data");
 				// Log.d(tag, "uri = "+data.getExtras().get);
-			} else if (requestCode == PHOTO && data != null) {
+			} else if (requestCode == PHOTO) {
 				Uri uri = (Uri) data.getData();
 				Log.d(tag, "uri = " + uri.getPath());
+				
+				// orientation or horizontal
+				Matrix matrix = new Matrix();
+				try {
+					//Log.d(tag, "getFileDescriptor = "+openFile(uri).getFileDescriptor());
+					ExifInterface exif = new ExifInterface(uri.getPath());
+					int rotation = exif.getAttributeInt(
+							ExifInterface.TAG_ORIENTATION,
+							ExifInterface.ORIENTATION_NORMAL);
+					int rotationInDegrees = exifToDegrees(rotation);
+					Log.d(tag, "rotation = "+rotation);
+					Log.d(tag, "rotationInDegrees = "+rotationInDegrees);
+					if (rotation != 0f) {
+						matrix.preRotate(rotationInDegrees);
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				// END orientation or horizontal
+
+				//adjust picture size 
+				BitmapFactory.Options options = new BitmapFactory.Options();  
+				options.inSampleSize=2;//图片高宽度都为原来的二分之一，即图片大小为原来的大小的四分之一  
+				options.inTempStorage = new byte[5*1024];
+				
+				// uri to bitmap
 				ContentResolver cr = this.getContentResolver();
 				try {
 					bitmap = BitmapFactory
-							.decodeStream(cr.openInputStream(uri));
+							.decodeStream(cr.openInputStream(uri), null, options);
+//					Bitmap adjustedBitmap = Bitmap
+//							.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+//									bitmap.getHeight(), matrix, true);
+//					bitmap = adjustedBitmap;
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block	
-					
-			          Toast toast = Toast.makeText(getApplicationContext(),
-			        		  "照片不好，選別張!", Toast.LENGTH_SHORT);
-			        		                  //顯示Toast
-			        		                  toast.show();
-
-					
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 			}
-			//以下調整照片和顯示照片
-			// orientation or horizontal
-			// ExifInterface exif = new ExifInterface(filename);
 
-			// calculate scale
 			if(bitmap.getWidth()+50>=bitmap.getHeight()){
 				System.out.println("bitmap"+bitmap.getWidth()+" "+bitmap.getHeight());
+			// calculate scale
 			float mScale = ScalePic(bitmap, mPhone.heightPixels,
 					mPhone.widthPixels);
+
 			// // 判斷照片為橫向或者為直向，並進入ScalePic判斷圖片是否要進行縮放
 			// if (bitmap.getWidth() > bitmap.getHeight()) {
 			// ScalePic(bitmap, mPhone.heightPixels);
@@ -394,24 +421,20 @@ public class UploadPage extends Activity {
 			Matrix mMat = new Matrix();
 			final ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			mMat.setScale(mScale, mScale);
-			
+
 			Bitmap mScaleBitmap = Bitmap.createBitmap(bitmap, 0, 0,
 					bitmap.getWidth(), bitmap.getHeight(), mMat, false);
-			imageView.setImageBitmap(mScaleBitmap);   //顯示照片
-
+			imageView.setImageBitmap(mScaleBitmap);
 			mScaleBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-
 			runOnUiThread(new Runnable() {
 
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
 					uploadImage = stream.toByteArray();
-					
 				}
 			});
 			
-
 			}
 			else{
 				System.out.println("照片不好，選別張");
@@ -423,10 +446,8 @@ public class UploadPage extends Activity {
 
 			
 			}
-			
-			
 		}
-		if (requestCode == MEDIA) {
+		if (requestCode == MEDIA && data != null) {
 			musicPath = data.getExtras().getString("musicPath");
 			Log.d(tag, "musicPath = " + musicPath);
 			String[] temp_filePathString = musicPath.split("/");
@@ -436,6 +457,7 @@ public class UploadPage extends Activity {
 
 		super.onActivityResult(requestCode, resultCode, data);
 	}
+
 	
 	
 	
