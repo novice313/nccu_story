@@ -6,13 +6,18 @@ import java.util.Comparator;
 
 import mclab1.service.music.MusicController;
 import mclab1.service.music.MusicService;
+import mclab1.service.music.MusicService.MusicBinder;
 import mclab1.service.music.Song;
 import mclab1.service.music.SongAdapter;
+import android.content.ComponentName;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.BaseColumns;
 import android.provider.MediaStore.Audio.AudioColumns;
 import android.provider.MediaStore.MediaColumns;

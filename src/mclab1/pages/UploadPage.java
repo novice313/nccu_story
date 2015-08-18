@@ -314,13 +314,8 @@ public class UploadPage extends Activity {
 			if ((requestCode == CAMERA)) {
 				bitmap = (Bitmap) data.getExtras().get("data");
 				// Log.d(tag, "uri = "+data.getExtras().get);
-<<<<<<< HEAD
 			} else if (requestCode == PHOTO) {
 				Uri uri = (Uri) data.getData();
-=======
-			} else if (requestCode == PHOTO && data != null) {
-				Uri uri = data.getData();
->>>>>>> 0088fb4ea53bfe9b3f287e65e47f3a7a5e66bced
 				Log.d(tag, "uri = " + uri.getPath());
 
 				// orientation or horizontal

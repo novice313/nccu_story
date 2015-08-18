@@ -366,10 +366,7 @@ public class GoogleMapFragment extends Fragment
 																	contentString,
 																	latitude,
 																	longitude));
-<<<<<<< HEAD
 													
-=======
->>>>>>> 0088fb4ea53bfe9b3f287e65e47f3a7a5e66bced
 													bmp.recycle();
 
 													LatLng point = new LatLng(
@@ -452,10 +449,7 @@ public class GoogleMapFragment extends Fragment
 																	contentString,
 																	latitude,
 																	longitude));
-<<<<<<< HEAD
-													
-=======
->>>>>>> 0088fb4ea53bfe9b3f287e65e47f3a7a5e66bced
+
 													bmp.recycle();
 
 													LatLng point = new LatLng(
@@ -541,10 +535,7 @@ public class GoogleMapFragment extends Fragment
 																	contentString,
 																	latitude,
 																	longitude));
-<<<<<<< HEAD
 													
-=======
->>>>>>> 0088fb4ea53bfe9b3f287e65e47f3a7a5e66bced
 													bmp.recycle();
 
 													LatLng point = new LatLng(
