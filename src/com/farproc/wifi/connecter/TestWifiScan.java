@@ -132,19 +132,12 @@ public class TestWifiScan extends ListActivity {
 		switch (item.getItemId()) {
 		case R.id.list_to_client:
 			Intent intent = new Intent(this, ro.ui.pttdroid.UploadPage.class);   //開時傳柏的參數
-			/*Bundle bundle = new Bundle();
-			bundle.putString("nickname", Globalvariable.nicknameString);
-			bundle.putString("language", Globalvariable.languageString);
-			bundle.putString("title", Globalvariable.titleString);
-			bundle.putString("content", Globalvariable.contentString);
-			
-			bundle.putString("photopath", Globalvariable.photopath);
-			bundle.putString("Longitude", Globalvariable.Longitude);
-			bundle.putString("Latitude", Globalvariable.Latitude);
-			bundle.putString("Macaddress", Globalvariable.Macaddress);
-			bundle.putString("Uuid", Globalvariable.Uuid);*/
-
-
+		
+			Bundle bundle_broadcast = new Bundle();
+			bundle_broadcast.putDouble("longitude", longitude);
+			bundle_broadcast.putDouble("latitude", latitude);
+			// 將Bundle物件assign給intent
+			intent.putExtras(bundle_broadcast);
 
 
 			//intent.putExtras(bundle);
@@ -178,7 +171,7 @@ public class TestWifiScan extends ListActivity {
 				CurrentSSID=result.SSID;
 				System.out.println("Currentlevel"+Currentlevel+CurrentSSID+result.SSID);
 			}
-			if(count!=0&&result.SSID.contains("NCCU")){
+			if(count!=0&&result.SSID.contains("NCCU")){   //NCCU都抓出來
 			System.out.println("Currentlevel2"+Currentlevel+CurrentSSID+result.SSID);
 			((TwoLineListItem) convertView).getText1().setText(result.SSID);
 			((TwoLineListItem)convertView).getText1().setTextColor(0xFF008080);

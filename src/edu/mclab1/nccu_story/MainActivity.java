@@ -347,7 +347,8 @@ public class MainActivity extends FragmentActivity implements
 			break;
 		case R.id.action_test:
 			Log.d(tag, "Test onClick");
-			
+        	    
+
 
 			// Intent intent = new Intent();
 			// intent.setClass(MainActivity.this, FileexplorerActivity.class);

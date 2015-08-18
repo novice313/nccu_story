@@ -151,7 +151,7 @@ public class GuiderRecorder extends Thread
 				msg="Tim"+j;
 				j=j+1;
 				System.out.println("Global"+Globalvariable.Macaddress+" "+Globalvariable.Uuid
-						+" "+Globalvariable.Latitude+" "+Globalvariable.Longitude);
+						);
 				if(AudioSettings.useSpeex()==AudioSettings.USE_SPEEX) 
 				{
 					int readSize = recorder.read(pcmFrame, 0, Audio.FRAME_SIZE);
