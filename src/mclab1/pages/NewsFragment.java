@@ -38,8 +38,8 @@ public class NewsFragment extends Fragment {
 	private final static String tag = "NewsFragment";
 	private int LIMIT = 10;
 
-	public static ArrayList<News> newsList;
-	public static ListView newsView;
+	public ArrayList<News> newsList;
+	public ListView newsView;
 	NewsAdapter newsAdt;
 
 	@Override

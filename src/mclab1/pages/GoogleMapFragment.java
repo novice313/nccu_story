@@ -67,7 +67,7 @@ import edu.mclab1.nccu_story.R;
 public class GoogleMapFragment extends Fragment
 /* implements OnMapReadyCallback */implements OnMapReadyCallback {
 
-	public static ArrayList<News> storyList;
+	public ArrayList<News> storyList;
 	private final static String tag = "GoogleMapFragment";
 	private static final String MAP_FRAGMENT_TAG = "map";
 	final LatLng NCCU = new LatLng(24.986233, 121.575843);
@@ -376,6 +376,8 @@ public class GoogleMapFragment extends Fragment
 																	contentString,
 																	latitude,
 																	longitude));
+													
+													bmp.recycle();
 
 													LatLng point = new LatLng(
 															latitude, longitude);
@@ -457,6 +459,8 @@ public class GoogleMapFragment extends Fragment
 																	contentString,
 																	latitude,
 																	longitude));
+													
+													bmp.recycle();
 
 													LatLng point = new LatLng(
 															latitude, longitude);
@@ -541,6 +545,8 @@ public class GoogleMapFragment extends Fragment
 																	contentString,
 																	latitude,
 																	longitude));
+													
+													bmp.recycle();
 
 													LatLng point = new LatLng(
 															latitude, longitude);
