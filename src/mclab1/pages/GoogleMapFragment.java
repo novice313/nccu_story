@@ -10,9 +10,7 @@ import mclab1.custom.listview.News;
 
 import com.farproc.wifi.connecter.TestWifiScan;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
@@ -35,33 +33,23 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import android.R.integer;
 import android.app.AlertDialog;
-import android.app.DownloadManager.Query;
-import android.app.Notification.Builder;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.NetworkInfo.DetailedState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import edu.mclab1.nccu_story.MainActivity;
 import edu.mclab1.nccu_story.R;
 
 public class GoogleMapFragment extends Fragment
@@ -245,6 +233,7 @@ public class GoogleMapFragment extends Fragment
 		builder.setTitle("Upload");
 		// 建立選擇的事件
 		DialogInterface.OnClickListener ListClick = new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
 				case 0:// broadcast
@@ -282,6 +271,7 @@ public class GoogleMapFragment extends Fragment
 		};
 		// 建立按下取消什麼事情都不做的事件
 		DialogInterface.OnClickListener OkClick = new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 			}
 		};
@@ -636,7 +626,8 @@ public class GoogleMapFragment extends Fragment
 					ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
 					// Retrieve the object by id
 					query.getInBackground(objectId, new GetCallback<ParseObject>() {  //以後博要給我object ID
-					    public void done(ParseObject offline, ParseException e) {
+					    @Override
+						public void done(ParseObject offline, ParseException e) {
 					        if (e == null) {
 					       Globalvariable.titleString =	(String) offline.get("title");
 					       Globalvariable.contentString=(String) offline.get("content");

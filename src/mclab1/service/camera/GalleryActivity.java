@@ -2,17 +2,15 @@ package mclab1.service.camera;
 
 import java.util.ArrayList;
 
-import mclab1.pages.CameraPage;
-
 import edu.mclab1.nccu_story.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
+import android.provider.MediaStore.Images.ImageColumns;
+import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,7 +39,8 @@ public class GalleryActivity extends Activity {
         gridView.setAdapter(gridAdapter);
 
         gridView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+            @Override
+			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 ImageItem item = (ImageItem) parent.getItemAtPosition(position);
 
                 //Create intent
@@ -80,8 +79,8 @@ public class GalleryActivity extends Activity {
     private ArrayList<ImageItem> getData() {
         final ArrayList<ImageItem> imageItems = new ArrayList<ImageItem>();
         
-        final String[] projection = { MediaStore.Images.Media.DATA };
-	    final String selection = MediaStore.Images.Media.BUCKET_ID + " = ?";
+        final String[] projection = { MediaColumns.DATA };
+	    final String selection = ImageColumns.BUCKET_ID + " = ?";
 	    final String[] selectionArgs = { CAMERA_IMAGE_BUCKET_ID };
 	    final Cursor cursor = getContentResolver().query(Images.Media.EXTERNAL_CONTENT_URI, 
 	            projection, null, null,
@@ -90,7 +89,7 @@ public class GalleryActivity extends Activity {
 	            null);
 	    //ArrayList<String> result = new ArrayList<String>(cursor.getCount());
 	    if (cursor.moveToFirst()) {
-	        final int dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+	        final int dataColumn = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
 	        int i=0;
 	        do {
 	            final String data = cursor.getString(dataColumn);

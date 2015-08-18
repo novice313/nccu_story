@@ -3,8 +3,6 @@ package mclab1.service.upload;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-
 import mclab1.service.upload.Song;
 import mclab1.service.upload.SongAdapter;
 import edu.mclab1.nccu_story.R;
@@ -14,6 +12,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.BaseColumns;
+import android.provider.MediaStore.Audio.AudioColumns;
+import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -46,6 +47,7 @@ public class UploadMediaListActivity extends Activity {
 		getSongList();
 		// sort alphabetically by title
 		Collections.sort(songList, new Comparator<Song>() {
+			@Override
 			public int compare(Song a, Song b) {
 				return a.getTitle().compareTo(b.getTitle());
 			}
@@ -81,13 +83,13 @@ public class UploadMediaListActivity extends Activity {
 		if (musicCursor != null && musicCursor.moveToFirst()) {
 			// get columns
 			int titleColumn = musicCursor
-					.getColumnIndex(android.provider.MediaStore.Audio.Media.TITLE);
+					.getColumnIndex(MediaColumns.TITLE);
 			int idColumn = musicCursor
-					.getColumnIndex(android.provider.MediaStore.Audio.Media._ID);
+					.getColumnIndex(BaseColumns._ID);
 			int artistColumn = musicCursor
-					.getColumnIndex(android.provider.MediaStore.Audio.Media.ARTIST);
+					.getColumnIndex(AudioColumns.ARTIST);
 			int pathColumn = musicCursor
-					.getColumnIndex(android.provider.MediaStore.Audio.Media.DATA);
+					.getColumnIndex(MediaColumns.DATA);
 			// add songs to list
 			do {
 				long thisId = musicCursor.getLong(idColumn);

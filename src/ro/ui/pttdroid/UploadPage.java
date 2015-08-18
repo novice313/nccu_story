@@ -1,16 +1,12 @@
 package ro.ui.pttdroid;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
+
 
 //import mclab1.service.upload.UploadMediaListActivity;
 //import mclab1.sugar.Owner;
@@ -26,7 +22,6 @@ import com.mclab1.palaca.parsehelper.ParseHelper;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 
@@ -35,7 +30,6 @@ import com.parse.SaveCallback;
 
 
 
-import android.annotation.SuppressLint;
 //import edu.mclab1.nccu_story.MainActivity;
 //import edu.mclab1.nccu_story.R;
 import android.app.Activity;
@@ -49,10 +43,8 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -119,6 +111,7 @@ public class UploadPage extends Activity {
 	public static double longitudeString=121.575;
 	ProgressDialog dialog;
 
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.page_upload_offline);
@@ -197,12 +190,14 @@ public class UploadPage extends Activity {
 
 	}
 	
+	@Override
 	public void onResume(){
 		super.onResume();
 		System.out.println("Resume");
 
 		
 	}
+	@Override
 	public void onStop(){
 		super.onStop();
 		
@@ -361,7 +356,7 @@ public class UploadPage extends Activity {
 				bitmap = (Bitmap) data.getExtras().get("data");
 				// Log.d(tag, "uri = "+data.getExtras().get);
 			} else if (requestCode == PHOTO) {
-				Uri uri = (Uri) data.getData();
+				Uri uri = data.getData();
 				Log.d(tag, "uri = " + uri.getPath());
 				
 				// orientation or horizontal
@@ -473,13 +468,13 @@ public class UploadPage extends Activity {
 		}
 
 		else if (bitmap.getHeight() > phone_height) {
-			mScale = (float) (((float) phone_height / 1.5) / (float) bitmap
+			mScale = (float) ((phone_height / 1.5) / bitmap
 					.getHeight());
 			Log.d(tag, "mScale = " + mScale);
 		} else {// too small situation
 			float mScale_width = (float) phone_width
 					/ (float) bitmap.getWidth();
-			float mScale_height = (float) (((float) phone_height / 1.5) / (float) bitmap
+			float mScale_height = (float) ((phone_height / 1.5) / bitmap
 					.getHeight());
 			if (mScale_width < mScale_height) {
 				mScale = mScale_width;

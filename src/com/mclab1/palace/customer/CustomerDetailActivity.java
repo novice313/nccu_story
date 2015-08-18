@@ -35,8 +35,6 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.squareup.picasso.Picasso;
-
 import edu.mclab1.nccu_story.R;
 public class CustomerDetailActivity extends Activity {   //************offline *********** Story 
 	                                                     //VoiceDataActivity VoiceDataElment

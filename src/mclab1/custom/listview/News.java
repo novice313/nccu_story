@@ -1,7 +1,6 @@
 package mclab1.custom.listview;
 
 import android.graphics.Bitmap;
-import android.widget.ImageView;
 
 public class News {
 

@@ -17,39 +17,27 @@ along with pttdroid.  If not, see <http://www.gnu.org/licenses/>. */
 
 package ro.ui.pttdroid;
 
-import java.io.BufferedOutputStream;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.util.List;
-
-import ro.ui.pttdroid.Client_Player.PlayerBinder;
 import ro.ui.pttdroid.codecs.Speex;
 import edu.mclab1.nccu_story.R;
 import ro.ui.pttdroid.settings.AudioSettings;
 import ro.ui.pttdroid.settings.CommSettings;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
-import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
-import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -57,12 +45,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.android.wifidirect.DeviceDetailFragment;
 import com.example.android.wifidirect.DeviceListFragment;
 import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
-import com.example.android.wifidirect.WiFiDirectBroadcastReceiver;
 import com.example.android.wifidirect.WifiReceiver;
 import com.mclab1.palaca.parsehelper.ParseHelper;
 import com.mclab1.palace.connection.ClientConnectionService;
@@ -70,9 +58,7 @@ import com.mclab1.palace.customer.CustomerFragment;
 import com.mclab1.palace.customer.CustomerFragmentGlobal;
 import com.mclab1.palace.customer.CustomerFragmentOffline;
 import com.mclab1.palace.guider.DisplayEvent;
-import com.mclab1.palace.guider.GuiderFragment;
 import com.mclab1.place.events.NewClientConnectionEvent;
-import com.mclab1.place.events.NewServerConnectionEvent;
 import com.mclab1.place.events.PauseAudioEvent;
 import com.mclab1.place.events.ResumeAudioEvent;
 
@@ -137,7 +123,20 @@ shutdown();
 public void onCreate(Bundle savedInstanceState) {
 super.onCreate(savedInstanceState);
 setContentView(R.layout.main);
+/*ImageButton ready_image_guide;
+ready_image_guide=(ImageButton)findViewById(R.id.ready_image_guide); 
 
+ready_image_guide.setOnClickListener(new Button.OnClickListener()  
+{  
+    @Override  
+    public void onClick(View v) {  
+        // TODO Auto-generated method stub  
+    	
+		change_to_client_online_fragment();
+    	
+    }  
+      
+}); */
 getActionBar().setBackgroundDrawable(null);
  System.out.println("start main!!!!!!!!!!"); 
  Intent intent = this.getIntent();
@@ -270,16 +269,14 @@ manager.createGroup(channel, new ActionListener() {
 public void onResume() {
 super.onResume();
 
-microphoneSwitcher = new MicrophoneSwitcher();
-microphoneSwitcher.init();
-System.out.println("Client_Main");
+
 /*wifiReceiver = new WifiReceiver();         // *******
 registerReceiver(wifiReceiver, filter);
 receiver = new WiFiDirectBroadcastReceiver(manager, channel, this);
 registerReceiver(receiver, intentFilter);*/
 
-
-change_to_client_offline_fragment();
+//change_to_client_online_fragment();
+//change_to_client_offline_fragment();
 
 
 /****************** 之後要改變頁面的地方
@@ -404,7 +401,7 @@ case R.id.btn_change_mode:
 	invalidateOptionsMenu(); 
 	return true;
 
-case R.id.btn_quit_icon:     //一個箭頭的符號
+/*case R.id.btn_quit_icon:     //一個箭頭的符號
 	
 	if (if_clientL_offline_mode) {
 	} else {
@@ -412,7 +409,7 @@ case R.id.btn_quit_icon:     //一個箭頭的符號
 		change_to_client_offline_fragment();
 	}
 	invalidateOptionsMenu();
-	return true;
+	return true;*/
 	
 	
 	
@@ -428,7 +425,12 @@ default:
 
 
 
-private void init() {
+private void init() {  //init=> OnResume
+	
+	microphoneSwitcher = new MicrophoneSwitcher();
+	microphoneSwitcher.init();
+	System.out.println("Client_Main");
+	
 if (firstLaunch) {
 	CommSettings.getSettings(this);
 	AudioSettings.getSettings(this);
@@ -436,13 +438,16 @@ if (firstLaunch) {
 	setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 	Speex.open(AudioSettings.getSpeexQuality());
-
-	//playerIntent = new Intent(this, Player.class);
+	
+	//playerIntent = new Intent(this, Player.class);  
 	//startService(playerIntent);
 	System.out.println("clientConnectionIntent");
-	clientConnectionIntent = new Intent(this,
+	/*clientConnectionIntent = new Intent(this,
 			ClientConnectionService.class);
-	startService(clientConnectionIntent);
+	startService(clientConnectionIntent);*/
+	
+
+	
 
 	//customPlayerIntent = new Intent(this, CustomPlayer.class); // 沒用到
 	//startService(customPlayerIntent);

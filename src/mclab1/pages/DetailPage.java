@@ -10,12 +10,10 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import edu.mclab1.nccu_story.R;
-import android.R.integer;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 

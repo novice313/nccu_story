@@ -1,23 +1,18 @@
 package mclab1.service.camera;
 
-import java.security.PublicKey;
-
 import mclab1.pages.UploadPage;
 import edu.mclab1.nccu_story.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 //import android.support.v7.app.ActionBarActivity;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 public class DetailsActivity extends Activity {
 	

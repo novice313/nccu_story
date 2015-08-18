@@ -39,6 +39,7 @@ MediaPlayer.OnCompletionListener {
 	private boolean shuffle=false;
 	private Random rand;
 
+	@Override
 	public void onCreate(){
 		//create the service
 		super.onCreate();

@@ -1,12 +1,9 @@
 package com.mclab1.palace.customer;
 
-import java.util.List;
 import java.util.Random;
 
 import edu.mclab1.nccu_story.R;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.util.Log;
 import android.util.SparseArray;
@@ -18,13 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.makeramen.RoundedTransformationBuilder;
-import com.parse.FindCallback;
-import com.parse.GetDataCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseImageView;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -114,7 +104,7 @@ public class SampleAdapter extends ArrayAdapter<CustomerItem> {
 	public View getView(final int position, View convertView,
 			final ViewGroup parent) {
 
-	   ViewHolder vh = null;
+		ViewHolder vh = null;
 		int type = getItemViewType(position);
 
 		Log.d(TAG, "getView position:" + position);
@@ -122,82 +112,8 @@ public class SampleAdapter extends ArrayAdapter<CustomerItem> {
 			convertView = mLayoutInflater.inflate(R.layout.list_item_sample,
 					parent, false);
 			vh = new ViewHolder();
-			
-			
-		    ParseQuery<ParseObject> tablequery = ParseQuery.getQuery("offline");
-		    tablequery.findInBackground(new FindCallback<ParseObject>() {        //讀取文字
-		    	@Override
-				public void done(List<ParseObject> me, ParseException e) {
-		    		if(e==null){
-		    			
-		    		
-
-		    final ParseFile image =(ParseFile)me.get(0).get("Photo");
-    		// ((ParseObject) me).getParseFile("data");
-   // final ParseImageView imageView = (ParseImageView) findViewById(R.id.personalprfile);
-   // imageView.setParseFile(image);
-   // System.out.println("image"+image);
-   // if(image!=null){
-    image.getDataInBackground(new GetDataCallback() {
-		
-		@Override
-		public void done(byte[] data, ParseException e) {
-			// TODO Auto-generated method stub
-			if(e==null){
-    			System.out.println("personalprofile"+" "+data.length);
-                final Bitmap bmp = BitmapFactory.decodeByteArray(data, 0,data.length);
-                
-              //final ParseImageView imageView = (ParseImageView) vh.findViewById(R.id.item_image);
-             // imageView.setParseFile(image);
-            //  imageView.setImageBitmap(bmp);
-                
-               /* imageView.loadInBackground(new GetDataCallback() {
-                    public void done(byte[] data, ParseException e) {
-                    // The image is loaded and displayed!                    
-                    int oldHeight = imageView.getHeight();
-                    int oldWidth = imageView.getWidth();     
-                    System.out.println("imageView height = " + oldHeight);
-                    System.out.println("imageView width = " + oldWidth);
-                    imageView.setImageBitmap(bmp);
-
-
-                   // Log.v("LOG!!!!!!", "imageView height = " + oldHeight);      // DISPLAYS 90 px
-                   // Log.v("LOG!!!!!!", "imageView width = " + oldWidth);        // DISPLAYS 90 px      
-                    }
-                });*/
-				
-			}
-			else{
-    			System.out.println("personalprofilerror");
-
-			}
-			
-		}
-	});
-  //  }else{
-	//	System.out.println("imageerror"); 	
-   // }
-    /*imageView.loadInBackground(new GetDataCallback() {
-         public void done(byte[] data, ParseException e) {
-         // The image is loaded and displayed!                    
-         int oldHeight = imageView.getHeight();
-         int oldWidth = imageView.getWidth(); 
-         System.out.println("imageView height = " + oldHeight);
-         System.out.println("imageView width = " + oldWidth);
-             
-         }
-    });*/ 
-	
-}else{
-	
-}
-
-}
-
-});
-    
 			vh.itemImage = (ImageView) convertView
-					.findViewById(R.id.item_image);    //parse抓圖
+					.findViewById(R.id.item_image);
 			convertView.setTag(vh);
 
 		} else {
