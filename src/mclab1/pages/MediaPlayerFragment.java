@@ -6,31 +6,26 @@ import java.util.Comparator;
 
 import mclab1.service.music.MusicController;
 import mclab1.service.music.MusicService;
-import mclab1.service.music.MusicService.MusicBinder;
 import mclab1.service.music.Song;
 import mclab1.service.music.SongAdapter;
-
-import android.content.ComponentName;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
+import android.provider.BaseColumns;
+import android.provider.MediaStore.Audio.AudioColumns;
+import android.provider.MediaStore.MediaColumns;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.MediaController.MediaPlayerControl;
-import edu.mclab1.nccu_story.MainActivity;
 import edu.mclab1.nccu_story.R;
 
 public class MediaPlayerFragment extends Fragment implements MediaPlayerControl {
@@ -101,6 +96,7 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		getSongList();
 		// sort alphabetically by title
 		Collections.sort(songList, new Comparator<Song>() {
+			@Override
 			public int compare(Song a, Song b) {
 				return a.getTitle().compareTo(b.getTitle());
 			}
@@ -139,11 +135,11 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		if (musicCursor != null && musicCursor.moveToFirst()) {
 			// get columns
 			int titleColumn = musicCursor
-					.getColumnIndex(android.provider.MediaStore.Audio.Media.TITLE);
+					.getColumnIndex(MediaColumns.TITLE);
 			int idColumn = musicCursor
-					.getColumnIndex(android.provider.MediaStore.Audio.Media._ID);
+					.getColumnIndex(BaseColumns._ID);
 			int artistColumn = musicCursor
-					.getColumnIndex(android.provider.MediaStore.Audio.Media.ARTIST);
+					.getColumnIndex(AudioColumns.ARTIST);
 			// add songs to list
 			do {
 				long thisId = musicCursor.getLong(idColumn);

@@ -1,7 +1,5 @@
 package com.mclab1.palace.connection;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -29,7 +27,6 @@ import com.mclab1.place.events.NewClientConnectionEvent;
 import com.mclab1.place.events.PauseAudioEvent;
 import com.mclab1.place.events.ResumeAudioEvent;
 
-import java.net.Socket;
 import java.util.Enumeration;
 
 import de.greenrobot.event.EventBus;

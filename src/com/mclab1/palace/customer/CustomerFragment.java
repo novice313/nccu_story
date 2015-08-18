@@ -1,17 +1,11 @@
 package com.mclab1.palace.customer;
 
 import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import edu.mclab1.nccu_story.R;
-import ro.ui.pttdroid.settings.CommSettings;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,25 +14,15 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 
-import com.mclab1.palaca.parsehelper.VoiceObject;
 import com.mclab1.palace.guider.DisplayEvent;
 import com.mclab1.place.events.EraseServerConnectionEvent;
 import com.mclab1.place.events.NewServerConnectionEvent;
-import com.parse.FindCallback;
-import com.parse.GetDataCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
 import de.greenrobot.event.EventBus;
 
 public class CustomerFragment extends Fragment {
@@ -59,7 +43,7 @@ public class CustomerFragment extends Fragment {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.customer_fragment, container,
 				false);
-		init_view(view);
+		//init_view(view);
 
 		return view;
 	}

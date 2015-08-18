@@ -36,7 +36,7 @@ public class CustomerFragmentOffline extends Fragment {
 				false);
 	}
 
-	private void gen_test_data() {
+	private void gen_test_data() {    //產生可以聽的OFFline部分
 		flag=false;
 		System.out.println("flag"+flag);
 		ArrayList<CustomerItem> testDStrings = new ArrayList<CustomerItem>();
@@ -65,7 +65,8 @@ public class CustomerFragmentOffline extends Fragment {
 				ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
 				// Retrieve the object by id
 				query.getInBackground("InRYwKoOIr", new GetCallback<ParseObject>() {  //以後博要給我object ID
-				    public void done(ParseObject offline, ParseException e) {
+				    @Override
+					public void done(ParseObject offline, ParseException e) {
 				        if (e == null) {
 				       Globalvariable.titleString =	(String) offline.get("title");
 				       Globalvariable.contentString=(String) offline.get("content");

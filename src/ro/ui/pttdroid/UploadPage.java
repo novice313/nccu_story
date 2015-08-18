@@ -1,16 +1,12 @@
 package ro.ui.pttdroid;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
+
 
 //import mclab1.service.upload.UploadMediaListActivity;
 //import mclab1.sugar.Owner;
@@ -26,8 +22,8 @@ import com.mclab1.palaca.parsehelper.ParseHelper;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.SaveCallback;
+
 
 
 
@@ -37,6 +33,7 @@ import com.parse.SaveCallback;
 //import edu.mclab1.nccu_story.MainActivity;
 //import edu.mclab1.nccu_story.R;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -46,10 +43,8 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -114,12 +109,15 @@ public class UploadPage extends Activity {
 	private final int INITIAL_SCORE = 0;
 	public static double latitudeString=24.98;
 	public static double longitudeString=121.575;
+	ProgressDialog dialog;
 
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.page_upload_offline);
 		ParseHelper.initParse(this);
 		
+		System.out.println("UploadPage");    //conflict過
 		Bundle extras = getIntent().getExtras();
 		longitudeString = extras.getDouble("longitude");
     	latitudeString = extras.getDouble("latitude");
@@ -188,13 +186,31 @@ public class UploadPage extends Activity {
 		languageList = new ArrayAdapter<String>(UploadPage.this,
 				android.R.layout.simple_spinner_item, language);
 		spinner_language.setAdapter(languageList);
+		
 
 	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		System.out.println("Resume");
+
+		
+	}
+	@Override
+	public void onStop(){
+		super.onStop();
+		
+	}
+	
 
 	protected void Upload() throws ParseException, IOException {
 		ParseFile imageFile = null;
 		ParseFile musicFile = null;
-
+		
+		
+        dialog = ProgressDialog.show(UploadPage.this,
+                "正在上傳資料中", "請 稍 等 . . . . ",true);
 		// image
 		if (uploadImage != null) {
 			imageFile = new ParseFile("uploadImage", uploadImage);
@@ -305,7 +321,7 @@ public class UploadPage extends Activity {
 			intent_gallery.setType("image/*");
 			intent_gallery.setAction(Intent.ACTION_GET_CONTENT);
 			startActivityForResult(intent_gallery, PHOTO);
-
+			
 			break;
 
 		/*
@@ -322,29 +338,70 @@ public class UploadPage extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	
+	
+	
+	private static int exifToDegrees(int exifOrientation) {        
+	    if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; } 
+	    else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; } 
+	    else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }            
+	    return 0;    
+	 }
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == CAMERA || requestCode == PHOTO) {
+		if ((requestCode == CAMERA || requestCode == PHOTO) && data != null) {
 			// 藉由requestCode判斷是否為開啟相機或開啟相簿而呼叫的，且data不為null
-			if ((requestCode == CAMERA) && data != null) {
+			if ((requestCode == CAMERA)) {
 				bitmap = (Bitmap) data.getExtras().get("data");
 				// Log.d(tag, "uri = "+data.getExtras().get);
-			} else if (requestCode == PHOTO && data != null) {
-				Uri uri = (Uri) data.getData();
+			} else if (requestCode == PHOTO) {
+				Uri uri = data.getData();
 				Log.d(tag, "uri = " + uri.getPath());
+				
+				// orientation or horizontal
+				Matrix matrix = new Matrix();
+				try {
+					//Log.d(tag, "getFileDescriptor = "+openFile(uri).getFileDescriptor());
+					ExifInterface exif = new ExifInterface(uri.getPath());
+					int rotation = exif.getAttributeInt(
+							ExifInterface.TAG_ORIENTATION,
+							ExifInterface.ORIENTATION_NORMAL);
+					int rotationInDegrees = exifToDegrees(rotation);
+					Log.d(tag, "rotation = "+rotation);
+					Log.d(tag, "rotationInDegrees = "+rotationInDegrees);
+					if (rotation != 0f) {
+						matrix.preRotate(rotationInDegrees);
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				// END orientation or horizontal
+
+				//adjust picture size 
+				BitmapFactory.Options options = new BitmapFactory.Options();  
+				options.inSampleSize=2;//图片高宽度都为原来的二分之一，即图片大小为原来的大小的四分之一  
+				options.inTempStorage = new byte[5*1024];
+				
+				// uri to bitmap
 				ContentResolver cr = this.getContentResolver();
 				try {
 					bitmap = BitmapFactory
-							.decodeStream(cr.openInputStream(uri));
+							.decodeStream(cr.openInputStream(uri), null, options);
+//					Bitmap adjustedBitmap = Bitmap
+//							.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+//									bitmap.getHeight(), matrix, true);
+//					bitmap = adjustedBitmap;
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
 			}
-			// orientation or horizontal
-			// ExifInterface exif = new ExifInterface(filename);
 
+			if(bitmap.getWidth()+50>=bitmap.getHeight()){
+				System.out.println("bitmap"+bitmap.getWidth()+" "+bitmap.getHeight());
 			// calculate scale
 			float mScale = ScalePic(bitmap, mPhone.heightPixels,
 					mPhone.widthPixels);
@@ -372,8 +429,20 @@ public class UploadPage extends Activity {
 					uploadImage = stream.toByteArray();
 				}
 			});
+			
+			}
+			else{
+				System.out.println("照片不好，選別張");
+		          Toast toast = Toast.makeText(getApplicationContext(),
+		        		  "照片不好，選別張!", Toast.LENGTH_SHORT);
+		        		                  //顯示Toast
+		        		                  toast.show();
+				
+
+			
+			}
 		}
-		if (requestCode == MEDIA) {
+		if (requestCode == MEDIA && data != null) {
 			musicPath = data.getExtras().getString("musicPath");
 			Log.d(tag, "musicPath = " + musicPath);
 			String[] temp_filePathString = musicPath.split("/");
@@ -383,6 +452,10 @@ public class UploadPage extends Activity {
 
 		super.onActivityResult(requestCode, resultCode, data);
 	}
+
+	
+	
+	
 
 	private float ScalePic(Bitmap bitmap, int phone_height, int phone_width) {
 		// 縮放比例預設為1
@@ -395,13 +468,13 @@ public class UploadPage extends Activity {
 		}
 
 		else if (bitmap.getHeight() > phone_height) {
-			mScale = (float) (((float) phone_height / 1.5) / (float) bitmap
+			mScale = (float) ((phone_height / 1.5) / bitmap
 					.getHeight());
 			Log.d(tag, "mScale = " + mScale);
 		} else {// too small situation
 			float mScale_width = (float) phone_width
 					/ (float) bitmap.getWidth();
-			float mScale_height = (float) (((float) phone_height / 1.5) / (float) bitmap
+			float mScale_height = (float) ((phone_height / 1.5) / bitmap
 					.getHeight());
 			if (mScale_width < mScale_height) {
 				mScale = mScale_width;

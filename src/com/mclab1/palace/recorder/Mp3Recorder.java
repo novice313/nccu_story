@@ -18,36 +18,24 @@ along with pttdroid.  If not, see <http://www.gnu.org/licenses/>. */
 package com.mclab1.palace.recorder;
 
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import com.mclab1.palaca.parsehelper.VoiceObject;
-import com.mclab1.palace.connection.ClientConnectionService;
 import com.mclab1.palace.connection.VoiceData;
 import com.mclab1.palace.guider.DisplayEvent;
 
 import de.greenrobot.event.EventBus;
 import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
-import ro.ui.pttdroid.settings.CommSettings;
 import ro.ui.pttdroid.util.Audio;
 import ro.ui.pttdroid.util.IP;
-import ro.ui.pttdroid.util.Log;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder.AudioSource;
@@ -55,8 +43,6 @@ import android.media.MediaRecorder.AudioSource;
 import com.pocketdigi.utils.FLameUtils;
 
 import android.os.Environment;
-import android.provider.ContactsContract.CommonDataKinds.Event;
-import android.widget.SimpleAdapter;
 
 public class Mp3Recorder extends Thread
 {	

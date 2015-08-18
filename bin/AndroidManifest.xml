@@ -91,7 +91,8 @@
         <!-- google map -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAtdXBrBZ051aQYqKquo1QGCG73OScJXIA" />
+            android:value="AIzaSyAxUWmJ6ftyh441WQZ39xO86F-1igwN5ms" />  <!-- AIzaSyAxUWmJ6ftyh441WQZ39xO86F-1igwN5ms
+                                                                             AIzaSyAtdXBrBZ051aQYqKquo1QGCG73OScJXIA 柏 -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -107,12 +108,16 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:screenOrientation="portrait"
+             />
         <!-- END facebook -->
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -121,19 +126,25 @@
         </activity>
         <activity
             android:name="mclab1.pages.UploadPage"
-            android:label="UploadPage" >
+            android:label="UploadPage"            
+            android:screenOrientation="portrait"
+             >
         </activity>
 
         <!-- file commander -->
         <activity
             android:name="com.example.fileexplorer.FileexplorerActivity"
             android:label="@string/title_activity_fileexplorer"
-            android:theme="@android:style/Theme.Holo" >
+            android:theme="@android:style/Theme.Holo" 
+            android:screenOrientation="portrait"
+            >
         </activity>
         <activity
             android:name="com.example.fileexplorer.FileChooser"
             android:label="Choose File"
-            android:theme="@android:style/Theme.Holo" >
+            android:theme="@android:style/Theme.Holo"
+            android:screenOrientation="portrait"
+             >
             <action android:name="com.example.fileexplorer.FileChooser" />
 
             <category android:name="android.intent.category.DEFAULT" />
@@ -144,47 +155,63 @@
         <!-- camera GalleryActivity -->
         <activity
             android:name="mclab1.pages.CameraPage"
-            android:label="@string/title_activity_CameraActivity" >
+            android:label="@string/title_activity_CameraActivity"
+            android:screenOrientation="portrait"
+             >
         </activity>
         
         <activity
             android:name="mclab1.service.camera.GalleryActivity"
-            android:label="@string/title_activity_GalleryActivity" >
+            android:label="@string/title_activity_GalleryActivity"
+            android:screenOrientation="portrait"
+             >
         </activity>
         <activity
             android:name="mclab1.service.camera.DetailsActivity"
-            android:label="@string/title_activity_DetailsActivity" >
+            android:label="@string/title_activity_DetailsActivity"
+            android:screenOrientation="portrait"
+             >
         </activity>
         <!-- END camera GalleryActivity -->
 
 		<!-- upload -->
 		<activity
             android:name="mclab1.service.upload.UploadMediaListActivity"
-            android:label="@string/title_activity_UploadMediaListActivity" >
+            android:label="@string/title_activity_UploadMediaListActivity"
+            android:screenOrientation="portrait"
+             >
         </activity>
 		<!-- END upload -->
 		
 		<!-- detail page -->
 		<activity
             android:name="mclab1.pages.DetailPage"
-            android:label="@string/title_activity_DetailPage" >
+            android:label="@string/title_activity_DetailPage"
+            android:screenOrientation="portrait"
+             >
         </activity>
 		<!-- END detail page -->
 		
 		<!-- broadcast -->
 		<activity
             android:name="com.farproc.wifi.connecter.TestWifiScan"
-            android:label="@string/title_activity_TestWifiScan" >
+            android:label="@string/title_activity_TestWifiScan"
+            android:screenOrientation="portrait"
+             >
         </activity>
         
         <activity
             android:name="ro.ui.pttdroid.Main"
-            android:label="@string/title_activity_Main" >
+            android:label="@string/title_activity_Main" 
+            android:screenOrientation="portrait"
+            >
         </activity>
         
         <activity
             android:name="ro.ui.pttdroid.UploadPage"
-            android:label="@string/title_activity_UploadPage" >
+            android:label="@string/title_activity_UploadPage"
+            android:screenOrientation="portrait"
+             >
         </activity>
 		<!-- END broadcast -->
 		
@@ -192,13 +219,17 @@
         
 		<activity
             android:name="ro.ui.pttdroid.Client_Main"
-            android:label="@string/title_activity_Client_Main" >
+            android:label="@string/title_activity_Client_Main"
+            android:screenOrientation="portrait"
+             >
 		    
         </activity>
         
 		<activity
             android:name="com.mclab1.palace.customer.CustomerDetailActivity"
-            android:label="CustomDetail" >
+            android:label="CustomDetail" 
+            android:screenOrientation="portrait"
+            >
 
         </activity>
 		<!-- END listen broadcast -->

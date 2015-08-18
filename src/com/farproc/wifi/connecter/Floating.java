@@ -105,12 +105,14 @@ public class Floating extends Activity {
 		}
 	}
 	
+	@Override
 	public void onCreateContextMenu (ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 		if(mContent != null) {
 			mContent.onCreateContextMenu(menu, v, menuInfo);
 		}
 	}
 	
+	@Override
 	public boolean onContextItemSelected (MenuItem item) {
 		if(mContent != null) {
 			return mContent.onContextItemSelected(item);

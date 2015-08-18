@@ -1,8 +1,6 @@
 package mclab1.pages;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import com.parse.FindCallback;
@@ -14,11 +12,7 @@ import com.parse.ParseQuery;
 
 import mclab1.custom.listview.News;
 import mclab1.custom.listview.NewsAdapter;
-import mclab1.service.music.Song;
-import mclab1.service.music.SongAdapter;
 import edu.mclab1.nccu_story.R;
-import edu.mclab1.nccu_story.R.drawable;
-import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -28,10 +22,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class NewsFragment extends Fragment {
 
@@ -155,6 +146,7 @@ public class NewsFragment extends Fragment {
 		Log.d(tag, "onStart");
 	}
 
+	@Override
 	public void onResume() {
 		super.onResume();
 	}

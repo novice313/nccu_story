@@ -2,7 +2,6 @@ package mclab1.custom.listview;
 
 import java.util.ArrayList;
 
-import mclab1.service.music.Song;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import edu.mclab1.nccu_story.MainActivity;
 import edu.mclab1.nccu_story.R;
 
 public class NewsAdapter extends BaseAdapter{

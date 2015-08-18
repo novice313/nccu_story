@@ -9,5 +9,11 @@ public class MusicController extends MediaController {
 		super(c);
 	}
 
+<<<<<<< HEAD
+=======
+	@Override
+	public void hide(){}
+	
+>>>>>>> 0088fb4ea53bfe9b3f287e65e47f3a7a5e66bced
 
 }

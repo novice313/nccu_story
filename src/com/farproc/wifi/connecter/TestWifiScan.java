@@ -26,9 +26,6 @@
 package com.farproc.wifi.connecter;
 
 import java.util.List;
-import ro.ui.pttdroid.Globalvariable;
-import ro.ui.pttdroid.Main;
-import ro.ui.pttdroid.UploadPage;
 //import ro.ui.pttdroid.Main.MicrophoneSwitcher;
 import edu.mclab1.nccu_story.R;
 import android.annotation.SuppressLint;
@@ -43,7 +40,6 @@ import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,6 +68,9 @@ public class TestWifiScan extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	
+		Toast.makeText(getApplicationContext(), "您要和身上的無線AP做連接!",
+				Toast.LENGTH_LONG).show();
+    	
     	mWifiManager = (WifiManager)getSystemService(WIFI_SERVICE);
     	
     	setListAdapter(mListAdapter);
@@ -87,8 +86,6 @@ public class TestWifiScan extends ListActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Toast.makeText(getApplicationContext(), "您要和身上的無線AP做連接!",
-				Toast.LENGTH_LONG).show();
 		final IntentFilter filter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 		registerReceiver(mReceiver, filter);
 		mWifiManager.startScan();

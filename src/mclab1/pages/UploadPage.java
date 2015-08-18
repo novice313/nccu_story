@@ -8,19 +8,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import mclab1.service.upload.UploadMediaListActivity;
 import mclab1.sugar.Owner;
 
-import com.example.fileexplorer.FileexplorerActivity;
-import com.facebook.login.LoginManager;
+import com.orm.SugarRecord;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import edu.mclab1.nccu_story.MainActivity;
@@ -33,11 +30,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
-import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -97,6 +92,7 @@ public class UploadPage extends Activity {
 	// initial score
 	private final int INITIAL_SCORE = 0;
 
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.page_upload);
@@ -123,7 +119,7 @@ public class UploadPage extends Activity {
 		// imageView.setImageBitmap(bitmap);
 		// imageView.setRotation(90);
 
-		List<Owner> owner = Owner.listAll(Owner.class);
+		List<Owner> owner = SugarRecord.listAll(Owner.class);
 
 		if (owner.isEmpty()) {
 			userName.setText("You didn't log in before.");
@@ -318,8 +314,13 @@ public class UploadPage extends Activity {
 			if ((requestCode == CAMERA)) {
 				bitmap = (Bitmap) data.getExtras().get("data");
 				// Log.d(tag, "uri = "+data.getExtras().get);
+<<<<<<< HEAD
 			} else if (requestCode == PHOTO) {
 				Uri uri = (Uri) data.getData();
+=======
+			} else if (requestCode == PHOTO && data != null) {
+				Uri uri = data.getData();
+>>>>>>> 0088fb4ea53bfe9b3f287e65e47f3a7a5e66bced
 				Log.d(tag, "uri = " + uri.getPath());
 
 				// orientation or horizontal
@@ -429,13 +430,13 @@ public class UploadPage extends Activity {
 		}
 
 		else if (bitmap.getHeight() > phone_height) {
-			mScale = (float) (((float) phone_height / 1.5) / (float) bitmap
+			mScale = (float) ((phone_height / 1.5) / bitmap
 					.getHeight());
 			Log.d(tag, "mScale = " + mScale);
 		} else {// too small situation
 			float mScale_width = (float) phone_width
 					/ (float) bitmap.getWidth();
-			float mScale_height = (float) (((float) phone_height / 1.5) / (float) bitmap
+			float mScale_height = (float) ((phone_height / 1.5) / bitmap
 					.getHeight());
 			if (mScale_width < mScale_height) {
 				mScale = mScale_width;
