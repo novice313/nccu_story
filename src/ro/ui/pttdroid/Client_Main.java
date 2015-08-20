@@ -294,7 +294,7 @@ if (if_guider) {
 		//System.out.println("local");
 		//if (if_clientL_offline_mode) {
 		//	if_clientL_offline_mode = false;
-		
+	
 		
 		//change_to_client_offline_fragment();		
 
