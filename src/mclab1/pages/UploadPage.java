@@ -309,13 +309,13 @@ public class UploadPage extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == CAMERA || requestCode == PHOTO) {
+		if ((requestCode == CAMERA || requestCode == PHOTO) && data != null) {
 			// 藉由requestCode判斷是否為開啟相機或開啟相簿而呼叫的，且data不為null
-			if ((requestCode == CAMERA) && data != null) {
+			if ((requestCode == CAMERA)) {
 				bitmap = (Bitmap) data.getExtras().get("data");
 				// Log.d(tag, "uri = "+data.getExtras().get);
-			} else if (requestCode == PHOTO && data != null) {
-				Uri uri = data.getData();
+			} else if (requestCode == PHOTO) {
+				Uri uri = (Uri) data.getData();
 				Log.d(tag, "uri = " + uri.getPath());
 
 				// orientation or horizontal
@@ -338,11 +338,16 @@ public class UploadPage extends Activity {
 				}
 				// END orientation or horizontal
 
+				//adjust picture size 
+				BitmapFactory.Options options = new BitmapFactory.Options();  
+				options.inSampleSize=2;//图片高宽度都为原来的二分之一，即图片大小为原来的大小的四分之一  
+				options.inTempStorage = new byte[5*1024];
+				
 				// uri to bitmap
 				ContentResolver cr = this.getContentResolver();
 				try {
 					bitmap = BitmapFactory
-							.decodeStream(cr.openInputStream(uri));
+							.decodeStream(cr.openInputStream(uri), null, options);
 //					Bitmap adjustedBitmap = Bitmap
 //							.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
 //									bitmap.getHeight(), matrix, true);
@@ -382,7 +387,7 @@ public class UploadPage extends Activity {
 				}
 			});
 		}
-		if (requestCode == MEDIA) {
+		if (requestCode == MEDIA && data != null) {
 			musicPath = data.getExtras().getString("musicPath");
 			Log.d(tag, "musicPath = " + musicPath);
 			String[] temp_filePathString = musicPath.split("/");

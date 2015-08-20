@@ -8,9 +8,4 @@ public class MusicController extends MediaController {
 	public MusicController(Context c){
 		super(c);
 	}
-
-	@Override
-	public void hide(){}
-	
-
 }

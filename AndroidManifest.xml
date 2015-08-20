@@ -219,11 +219,11 @@
         
 		<activity
             android:name="ro.ui.pttdroid.Client_Main"
-            android:label="@string/title_activity_Client_Main"
+            android:label="@string/title_activity_Client_Main"        
             android:screenOrientation="portrait"
              >
-		    
         </activity>
+		
         
 		<activity
             android:name="com.mclab1.palace.customer.CustomerDetailActivity"

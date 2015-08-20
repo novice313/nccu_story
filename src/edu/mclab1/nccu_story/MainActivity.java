@@ -254,44 +254,45 @@ public class MainActivity extends FragmentActivity implements
 	protected void onStart() {
 		super.onStart();
 		Log.d(tag, "onStart");
-		if (MediaPlayerFragment.playIntent == null) {
-			MediaPlayerFragment.playIntent = new Intent(this,
-					MusicService.class);
-			bindService(MediaPlayerFragment.playIntent,
-					MainActivity.musicConnection, Context.BIND_AUTO_CREATE);
-			startService(MediaPlayerFragment.playIntent);
-		}
+//		if (MediaPlayerFragment.playIntent == null) {
+//			MediaPlayerFragment.playIntent = new Intent(this,
+//					MusicService.class);
+//			bindService(MediaPlayerFragment.playIntent,
+//					MainActivity.musicConnection, Context.BIND_AUTO_CREATE);
+//			startService(MediaPlayerFragment.playIntent);
+//		}
 	}
 
-	// mediaplayer
-	// connect to the service
-	public static ServiceConnection musicConnection = new ServiceConnection() {
-
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder service) {
-			MusicBinder binder = (MusicBinder) service;
-			// get service
-			MediaPlayerFragment.musicSrv = binder.getService();
-
-			// if(musicSrv!=null){
-			Log.d(tag, MediaPlayerFragment.musicSrv.toString());
-			// }
-			// pass list
-			MediaPlayerFragment.musicSrv.setList(MediaPlayerFragment.songList);
-			MediaPlayerFragment.musicBound = true;
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName name) {
-			MediaPlayerFragment.musicBound = false;
-		}
-	};
+//	// mediaplayer
+//	// connect to the service
+//	public static ServiceConnection musicConnection = new ServiceConnection() {
+//
+//		@Override
+//		public void onServiceConnected(ComponentName name, IBinder service) {
+//			MusicBinder binder = (MusicBinder) service;
+//			// get service
+//			MediaPlayerFragment.musicSrv = binder.getService();
+//
+//			// if(musicSrv!=null){
+//			Log.d(tag, MediaPlayerFragment.musicSrv.toString());
+//			// }
+//			// pass list
+//			MediaPlayerFragment.musicSrv.setList(MediaPlayerFragment.songList);
+//			MediaPlayerFragment.musicBound = true;
+//		}
+//
+//		@Override
+//		public void onServiceDisconnected(ComponentName name) {
+//			MediaPlayerFragment.musicBound = false;
+//		}
+//	};
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		menu.findItem(R.id.action_recorder).setVisible(false);
+		menu.findItem(R.id.action_test).setVisible(false);
 		return true;
 	}
 
@@ -316,7 +317,8 @@ public class MainActivity extends FragmentActivity implements
 		case R.id.action_test:
 			Log.d(tag, "Test onClick");
         	    
-
+			//mediaplayer stop
+			MediaPlayerFragment.musicSrv.pausePlayer();
 
 			// Intent intent = new Intent();
 			// intent.setClass(MainActivity.this, FileexplorerActivity.class);

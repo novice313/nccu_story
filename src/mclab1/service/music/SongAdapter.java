@@ -72,7 +72,7 @@ public class SongAdapter extends BaseAdapter {
 					//setController();
 					MediaPlayerFragment.playbackPaused = false;
 				}
-				MediaPlayerFragment.controller.show(0);
+				MediaPlayerFragment.controller.show();
 			}
 		});
 		return songLay;
