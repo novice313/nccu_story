@@ -15,6 +15,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -55,7 +57,7 @@ public class OwnerFragment extends Fragment {
 		Log.d(tag, "onCreateView");
 		View view = inflater.inflate(R.layout.fragment_news, container, false);
 		newsView = (ListView) view.findViewById(R.id.news_list);
-		
+
 		// instantiate list
 		newsList = new ArrayList<News>();
 
@@ -104,6 +106,27 @@ public class OwnerFragment extends Fragment {
 		Log.d(tag, "onActivityCreated");
 		super.onActivityCreated(savedInstanceState);
 
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		switch (item.getItemId()) {
+		case R.id.action_loginFacebook:
+			List<Owner> owner = SugarRecord.listAll(Owner.class);
+			if (!owner.isEmpty()) {
+				final String userName = owner.get(owner.size() - 1).userName;
+				getActivity().runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						getNewsList(userName);
+					}
+				});
+			}
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void ShowAlertDialogAndList(final String objectIdString) {

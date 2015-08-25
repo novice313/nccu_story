@@ -122,11 +122,11 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		Log.d(tag, "onstart");
 		super.onStart();
 		if (MediaPlayerFragment.playIntent == null) {
-			MediaPlayerFragment.playIntent = new Intent(getActivity(),
+			/*MediaPlayerFragment.playIntent = new Intent(getActivity(),
 					MusicService.class);
 			getActivity().bindService(MediaPlayerFragment.playIntent,
 					MediaPlayerFragment.musicConnection, Context.BIND_AUTO_CREATE);
-			getActivity().startService(MediaPlayerFragment.playIntent);
+			getActivity().startService(MediaPlayerFragment.playIntent);*/
 		}
 	}
 

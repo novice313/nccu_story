@@ -182,7 +182,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 							System.out.println("outout");
 							while(true){
 								//if(mpintro!=null){
-								if(mpintro.isPlaying()){
+								if(mpintro!=null && mpintro.isPlaying()){
 									//System.out.println("mpintro_isPlaying");
 									}else{
 										System.out.println("mpintro_out"+" "+M+" "+test[L][M]);
@@ -256,6 +256,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
         	mpintro.stop();
         	mpintro.release();
         	mpintro = null;
+    		
        }
 		System.out.println("onPause"+mpintro);
 		Log.d(msg, "The onPause() event");
