@@ -218,6 +218,7 @@ stopService(playerIntent);
 }
 
 private void  change_to_client_Global_online_fragment(){
+
 	FragmentManager fragmentManager = getSupportFragmentManager();
 	CustomerFragmentGlobal customerFragmentGlobal = new CustomerFragmentGlobal();
 	fragmentManager.beginTransaction()

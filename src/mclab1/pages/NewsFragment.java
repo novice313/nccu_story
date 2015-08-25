@@ -13,6 +13,7 @@ import com.parse.ParseQuery;
 import mclab1.custom.listview.News;
 import mclab1.custom.listview.NewsAdapter;
 import edu.mclab1.nccu_story.R;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -21,7 +22,11 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 
 public class NewsFragment extends Fragment {
@@ -62,6 +67,20 @@ public class NewsFragment extends Fragment {
 		newsAdt = new NewsAdapter(getActivity().getApplicationContext(),
 				newsList);
 		newsView.setAdapter(newsAdt);
+		newsView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View v,
+					int pos, long id) {
+				Log.d(tag, "uuid = " + newsList.get(pos).getobjectId());
+				Intent intent_toDetailPage = new Intent();
+				intent_toDetailPage.putExtra("objectId", newsList.get(pos)
+						.getobjectId());
+				intent_toDetailPage.setClass(getActivity(), DetailPage.class);
+				startActivity(intent_toDetailPage);
+				return false;
+			}
+		});
 
 		return view;
 	}

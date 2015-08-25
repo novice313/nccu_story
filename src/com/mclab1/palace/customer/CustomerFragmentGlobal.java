@@ -79,7 +79,7 @@ public class CustomerFragmentGlobal extends Fragment {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.customer_fragment_g, container,
 				false);
-
+		
 		init_view(view);
 
 		return view;
