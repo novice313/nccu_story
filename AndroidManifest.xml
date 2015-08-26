@@ -233,6 +233,10 @@
 
         </activity>
 		<!-- END listen broadcast -->
+		
+		<!-- hockey app -->
+		<activity android:name="net.hockeyapp.android.UpdateActivity" />
+		<!-- END hockey app -->
 
         <!-- music service -->
         <service android:name="mclab1.service.music.MusicService" >

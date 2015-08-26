@@ -363,7 +363,7 @@ public class GoogleMapFragment extends Fragment
 													// "parseFile done");
 													BitmapFactory.Options opt = null;
 													opt = new BitmapFactory.Options();
-													opt.inSampleSize = 2;
+													opt.inSampleSize = 8;
 													Bitmap bmp = BitmapFactory
 															.decodeByteArray(
 																	data,
@@ -452,7 +452,7 @@ public class GoogleMapFragment extends Fragment
 
 													BitmapFactory.Options opt = null;
 													opt = new BitmapFactory.Options();
-													opt.inSampleSize = 2;
+													opt.inSampleSize = 8;
 													Bitmap bmp = BitmapFactory
 															.decodeByteArray(
 																	data,
@@ -543,7 +543,7 @@ public class GoogleMapFragment extends Fragment
 													// "parseFile done");
 													BitmapFactory.Options opt = null;
 													opt = new BitmapFactory.Options();
-													opt.inSampleSize = 2;
+													opt.inSampleSize = 8;
 													Bitmap bmp = BitmapFactory
 															.decodeByteArray(
 																	data,
@@ -642,7 +642,7 @@ public class GoogleMapFragment extends Fragment
 
 				String snippet = marker.getSnippet();
 				final String[] temp = snippet.split(",");
-				String objectId = temp[0];
+				final String objectId = temp[0];
 				LatLng point = marker.getPosition();
 				final double latitude = point.latitude;
 				final double longitude = point.longitude;

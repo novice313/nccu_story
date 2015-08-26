@@ -321,14 +321,15 @@ public class UploadPage extends Activity {
 				// orientation or horizontal
 				Matrix matrix = new Matrix();
 				try {
-					Log.d(tag, "getFileDescriptor = "+openFile(uri).getFileDescriptor());
+					Log.d(tag, "getFileDescriptor = "
+							+ openFile(uri).getFileDescriptor());
 					ExifInterface exif = new ExifInterface(uri.getPath());
 					int rotation = exif.getAttributeInt(
 							ExifInterface.TAG_ORIENTATION,
 							ExifInterface.ORIENTATION_NORMAL);
 					int rotationInDegrees = exifToDegrees(rotation);
-					Log.d(tag, "rotation = "+rotation);
-					Log.d(tag, "rotationInDegrees = "+rotationInDegrees);
+					Log.d(tag, "rotation = " + rotation);
+					Log.d(tag, "rotationInDegrees = " + rotationInDegrees);
 					if (rotation != 0f) {
 						matrix.preRotate(rotationInDegrees);
 					}
@@ -338,20 +339,20 @@ public class UploadPage extends Activity {
 				}
 				// END orientation or horizontal
 
-				//adjust picture size 
-				BitmapFactory.Options options = new BitmapFactory.Options();  
-				options.inSampleSize=2;//图片高宽度都为原来的二分之一，即图片大小为原来的大小的四分之一  
-				options.inTempStorage = new byte[5*1024];
-				
+				// adjust picture size
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inSampleSize = 2;// 图片高宽度都为原来的二分之一，即图片大小为原来的大小的四分之一
+				options.inTempStorage = new byte[5 * 1024];
+
 				// uri to bitmap
 				ContentResolver cr = this.getContentResolver();
 				try {
-					bitmap = BitmapFactory
-							.decodeStream(cr.openInputStream(uri), null, options);
-//					Bitmap adjustedBitmap = Bitmap
-//							.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
-//									bitmap.getHeight(), matrix, true);
-//					bitmap = adjustedBitmap;
+					bitmap = BitmapFactory.decodeStream(
+							cr.openInputStream(uri), null, options);
+					// Bitmap adjustedBitmap = Bitmap
+					// .createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+					// bitmap.getHeight(), matrix, true);
+					// bitmap = adjustedBitmap;
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -408,10 +409,11 @@ public class UploadPage extends Activity {
 		}
 		return 0;
 	}
-	
+
 	public ParcelFileDescriptor openFile(Uri uri) throws FileNotFoundException {
-	    File privateFile = new File(this.getFilesDir(), uri.getPath());
-	    return ParcelFileDescriptor.open(privateFile, ParcelFileDescriptor.MODE_READ_ONLY);
+		File privateFile = new File(this.getFilesDir(), uri.getPath());
+		return ParcelFileDescriptor.open(privateFile,
+				ParcelFileDescriptor.MODE_READ_ONLY);
 	}
 
 	private float ScalePic(Bitmap bitmap, int phone_height, int phone_width) {
@@ -425,8 +427,7 @@ public class UploadPage extends Activity {
 		}
 
 		else if (bitmap.getHeight() > phone_height) {
-			mScale = (float) ((phone_height / 1.5) / bitmap
-					.getHeight());
+			mScale = (float) ((phone_height / 1.5) / bitmap.getHeight());
 			Log.d(tag, "mScale = " + mScale);
 		} else {// too small situation
 			float mScale_width = (float) phone_width

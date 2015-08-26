@@ -83,6 +83,7 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		// retrieve list view
 		songView = (ListView) view.findViewById(R.id.song_list);
 		// controller.show();
+		startService();
 		return view;
 
 	}
@@ -121,6 +122,10 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 	public void onStart() {
 		Log.d(tag, "onstart");
 		super.onStart();
+		
+	}
+	
+	public void startService(){
 		if (MediaPlayerFragment.playIntent == null) {
 			MediaPlayerFragment.playIntent = new Intent(getActivity(),
 					MusicService.class);
@@ -244,6 +249,8 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		// TODO Auto-generated method stub
 		Log.d(tag, "height = "+controller.getHeight());
 		controller.removeAllViews();
+		getActivity().unbindService(musicConnection);
+		getActivity().stopService(playIntent);
 		super.onDestroyView();
 	}
 
