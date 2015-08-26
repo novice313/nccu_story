@@ -182,13 +182,22 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 							System.out.println("outout");
 							while(true){
 								//if(mpintro!=null){
-								if(mpintro.isPlaying()){
-									//System.out.println("mpintro_isPlaying");
-									}else{
-										System.out.println("mpintro_out"+" "+M+" "+test[L][M]);
-										M=M+1;
-										break;
-										}
+								try{
+									
+									if(mpintro.isPlaying()){
+										//System.out.println("mpintro_isPlaying");
+										}else{
+											System.out.println("mpintro_out"+" "+M+" "+test[L][M]);
+											M=M+1;
+											break;
+											}
+									
+								}catch(IllegalStateException e){
+									mpintro=null;
+									mpintro =new MediaPlayer();
+									
+								}
+
 								//}else{
 									
 								}
@@ -255,7 +264,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
     		System.out.println("mpintro"+mpintro);
         	mpintro.stop();
         	mpintro.release();
-        	mpintro = null;
+        	//mpintro = null;
        }
 		System.out.println("onPause"+mpintro);
 		Log.d(msg, "The onPause() event");

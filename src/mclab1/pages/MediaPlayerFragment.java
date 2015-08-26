@@ -249,9 +249,13 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		// TODO Auto-generated method stub
 		Log.d(tag, "height = "+controller.getHeight());
 		controller.removeAllViews();
+		stopService();
+		super.onDestroyView();
+	}
+	
+	public void stopService(){
 		getActivity().unbindService(musicConnection);
 		getActivity().stopService(playIntent);
-		super.onDestroyView();
 	}
 
 	@Override

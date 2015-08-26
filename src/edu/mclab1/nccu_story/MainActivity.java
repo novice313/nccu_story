@@ -51,7 +51,7 @@ public class MainActivity extends FragmentActivity implements
 	private ViewPager viewPager;
 	private ActionBar actionBar;
 	private TabsPagerAdapter mAdapter;
-	private String[] tabs = { "News", "Googlemap", "Mediaplayer", "Owner" };
+	private String[] tabs = { "News", "Googlemap", "Owner", "Mediaplayer" };
 	public static int tabsize = 0;
 	
 
