@@ -73,6 +73,12 @@ public class NewsFragment extends Fragment {
 			public boolean onItemLongClick(AdapterView<?> parent, View v,
 					int pos, long id) {
 				Log.d(tag, "uuid = " + newsList.get(pos).getobjectId());
+				
+				if (MediaPlayerFragment.musicSrv != null) {
+					MediaPlayerFragment.musicSrv.pausePlayer();
+				}
+
+				
 				Intent intent_toDetailPage = new Intent();
 				intent_toDetailPage.putExtra("objectId", newsList.get(pos)
 						.getobjectId());
