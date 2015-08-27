@@ -702,7 +702,7 @@ public class GoogleMapFragment extends Fragment
 								public void done(List<ParseObject> objects,
 										ParseException e) {
 									// TODO Auto-generated method stub
-									if (e != null) {
+									if (e == null) {
 										ParseObject parseObject = objects
 												.get(0);
 
