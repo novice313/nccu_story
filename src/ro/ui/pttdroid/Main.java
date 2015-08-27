@@ -197,6 +197,7 @@ public class Main extends FragmentActivity implements ChannelListener,
 		setContentView(R.layout.main);
 
 		getActionBar().setBackgroundDrawable(null);
+		getActionBar().setBackgroundDrawable(getResources().getDrawable(android.R.color.darker_gray));
 		 System.out.println("startmain!!!!!!!!!!");
 		 
 		/* mContext = this.getApplicationContext();

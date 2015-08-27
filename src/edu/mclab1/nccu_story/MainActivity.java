@@ -20,6 +20,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.orm.SugarRecord;
 import com.parse.Parse;
+
 import mclab1.pages.MediaPlayerFragment;
 import mclab1.service.music.MusicService;
 import mclab1.service.music.MusicService.MusicBinder;
@@ -32,6 +33,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
@@ -41,6 +43,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements
 		ActionBar.TabListener {
@@ -71,6 +74,14 @@ public class MainActivity extends FragmentActivity implements
 		// Parse.enableLocalDatastore(this);
 		Parse.initialize(this, "wtSFcggR896xMJQUGblYuphkF6EVw4ChcLcpSowP",
 				"IwJ3gTRBe8cARlxMf3xh97eai2a7MNLP68vdL3IY");
+		
+		WifiManager mWifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		
+		if(!mWifiManager.isWifiEnabled()){
+			mWifiManager.setWifiEnabled(true);
+			Toast.makeText(MainActivity.this, "Wi-Fi開啟中....", Toast.LENGTH_LONG).show();
+		}
+
 		// ParseObject testObject = new ParseObject("TestObject");
 		// testObject.put("foo", "bar");
 		// testObject.saveInBackground();

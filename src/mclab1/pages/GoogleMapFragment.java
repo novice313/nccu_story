@@ -220,9 +220,10 @@ public class GoogleMapFragment extends Fragment
 			@Override
 			public void onMapLongClick(LatLng point) {
 				// check login or not
-				List<Owner> owner = SugarRecord.listAll(Owner.class);
-				if (owner.isEmpty()) {
+				//List<Owner> owner = SugarRecord.listAll(Owner.class);
+				//if (owner.isEmpty()) {
 
+<<<<<<< HEAD
 					Toast.makeText(getActivity(),
 							"Sorry! You have to log in first.",
 							Toast.LENGTH_SHORT).show();
@@ -232,9 +233,15 @@ public class GoogleMapFragment extends Fragment
 						MediaPlayerFragment.musicSrv.pausePlayer();
 					}
 					
+=======
+				//	Toast.makeText(getActivity(),
+				//			"Sorry! You have to log in first.",
+				//			Toast.LENGTH_SHORT).show();
+				//} else {
+>>>>>>> Tsai-YU-QUAN-Tsai_yua_chan
 					// longclick upload
 					ShowAlertDialogAndList(point);
-				}
+				//}
 			}
 		});
 
@@ -387,7 +394,9 @@ public class GoogleMapFragment extends Fragment
 																	latitude,
 																	longitude));
 
+													if(bmp!=null){
 													bmp.recycle();
+													}
 
 													LatLng point = new LatLng(
 															latitude, longitude);
@@ -476,7 +485,9 @@ public class GoogleMapFragment extends Fragment
 																	latitude,
 																	longitude));
 
+													if(bmp!=null){
 													bmp.recycle();
+													}
 
 													LatLng point = new LatLng(
 															latitude, longitude);
@@ -567,7 +578,9 @@ public class GoogleMapFragment extends Fragment
 																	latitude,
 																	longitude));
 
-													bmp.recycle();
+													if (bmp!=null) {
+														bmp.recycle();
+													}
 
 													LatLng point = new LatLng(
 															latitude, longitude);

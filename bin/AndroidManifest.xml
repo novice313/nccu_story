@@ -90,9 +90,13 @@
 
         <!-- google map -->
         <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAtdXBrBZ051aQYqKquo1QGCG73OScJXIA" />  <!-- AIzaSyAxUWmJ6ftyh441WQZ39xO86F-1igwN5ms
-                                                                             AIzaSyAtdXBrBZ051aQYqKquo1QGCG73OScJXIA 柏 -->
+            android:name="com.google.android.maps.v2.API_KEY"             
+            android:value="AIzaSyAxUWmJ6ftyh441WQZ39xO86F-1igwN5ms" />  <!-- AIzaSyAxUWmJ6ftyh441WQZ39xO86F-1igwN5ms
+                                                                             AIzaSyAtdXBrBZ051aQYqKquo1QGCG73OScJXIA 柏 
+                                                                              google map沒設好會影響聲音傳不過去
+                                                                             
+                                                                             
+                                                                             -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -219,11 +223,11 @@
         
 		<activity
             android:name="ro.ui.pttdroid.Client_Main"
-            android:label="@string/title_activity_Client_Main"
+            android:label="@string/title_activity_Client_Main"        
             android:screenOrientation="portrait"
              >
-		    
         </activity>
+		
         
 		<activity
             android:name="com.mclab1.palace.customer.CustomerDetailActivity"

@@ -127,12 +127,17 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 
 	public void startService() {
 		if (MediaPlayerFragment.playIntent == null) {
-			MediaPlayerFragment.playIntent = new Intent(getActivity(),
+			/*MediaPlayerFragment.playIntent = new Intent(getActivity(),
 					MusicService.class);
 			getActivity().bindService(MediaPlayerFragment.playIntent,
+<<<<<<< HEAD
 					MediaPlayerFragment.musicConnection,
 					Context.BIND_AUTO_CREATE);
 			getActivity().startService(MediaPlayerFragment.playIntent);
+=======
+					MediaPlayerFragment.musicConnection, Context.BIND_AUTO_CREATE);
+			getActivity().startService(MediaPlayerFragment.playIntent);*/
+>>>>>>> Tsai-YU-QUAN-Tsai_yua_chan
 		}
 	}
 
