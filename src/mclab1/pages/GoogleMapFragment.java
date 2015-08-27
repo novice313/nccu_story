@@ -220,16 +220,16 @@ public class GoogleMapFragment extends Fragment
 			@Override
 			public void onMapLongClick(LatLng point) {
 				// check login or not
-				List<Owner> owner = SugarRecord.listAll(Owner.class);
-				if (owner.isEmpty()) {
+				//List<Owner> owner = SugarRecord.listAll(Owner.class);
+				//if (owner.isEmpty()) {
 
-					Toast.makeText(getActivity(),
-							"Sorry! You have to log in first.",
-							Toast.LENGTH_SHORT).show();
-				} else {
+				//	Toast.makeText(getActivity(),
+				//			"Sorry! You have to log in first.",
+				//			Toast.LENGTH_SHORT).show();
+				//} else {
 					// longclick upload
 					ShowAlertDialogAndList(point);
-				}
+				//}
 			}
 		});
 

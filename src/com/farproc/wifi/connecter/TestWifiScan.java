@@ -166,9 +166,17 @@ public class TestWifiScan extends ListActivity {
 			if(Currentlevel < result.level &&Currentlevel!=0){
 				Currentlevel=result.level;
 				CurrentSSID=result.SSID;
-				System.out.println("Currentlevel"+Currentlevel+CurrentSSID+result.SSID);
+				System.out.println("Testwifiscan"+Currentlevel+CurrentSSID+result.SSID);
 			}
-			if(count!=0&&result.SSID.contains("NCCU")){   //NCCU都抓出來
+			if(count%100==0){
+				Currentlevel=result.level;
+				CurrentSSID=result.SSID;
+				System.out.println("Refresh:"+Currentlevel+CurrentSSID+result.SSID+" "+count);
+				
+			}
+			//System.out.println("Testwifiscan"+result.level+result.SSID);
+			
+			if(count!=0&&result.SSID.contains("NCCU")){   //附近有NCCU都抓出來
 			System.out.println("Currentlevel2"+Currentlevel+CurrentSSID+result.SSID);
 			((TwoLineListItem) convertView).getText1().setText(result.SSID);
 			((TwoLineListItem)convertView).getText1().setTextColor(0xFF008080);
@@ -176,6 +184,17 @@ public class TestWifiScan extends ListActivity {
 					String.format("%s  %d", result.BSSID, result.level)
 					);
 			}
+			else if(count!=0&& !CurrentSSID.contains("NCCU")){  //最靠近的點不是NCCU即全部顯示
+				
+				System.out.println("Currentlevel3"+Currentlevel+CurrentSSID+result.SSID);
+				((TwoLineListItem) convertView).getText1().setText(result.SSID);
+				((TwoLineListItem)convertView).getText1().setTextColor(0xFF008080);
+				((TwoLineListItem)convertView).getText2().setText(
+						String.format("%s  %d", result.BSSID, result.level)
+						);
+				
+			}
+			
 			count=count+1;
 			//((TwoLineListItem)convertView).getText2().setTextColor(0xCD0000);
 			return convertView;
@@ -206,6 +225,9 @@ public class TestWifiScan extends ListActivity {
 			final ScanResult result = mScanResults.get(position);
 			if(result.SSID.contains("NCCU")){
 			launchWifiConnecter(TestWifiScan.this, result);
+			}
+			else if(!CurrentSSID.contains("NCCU")){
+				launchWifiConnecter(TestWifiScan.this, result);
 			}
 			
 		}
