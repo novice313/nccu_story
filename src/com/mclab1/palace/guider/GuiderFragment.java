@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import edu.mclab1.nccu_story.R;
-import ro.ui.pttdroid.settings.CommSettings;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;

@@ -1,7 +1,5 @@
 package mclab1.service.camera;
 
-import android.graphics.Bitmap;
-
 public class ImageItem {
     private String image;
     private String title;

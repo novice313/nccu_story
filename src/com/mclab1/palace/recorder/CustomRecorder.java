@@ -24,7 +24,6 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.mclab1.palaca.parsehelper.VoiceObject;
-import com.mclab1.palace.connection.ClientConnectionService;
 import com.mclab1.palace.connection.VoiceData;
 import com.mclab1.palace.guider.DisplayEvent;
 import com.pocketdigi.utils.FLameUtils;

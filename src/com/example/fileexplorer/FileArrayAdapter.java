@@ -27,6 +27,7 @@ public class FileArrayAdapter extends ArrayAdapter<Item>{
 		id = textViewResourceId;
 		items = objects;
 	}
+	@Override
 	public Item getItem(int i)
 	 {
 		 return items.get(i);

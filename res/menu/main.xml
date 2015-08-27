@@ -19,5 +19,6 @@
         android:id="@+id/action_recorder"
         android:icon="@drawable/ic_action_mic"
 		android:orderInCategory="30"
+		android:showAsAction="always"
 		android:title="@string/action_recorder"/>
 </menu>

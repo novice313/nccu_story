@@ -29,7 +29,6 @@ import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
 import ro.ui.pttdroid.settings.CommSettings;
 import ro.ui.pttdroid.util.Audio;
-import ro.ui.pttdroid.util.IP;
 import ro.ui.pttdroid.util.Log;
 import android.app.Notification;
 import android.app.PendingIntent;

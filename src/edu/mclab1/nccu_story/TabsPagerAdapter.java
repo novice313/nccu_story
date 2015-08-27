@@ -1,6 +1,5 @@
 package edu.mclab1.nccu_story;
 
-import mclab1.pages.CameraPage;
 import mclab1.pages.GoogleMapFragment;
 import mclab1.pages.MediaPlayerFragment;
 import mclab1.pages.NewsFragment;

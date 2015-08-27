@@ -9,7 +9,6 @@ import mclab1.service.music.MusicService;
 import mclab1.service.music.MusicService.MusicBinder;
 import mclab1.service.music.Song;
 import mclab1.service.music.SongAdapter;
-
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -19,17 +18,19 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.BaseColumns;
+import android.provider.MediaStore.Audio.AudioColumns;
+import android.provider.MediaStore.MediaColumns;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.MediaController.MediaPlayerControl;
-import edu.mclab1.nccu_story.MainActivity;
 import edu.mclab1.nccu_story.R;
 
 public class MediaPlayerFragment extends Fragment implements MediaPlayerControl {
@@ -59,6 +60,18 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		super.onCreate(savedInstanceState);
 		Log.d(tag, "onCreate.");
 
+		// set recorder icon at action bar
+		setHasOptionsMenu(true);
+
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		if (menu != null) {
+			menu.findItem(R.id.action_test).setVisible(true);
+			menu.findItem(R.id.action_recorder).setVisible(true);
+		}
 	}
 
 	@Override
@@ -80,11 +93,15 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		super.onActivityCreated(savedInstanceState);
 
 		// instantiate list
+		if (!(songList==null)) {
+			songList.clear();
+		}
 		songList = new ArrayList<Song>();
 		// get songs from device
 		getSongList();
 		// sort alphabetically by title
 		Collections.sort(songList, new Comparator<Song>() {
+			@Override
 			public int compare(Song a, Song b) {
 				return a.getTitle().compareTo(b.getTitle());
 			}
@@ -96,15 +113,21 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 
 		// setup controller
 		setController();
-		//controller.show();
+		// controller.show();
 	}
-	
+
 	// start and bind the service when the activity starts
 	@Override
 	public void onStart() {
 		Log.d(tag, "onstart");
 		super.onStart();
-		musicSrv.setList(songList);
+		if (MediaPlayerFragment.playIntent == null) {
+			/*MediaPlayerFragment.playIntent = new Intent(getActivity(),
+					MusicService.class);
+			getActivity().bindService(MediaPlayerFragment.playIntent,
+					MediaPlayerFragment.musicConnection, Context.BIND_AUTO_CREATE);
+			getActivity().startService(MediaPlayerFragment.playIntent);*/
+		}
 	}
 
 	public void getSongList() {
@@ -117,11 +140,11 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		if (musicCursor != null && musicCursor.moveToFirst()) {
 			// get columns
 			int titleColumn = musicCursor
-					.getColumnIndex(android.provider.MediaStore.Audio.Media.TITLE);
+					.getColumnIndex(MediaColumns.TITLE);
 			int idColumn = musicCursor
-					.getColumnIndex(android.provider.MediaStore.Audio.Media._ID);
+					.getColumnIndex(BaseColumns._ID);
 			int artistColumn = musicCursor
-					.getColumnIndex(android.provider.MediaStore.Audio.Media.ARTIST);
+					.getColumnIndex(AudioColumns.ARTIST);
 			// add songs to list
 			do {
 				long thisId = musicCursor.getLong(idColumn);
@@ -131,7 +154,7 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 			} while (musicCursor.moveToNext());
 		}
 	}
-	
+
 	// set the controller up
 	private void setController() {
 		controller = new MusicController(getActivity());
@@ -171,6 +194,30 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		controller.show(0);
 	}
 
+	// mediaplayer
+		// connect to the service
+		public static ServiceConnection musicConnection = new ServiceConnection() {
+
+			@Override
+			public void onServiceConnected(ComponentName name, IBinder service) {
+				MusicBinder binder = (MusicBinder) service;
+				// get service
+				MediaPlayerFragment.musicSrv = binder.getService();
+
+				// if(musicSrv!=null){
+				Log.d(tag, MediaPlayerFragment.musicSrv.toString());
+				// }
+				// pass list
+				MediaPlayerFragment.musicSrv.setList(MediaPlayerFragment.songList);
+				MediaPlayerFragment.musicBound = true;
+			}
+
+			@Override
+			public void onServiceDisconnected(ComponentName name) {
+				MediaPlayerFragment.musicBound = false;
+			}
+		};
+	
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -195,7 +242,8 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 	@Override
 	public void onDestroyView() {
 		// TODO Auto-generated method stub
-		controller.setVisibility(View.GONE);
+		Log.d(tag, "height = "+controller.getHeight());
+		controller.removeAllViews();
 		super.onDestroyView();
 	}
 

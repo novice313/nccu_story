@@ -36,6 +36,7 @@ public class Item implements Comparable<Item>{
 		return image;
 	}
 	
+	@Override
 	public int compareTo(Item o) {
 		if(this.name != null)
 			return this.name.toLowerCase().compareTo(o.getName().toLowerCase()); 

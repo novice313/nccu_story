@@ -2,33 +2,12 @@ package com.mclab1.palaca.parsehelper;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import ro.ui.pttdroid.util.Audio;
-import android.R.integer;
-import android.app.Service;
-import android.content.Intent;
 import android.net.wifi.WifiInfo;
-import android.os.Environment;
-import android.os.IBinder;
-import android.util.Log;
-
 import com.mclab1.palace.guider.DisplayEvent;
-import com.mclab1.place.events.NewClientConnectionEvent;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
-import com.pocketdigi.utils.FLameUtils;
-
 import de.greenrobot.event.EventBus;
 
 public class RealtimeVoiceObject {
@@ -40,6 +19,7 @@ public class RealtimeVoiceObject {
 	public static final String latitude="latitude";
 	public static final String longitude="longitude";
 	public static final String State="State";  //做online  offline state
+	public static final String Guiderid="Guiderid";
 	
 	
 	
@@ -59,7 +39,9 @@ public class RealtimeVoiceObject {
 	
 	
 	public void saveVoiceObject(final String mp3_file_path,final String tempFile, final String Tagi,final int SubTagi
-			,final String latitudestring,final String longitudestring,final int if_Final_normal) {
+			,final double latitudestring,final double longitudestring,final String guiderid,final int if_Final_normal) {
+			 
+
 		//new Thread() {
 		//	@Override
 		//	public void run() {
@@ -120,6 +102,7 @@ public class RealtimeVoiceObject {
 								parseObject.put(longitude, longitudestring);
 								parseObject.put(NumberTag, Tagi);
 								parseObject.put(SubNumberTag, SubTagi);
+								parseObject.put(Guiderid, guiderid);     //上傳Guiderid
 								parseObject.put(column_audio_file, file);
 								if(if_Final_normal==0){
 								parseObject.put(State,"Offline");
@@ -130,6 +113,8 @@ public class RealtimeVoiceObject {
 
 
 								parseObject.saveEventually();
+								                                     //update offline table
+							
 								
 								EventBus.getDefault()
 								.postSticky(

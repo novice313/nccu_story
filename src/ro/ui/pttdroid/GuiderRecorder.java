@@ -19,32 +19,23 @@ package ro.ui.pttdroid;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mclab1.palaca.parsehelper.VoiceObject;
-import com.mclab1.palaca.parsehelper.tempVoiceObject;
 import com.mclab1.palaca.parsehelper.RealtimeVoiceObject;
-import com.mclab1.palace.connection.ClientConnectionService;
 import com.mclab1.palace.connection.VoiceData;
 import com.mclab1.palace.guider.DisplayEvent;
-import com.mclab1.place.events.NewClientConnectionEvent;
-
 import de.greenrobot.event.EventBus;
 import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
@@ -52,23 +43,16 @@ import ro.ui.pttdroid.settings.CommSettings;
 import ro.ui.pttdroid.util.Audio;
 import ro.ui.pttdroid.util.IP;
 import ro.ui.pttdroid.util.Log;
-import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder.AudioSource;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
-
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.pocketdigi.utils.FLameUtils;
 
 import android.os.Environment;
-import android.os.IInterface;
-import android.provider.ContactsContract.CommonDataKinds.Event;
-import android.text.StaticLayout;
-import android.widget.SimpleAdapter;
 
 public class GuiderRecorder extends Thread
 {	
@@ -149,7 +133,7 @@ public class GuiderRecorder extends Thread
 				msg="Tim"+j;
 				j=j+1;
 				System.out.println("Global"+Globalvariable.Macaddress+" "+Globalvariable.Uuid
-						+" "+Globalvariable.Latitude+" "+Globalvariable.Longitude);
+						);
 				if(AudioSettings.useSpeex()==AudioSettings.USE_SPEEX) 
 				{
 					int readSize = recorder.read(pcmFrame, 0, Audio.FRAME_SIZE);
@@ -376,6 +360,37 @@ public class GuiderRecorder extends Thread
 		RealtimerawFinalVoiceQueue =new ArrayList<VoiceData>();
 		EventBus.getDefault().postSticky(
 				new DisplayEvent("Init recording file!"));
+		System.out.println("Init recording file");
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");   // add offline table to Online
+		// Retrieve the object by id
+		System.out.println("Ready to update State"+Globalvariable.guiderid);
+		query.whereEqualTo("GuiderID", Globalvariable.guiderid);
+		
+		query.findInBackground(new FindCallback<ParseObject>() {
+			
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+				for(int i=0;i<objects.size();i++){
+		        if (e == null) {
+		            // Now let's update it with some new data. In this case, only cheatMode and score
+		            // will get sent to the Parse Cloud. playerName hasn't changed.
+					final ParseObject State = objects.get(i);
+		        	State.put("State", "online");     // online 
+		        	State.put("numberTag", numberTag);
+		        	State.saveInBackground();
+		        	System.out.println("onlineSuccess");
+		        }
+		        else {
+		        	System.out.println("onlineerror");
+
+		        	
+		        }
+				}
+				
+			}
+		});
+
 	}
 	
 	
@@ -439,13 +454,46 @@ public class GuiderRecorder extends Thread
 				
 				RealtimeVoiceObject realtimeVoiceObject = new RealtimeVoiceObject();
 				if_Final_normal=0;
-				realtimeVoiceObject.saveVoiceObject(mp3File,tempFile,numberTag,SubnumbeTag,UploadPage.latitudeString,UploadPage.longitudeString,if_Final_normal); 
+				realtimeVoiceObject.saveVoiceObject(mp3File,tempFile,numberTag,SubnumbeTag,UploadPage.latitudeString,UploadPage.longitudeString,Globalvariable.guiderid ,if_Final_normal); 
 				//parse to cloud, after you can input where are you(not yet) ;從Uploadpage latitudeString longitudeString
 				//SubnumbeTag=0;
 				//numberTag = UUID.randomUUID().toString(); 
 				/*if(file.delete()){
 					EventBus.getDefault().postSticky(new DisplayEvent("file.delete()"));
 				}*/
+				
+				
+				ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
+				// Retrieve the object by id
+				System.out.println("Ready to update State"+Globalvariable.guiderid);
+				query.whereEqualTo("GuiderID", Globalvariable.guiderid);
+				
+				query.findInBackground(new FindCallback<ParseObject>() {
+					
+					@Override
+					public void done(List<ParseObject> objects, ParseException e) {
+						// TODO Auto-generated method stub
+						for(int i=0;i<objects.size();i++){
+				        if (e == null) {
+				            // Now let's update it with some new data. In this case, only cheatMode and score
+				            // will get sent to the Parse Cloud. playerName hasn't changed.
+							final ParseObject State = objects.get(i);
+				        	State.put("State", "offline");     // offline 
+				        	//State.put("numberTag", numberTag);     // offline 
+				        	
+				        	State.saveInBackground();
+				        	System.out.println("offlineSuccess");
+				        }
+				        else {
+				        	System.out.println("offlineerror");
+
+				        	
+				        }
+						}
+						
+					}
+				});
+				
 				SubnumbeTag=0;
 				numberTag = UUID.randomUUID().toString(); 
 				RealtimerawVoiceQueue.clear();
@@ -531,7 +579,7 @@ public class GuiderRecorder extends Thread
 						new DisplayEvent("Saving Realtime mp3!"));
 				RealtimeVoiceObject realtimeVoiceObject = new RealtimeVoiceObject();
 				if_Final_normal=1;
-				realtimeVoiceObject.saveVoiceObject(mp3File,tempFile,numberTag,SubnumbeTag,UploadPage.latitudeString,UploadPage.longitudeString,if_Final_normal); //parse to cloud
+				realtimeVoiceObject.saveVoiceObject(mp3File,tempFile,numberTag,SubnumbeTag,UploadPage.latitudeString,UploadPage.longitudeString,Globalvariable.guiderid,if_Final_normal); //parse to cloud
 				//SubnumbeTag=0;
 				//numberTag = UUID.randomUUID().toString(); 
 				/*if(file.delete()){

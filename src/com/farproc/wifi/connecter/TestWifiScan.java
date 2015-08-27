@@ -26,9 +26,6 @@
 package com.farproc.wifi.connecter;
 
 import java.util.List;
-import ro.ui.pttdroid.Globalvariable;
-import ro.ui.pttdroid.Main;
-import ro.ui.pttdroid.UploadPage;
 //import ro.ui.pttdroid.Main.MicrophoneSwitcher;
 import edu.mclab1.nccu_story.R;
 import android.annotation.SuppressLint;
@@ -43,7 +40,6 @@ import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,6 +68,9 @@ public class TestWifiScan extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	
+		Toast.makeText(getApplicationContext(), "您要和身上的無線AP做連接!",
+				Toast.LENGTH_LONG).show();
+    	
     	mWifiManager = (WifiManager)getSystemService(WIFI_SERVICE);
     	
     	setListAdapter(mListAdapter);
@@ -79,7 +78,7 @@ public class TestWifiScan extends ListActivity {
     	getListView().setOnItemClickListener(mItemOnClick);
     	
     	Bundle extras = getIntent().getExtras();
-		longitude = extras.getDouble("longitude");
+    	longitude = extras.getDouble("longitude");
 		latitude = extras.getDouble("latitude");
 	}
 	
@@ -87,8 +86,6 @@ public class TestWifiScan extends ListActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Toast.makeText(getApplicationContext(), "您要和身上的無線AP做連接!",
-				Toast.LENGTH_LONG).show();
 		final IntentFilter filter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 		registerReceiver(mReceiver, filter);
 		mWifiManager.startScan();
@@ -132,19 +129,12 @@ public class TestWifiScan extends ListActivity {
 		switch (item.getItemId()) {
 		case R.id.list_to_client:
 			Intent intent = new Intent(this, ro.ui.pttdroid.UploadPage.class);   //開時傳柏的參數
-			/*Bundle bundle = new Bundle();
-			bundle.putString("nickname", Globalvariable.nicknameString);
-			bundle.putString("language", Globalvariable.languageString);
-			bundle.putString("title", Globalvariable.titleString);
-			bundle.putString("content", Globalvariable.contentString);
-			
-			bundle.putString("photopath", Globalvariable.photopath);
-			bundle.putString("Longitude", Globalvariable.Longitude);
-			bundle.putString("Latitude", Globalvariable.Latitude);
-			bundle.putString("Macaddress", Globalvariable.Macaddress);
-			bundle.putString("Uuid", Globalvariable.Uuid);*/
-
-
+		
+			Bundle bundle_broadcast = new Bundle();
+			bundle_broadcast.putDouble("longitude", longitude);
+			bundle_broadcast.putDouble("latitude", latitude);
+			// 將Bundle物件assign給intent
+			intent.putExtras(bundle_broadcast);
 
 
 			//intent.putExtras(bundle);
@@ -176,9 +166,17 @@ public class TestWifiScan extends ListActivity {
 			if(Currentlevel < result.level &&Currentlevel!=0){
 				Currentlevel=result.level;
 				CurrentSSID=result.SSID;
-				System.out.println("Currentlevel"+Currentlevel+CurrentSSID+result.SSID);
+				System.out.println("Testwifiscan"+Currentlevel+CurrentSSID+result.SSID);
 			}
-			if(count!=0&&result.SSID.contains("NCCU")){
+			if(count%100==0){
+				Currentlevel=result.level;
+				CurrentSSID=result.SSID;
+				System.out.println("Refresh:"+Currentlevel+CurrentSSID+result.SSID+" "+count);
+				
+			}
+			//System.out.println("Testwifiscan"+result.level+result.SSID);
+			
+			if(count!=0&&result.SSID.contains("NCCU")){   //附近有NCCU都抓出來
 			System.out.println("Currentlevel2"+Currentlevel+CurrentSSID+result.SSID);
 			((TwoLineListItem) convertView).getText1().setText(result.SSID);
 			((TwoLineListItem)convertView).getText1().setTextColor(0xFF008080);
@@ -186,6 +184,17 @@ public class TestWifiScan extends ListActivity {
 					String.format("%s  %d", result.BSSID, result.level)
 					);
 			}
+			else if(count!=0&& !CurrentSSID.contains("NCCU")){  //最靠近的點不是NCCU即全部顯示
+				
+				System.out.println("Currentlevel3"+Currentlevel+CurrentSSID+result.SSID);
+				((TwoLineListItem) convertView).getText1().setText(result.SSID);
+				((TwoLineListItem)convertView).getText1().setTextColor(0xFF008080);
+				((TwoLineListItem)convertView).getText2().setText(
+						String.format("%s  %d", result.BSSID, result.level)
+						);
+				
+			}
+			
 			count=count+1;
 			//((TwoLineListItem)convertView).getText2().setTextColor(0xCD0000);
 			return convertView;
@@ -216,6 +225,9 @@ public class TestWifiScan extends ListActivity {
 			final ScanResult result = mScanResults.get(position);
 			if(result.SSID.contains("NCCU")){
 			launchWifiConnecter(TestWifiScan.this, result);
+			}
+			else if(!CurrentSSID.contains("NCCU")){
+				launchWifiConnecter(TestWifiScan.this, result);
 			}
 			
 		}

@@ -8,19 +8,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import mclab1.service.upload.UploadMediaListActivity;
 import mclab1.sugar.Owner;
 
-import com.example.fileexplorer.FileexplorerActivity;
-import com.facebook.login.LoginManager;
+import com.orm.SugarRecord;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import edu.mclab1.nccu_story.MainActivity;
@@ -33,10 +30,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
+import android.os.ParcelFileDescriptor;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -81,6 +77,10 @@ public class UploadPage extends Activity {
 	double longitude;
 	double latitude;
 
+	// current user
+	String userNameString = null;
+	String uuidString = null;
+
 	// temp
 	String musicPath = null;
 
@@ -92,6 +92,7 @@ public class UploadPage extends Activity {
 	// initial score
 	private final int INITIAL_SCORE = 0;
 
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.page_upload);
@@ -118,11 +119,15 @@ public class UploadPage extends Activity {
 		// imageView.setImageBitmap(bitmap);
 		// imageView.setRotation(90);
 
-		List<Owner> owner = Owner.listAll(Owner.class);
+		List<Owner> owner = SugarRecord.listAll(Owner.class);
+
 		if (owner.isEmpty()) {
 			userName.setText("You didn't log in before.");
 		} else {
-			userName.setText(owner.get(0).userName);
+			int currentUser = owner.size() - 1;
+			userNameString = owner.get(currentUser).userName;
+			uuidString = owner.get(currentUser).uuid;
+			userName.setText(userNameString);
 			LogIn = true;
 		}
 
@@ -199,7 +204,8 @@ public class UploadPage extends Activity {
 		// END music
 
 		ParseObject uploadObject = new ParseObject("story");
-		uploadObject.put("userName", userName.getText().toString());
+		uploadObject.put("userName", userNameString);
+		uploadObject.put("userUuid", uuidString);
 		uploadObject.put("title", title.getText().toString());
 		uploadObject
 				.put("language", language[spinner_language
@@ -303,26 +309,55 @@ public class UploadPage extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == CAMERA || requestCode == PHOTO) {
+		if ((requestCode == CAMERA || requestCode == PHOTO) && data != null) {
 			// 藉由requestCode判斷是否為開啟相機或開啟相簿而呼叫的，且data不為null
-			if ((requestCode == CAMERA) && data != null) {
+			if ((requestCode == CAMERA)) {
 				bitmap = (Bitmap) data.getExtras().get("data");
 				// Log.d(tag, "uri = "+data.getExtras().get);
-			} else if (requestCode == PHOTO && data != null) {
+			} else if (requestCode == PHOTO) {
 				Uri uri = (Uri) data.getData();
 				Log.d(tag, "uri = " + uri.getPath());
+
+				// orientation or horizontal
+				Matrix matrix = new Matrix();
+				try {
+					Log.d(tag, "getFileDescriptor = "+openFile(uri).getFileDescriptor());
+					ExifInterface exif = new ExifInterface(uri.getPath());
+					int rotation = exif.getAttributeInt(
+							ExifInterface.TAG_ORIENTATION,
+							ExifInterface.ORIENTATION_NORMAL);
+					int rotationInDegrees = exifToDegrees(rotation);
+					Log.d(tag, "rotation = "+rotation);
+					Log.d(tag, "rotationInDegrees = "+rotationInDegrees);
+					if (rotation != 0f) {
+						matrix.preRotate(rotationInDegrees);
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				// END orientation or horizontal
+
+				//adjust picture size 
+				BitmapFactory.Options options = new BitmapFactory.Options();  
+				options.inSampleSize=2;//图片高宽度都为原来的二分之一，即图片大小为原来的大小的四分之一  
+				options.inTempStorage = new byte[5*1024];
+				
+				// uri to bitmap
 				ContentResolver cr = this.getContentResolver();
 				try {
 					bitmap = BitmapFactory
-							.decodeStream(cr.openInputStream(uri));
+							.decodeStream(cr.openInputStream(uri), null, options);
+//					Bitmap adjustedBitmap = Bitmap
+//							.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+//									bitmap.getHeight(), matrix, true);
+//					bitmap = adjustedBitmap;
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
 			}
-			// orientation or horizontal
-			// ExifInterface exif = new ExifInterface(filename);
 
 			// calculate scale
 			float mScale = ScalePic(bitmap, mPhone.heightPixels,
@@ -352,7 +387,7 @@ public class UploadPage extends Activity {
 				}
 			});
 		}
-		if (requestCode == MEDIA) {
+		if (requestCode == MEDIA && data != null) {
 			musicPath = data.getExtras().getString("musicPath");
 			Log.d(tag, "musicPath = " + musicPath);
 			String[] temp_filePathString = musicPath.split("/");
@@ -361,6 +396,22 @@ public class UploadPage extends Activity {
 		}
 
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	private static int exifToDegrees(int exifOrientation) {
+		if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+			return 90;
+		} else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+			return 180;
+		} else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+			return 270;
+		}
+		return 0;
+	}
+	
+	public ParcelFileDescriptor openFile(Uri uri) throws FileNotFoundException {
+	    File privateFile = new File(this.getFilesDir(), uri.getPath());
+	    return ParcelFileDescriptor.open(privateFile, ParcelFileDescriptor.MODE_READ_ONLY);
 	}
 
 	private float ScalePic(Bitmap bitmap, int phone_height, int phone_width) {
@@ -374,13 +425,13 @@ public class UploadPage extends Activity {
 		}
 
 		else if (bitmap.getHeight() > phone_height) {
-			mScale = (float) (((float) phone_height / 1.5) / (float) bitmap
+			mScale = (float) ((phone_height / 1.5) / bitmap
 					.getHeight());
 			Log.d(tag, "mScale = " + mScale);
 		} else {// too small situation
 			float mScale_width = (float) phone_width
 					/ (float) bitmap.getWidth();
-			float mScale_height = (float) (((float) phone_height / 1.5) / (float) bitmap
+			float mScale_height = (float) ((phone_height / 1.5) / bitmap
 					.getHeight());
 			if (mScale_width < mScale_height) {
 				mScale = mScale_width;

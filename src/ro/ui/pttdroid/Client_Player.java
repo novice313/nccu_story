@@ -130,7 +130,7 @@ public class Client_Player extends Service
 	{		 
 		playerThread = new PlayerThread();
 		playerThread.start();
-		
+		System.out.println("goodtimeOncreate"+loopthread);		
 		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		phoneCallListener = new PhoneCallListener();
 		telephonyManager.listen(phoneCallListener, PhoneStateListener.LISTEN_CALL_STATE);
@@ -166,7 +166,7 @@ public class Client_Player extends Service
 	{
 	    //stopForeground(true);
 		
-						
+		System.out.println("goodtime"+loopthread);		
 		//notify();
 		if(playerThread!=null){
 			playerThread.interrupt();
@@ -175,7 +175,6 @@ public class Client_Player extends Service
 			playing=false;
 			running = false;
 		}
-		System.out.println("goodtime"+loopthread);
 		if(loopthread!=null){
 			loopthread.interrupt();
 			loopthread=null;
@@ -366,6 +365,8 @@ public class Client_Player extends Service
 				{
 					case CommSettings.BROADCAST:
 						try{
+							
+					    System.out.println("ReadytoBROADCAST");
 						android.util.Log.i("pttdroid", "Broadcast!");
 						socket = new DatagramSocket(CommSettings.getPort());
 						socket.setBroadcast(true);
@@ -376,6 +377,7 @@ public class Client_Player extends Service
 					break;
 					case CommSettings.MULTICAST:
 						try{
+							System.out.println("Readytomulticast");
 						socket = new MulticastSocket(CommSettings.getPort());
 						((MulticastSocket) socket).joinGroup(addr50_51);
 						

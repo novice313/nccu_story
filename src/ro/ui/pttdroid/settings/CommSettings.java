@@ -20,8 +20,6 @@ package ro.ui.pttdroid.settings;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import com.mclab1.place.events.ResumeAudioEvent;
-
 import de.greenrobot.event.EventBus;
 import ro.ui.pttdroid.util.Log;
 import android.content.Context;
@@ -30,7 +28,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.provider.ContactsContract.CommonDataKinds.Event;
 import edu.mclab1.nccu_story.R;
 
 public class CommSettings extends PreferenceActivity 
@@ -83,7 +80,7 @@ public class CommSettings extends PreferenceActivity
 		{
     		castType = Integer.parseInt(prefs.getString(
     				"cast_type", 
-    				res.getStringArray(R.array.cast_types_values)[0]));			
+    				res.getStringArray(R.array.cast_types_values)[1]));	 //array String		
     		broadcastAddr = InetAddress.getByName(prefs.getString(
     				"broadcast_addr", 
     				res.getString(R.string.broadcast_addr_default)));			

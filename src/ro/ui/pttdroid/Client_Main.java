@@ -17,39 +17,27 @@ along with pttdroid.  If not, see <http://www.gnu.org/licenses/>. */
 
 package ro.ui.pttdroid;
 
-import java.io.BufferedOutputStream;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.util.List;
-
-import ro.ui.pttdroid.Client_Player.PlayerBinder;
 import ro.ui.pttdroid.codecs.Speex;
-import edu.mclab1.nccu_story.R;
 import ro.ui.pttdroid.settings.AudioSettings;
 import ro.ui.pttdroid.settings.CommSettings;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.res.Resources;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
-import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
-import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -57,26 +45,25 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.android.wifidirect.DeviceDetailFragment;
 import com.example.android.wifidirect.DeviceListFragment;
 import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
-import com.example.android.wifidirect.WiFiDirectBroadcastReceiver;
 import com.example.android.wifidirect.WifiReceiver;
 import com.mclab1.palaca.parsehelper.ParseHelper;
-import com.mclab1.palace.connection.ClientConnectionService;
 import com.mclab1.palace.customer.CustomerFragment;
 import com.mclab1.palace.customer.CustomerFragmentGlobal;
 import com.mclab1.palace.customer.CustomerFragmentOffline;
 import com.mclab1.palace.guider.DisplayEvent;
-import com.mclab1.palace.guider.GuiderFragment;
 import com.mclab1.place.events.NewClientConnectionEvent;
-import com.mclab1.place.events.NewServerConnectionEvent;
 import com.mclab1.place.events.PauseAudioEvent;
 import com.mclab1.place.events.ResumeAudioEvent;
 
 import de.greenrobot.event.EventBus;
+import edu.mclab1.nccu_story.R;
  
 public class Client_Main extends FragmentActivity implements ChannelListener, DeviceActionListener {
 public static final String SOCKET_TAG_STRING = "wifi-socket-test";
@@ -137,8 +124,25 @@ shutdown();
 public void onCreate(Bundle savedInstanceState) {
 super.onCreate(savedInstanceState);
 setContentView(R.layout.main);
+/*ImageButton ready_image_guide;
+ready_image_guide=(ImageButton)findViewById(R.id.ready_image_guide); 
 
-getActionBar().setBackgroundDrawable(null);
+ready_image_guide.setOnClickListener(new Button.OnClickListener()  
+{  
+    @Override  
+    public void onClick(View v) {  
+        // TODO Auto-generated method stub  
+    	
+		change_to_client_online_fragment();
+    	
+    }  
+      
+}); */
+//getActionBar().setBackgroundDrawable(null);
+
+getActionBar().setBackgroundDrawable(getResources().getDrawable(android.R.color.darker_gray));  //標題配色
+
+
  System.out.println("start main!!!!!!!!!!"); 
  Intent intent = this.getIntent();
 //取得傳遞過來的資料   
@@ -151,7 +155,17 @@ try {
 } catch (Exception e) {
 	EventBus.getDefault().postSticky("Failed to int parse!");
 }
+
+
+/*ImageButton listen_guide = (ImageButton) findViewById(R.id.listen_guide);
+
+listen_guide .setOnClickListener(new View.OnClickListener() {
+	        public void onClick(View v) {
+	        	
+	        }});*/
 init();
+
+microphoneSwitcher.hide();
 
 intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
 intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
@@ -182,6 +196,7 @@ fragmentManager.beginTransaction()
 }
 
 private void change_to_client_offline_fragment() { 
+System.out.println("INchange_to_client_offline_fragment");
 
 microphoneSwitcher.hide();
 
@@ -203,6 +218,7 @@ stopService(playerIntent);
 }
 
 private void  change_to_client_Global_online_fragment(){
+
 	FragmentManager fragmentManager = getSupportFragmentManager();
 	CustomerFragmentGlobal customerFragmentGlobal = new CustomerFragmentGlobal();
 	fragmentManager.beginTransaction()
@@ -269,15 +285,18 @@ manager.createGroup(channel, new ActionListener() {
 public void onResume() {
 super.onResume();
 
-microphoneSwitcher = new MicrophoneSwitcher();
-microphoneSwitcher.init();
-System.out.println("Client_Main");
+
 /*wifiReceiver = new WifiReceiver();         // *******
 registerReceiver(wifiReceiver, filter);
 receiver = new WiFiDirectBroadcastReceiver(manager, channel, this);
 registerReceiver(receiver, intentFilter);*/
 
+//change_to_client_online_fragment();
+//change_to_client_offline_fragment();
 
+
+/****************** 之後要改變頁面的地方
+/*
 if (if_guider) {
 	//test_create_group();
 	FragmentManager fragmentManager = getSupportFragmentManager();
@@ -288,12 +307,18 @@ if (if_guider) {
 } else {
 	
 	if(if_Global_local==1){
-		System.out.println("local");
+		//System.out.println("local");
 		//if (if_clientL_offline_mode) {
 		//	if_clientL_offline_mode = false;
-		  change_to_client_online_fragment();
-		  playerIntent = new Intent(Client_Main.this, Client_Player.class);
-		  startService(playerIntent);
+	
+		
+		//change_to_client_offline_fragment();		
+
+		  change_to_client_offline_fragment();	
+		  if_clientL_offline_mode = false;
+			change_to_client_online_fragment();
+			playerIntent = new Intent(this, Client_Player.class);
+			startService(playerIntent);
 		//	} else {
 		//		if_clientL_offline_mode = true;
 		//		change_to_client_offline_fragment();
@@ -315,7 +340,7 @@ if (if_guider) {
 			
 		}
 	//change_to_client_offline_fragment();
-}
+}*/
 
 
     
@@ -345,12 +370,12 @@ if (if_guider) {
 	if (if_clientL_offline_mode&&if_clientL_offline_mode) {
 		getMenuInflater().inflate(R.menu.menu_client_offline, menu);
 	} 
-	else if(!if_clientL_offline_mode) 
+	/*else if(!if_clientL_offline_mode) 
 	{
-		System.out.println("menu_client_local");
+		System.out.println("menu_client_local");                 //會選擇是不是Local
 
 		getMenuInflater().inflate(R.menu.menu_client_local, menu);
-	}
+	}*/
 }
 return true;
 }
@@ -375,10 +400,7 @@ case R.id.btn_change_mode:
 			change_to_client_online_fragment();
 			playerIntent = new Intent(this, Client_Player.class);
 			startService(playerIntent);
-			} else {
-				if_clientL_offline_mode = true;
-				change_to_client_offline_fragment();
-				}
+			} 
 		}
 	
 	if(if_Global_local==0){
@@ -387,35 +409,25 @@ case R.id.btn_change_mode:
 				if_clientL_offline_mode=false;
 
 				change_to_client_Global_online_fragment();
-			} else{
-				if_clientL_offline_mode=true;
-				change_to_client_offline_fragment();		
-			}
+			} 
 			invalidateOptionsMenu();
-			//return true;
 			
 		}
 		
 	invalidateOptionsMenu(); 
 	return true;
 
-case R.id.btn_quit_icon:
+/*case R.id.btn_quit_icon:     //一個箭頭的符號
 	
 	if (if_clientL_offline_mode) {
-		if_clientL_offline_mode = false;
-		change_to_client_online_fragment();
 	} else {
 		if_clientL_offline_mode = true;
 		change_to_client_offline_fragment();
 	}
 	invalidateOptionsMenu();
-	return true;
-	
-	
-/*case R.id.client_to_list:
-	Intent intent3 =new Intent(this,edu.mclab1.MainActivity.class);
-	startActivity(intent3);
 	return true;*/
+	
+	
 	
 
 
@@ -426,16 +438,15 @@ default:
 }
 
 
-/*@Override
-public void onActivityResult(int requestCode, int resultCode, Intent data) {
-System.out.println("onActivityResult");
-CommSettings.getSettings(this);
-AudioSettings.getSettings(this);
-}*/
 
 
 
-private void init() {
+private void init() {  //init=> OnResume
+	
+	microphoneSwitcher = new MicrophoneSwitcher();
+	microphoneSwitcher.init();
+	System.out.println("Client_Main");
+	
 if (firstLaunch) {
 	CommSettings.getSettings(this);
 	AudioSettings.getSettings(this);
@@ -443,13 +454,16 @@ if (firstLaunch) {
 	setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 	Speex.open(AudioSettings.getSpeexQuality());
-
-	//playerIntent = new Intent(this, Player.class);
+	
+	//playerIntent = new Intent(this, Player.class);  
 	//startService(playerIntent);
 	System.out.println("clientConnectionIntent");
-	clientConnectionIntent = new Intent(this,
+	/*clientConnectionIntent = new Intent(this,
 			ClientConnectionService.class);
-	startService(clientConnectionIntent);
+	startService(clientConnectionIntent);*/
+	
+
+	
 
 	//customPlayerIntent = new Intent(this, CustomPlayer.class); // 沒用到
 	//startService(customPlayerIntent);

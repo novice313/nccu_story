@@ -1,7 +1,5 @@
 package mclab1.service.upload;
 
-import android.graphics.Path;
-
 public class Song {
 
 	private long id;

@@ -2,6 +2,8 @@ package com.mclab1.palace.customer;
 
 import java.util.ArrayList;
 
+import ro.ui.pttdroid.Globalvariable;
+
 import edu.mclab1.nccu_story.R;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
@@ -15,6 +17,10 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.etsy.android.grid.StaggeredGridView;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingBottomInAnimationAdapter;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 public class CustomerFragmentOffline extends Fragment {
 	private SampleAdapter mAdapter;
@@ -30,7 +36,7 @@ public class CustomerFragmentOffline extends Fragment {
 				false);
 	}
 
-	private void gen_test_data() {
+	private void gen_test_data() {    //產生可以聽的OFFline部分
 		flag=false;
 		System.out.println("flag"+flag);
 		ArrayList<CustomerItem> testDStrings = new ArrayList<CustomerItem>();
@@ -54,15 +60,31 @@ public class CustomerFragmentOffline extends Fragment {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				Log.i(tag, "Clicket" + String.valueOf(arg2));
-				CustomerItem customerItem = mAdapter.getItem(arg2);
-				Intent intent = new Intent(getActivity(),
-						CustomerDetailActivity.class);
-				Bundle bundle = new Bundle();
+				//CustomerItem customerItem = mAdapter.getItem(arg2);
+				
+				ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
+				// Retrieve the object by id
+				query.getInBackground("InRYwKoOIr", new GetCallback<ParseObject>() {  //以後博要給我object ID
+				    @Override
+					public void done(ParseObject offline, ParseException e) {
+				        if (e == null) {
+				       Globalvariable.titleString =	(String) offline.get("title");
+				       Globalvariable.contentString=(String) offline.get("content");
+				       System.out.println("Globalvariable"+Globalvariable.titleString);
+				       System.out.println("Globalvariable"+Globalvariable.contentString);
+							Intent intent = new Intent(getActivity(),
+									CustomerDetailActivity.class);
+							getActivity().startActivity(intent);
+
+				        }
+				    }
+				});
+
+				/*Bundle bundle = new Bundle();
 				bundle.putString("title", customerItem.title);
 				bundle.putString("content", customerItem.content);
 				bundle.putString("photo", customerItem.image_path);
-				intent.putExtras(bundle);
-				getActivity().startActivity(intent);
+				intent.putExtras(bundle);*/
 
 			}
 		});
