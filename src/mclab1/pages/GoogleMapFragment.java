@@ -227,6 +227,11 @@ public class GoogleMapFragment extends Fragment
 							"Sorry! You have to log in first.",
 							Toast.LENGTH_SHORT).show();
 				} else {
+					// stop music
+					if (MediaPlayerFragment.musicSrv != null) {
+						MediaPlayerFragment.musicSrv.pausePlayer();
+					}
+					
 					// longclick upload
 					ShowAlertDialogAndList(point);
 				}
@@ -639,6 +644,10 @@ public class GoogleMapFragment extends Fragment
 			public void onInfoWindowClick(Marker marker) {
 				// TODO Auto-generated method stub
 				Log.d(tag, "onInfoWindowClick: " + marker.getTitle());
+				
+				if (MediaPlayerFragment.musicSrv != null) {
+					MediaPlayerFragment.musicSrv.pausePlayer();
+				}
 
 				String snippet = marker.getSnippet();
 				final String[] temp = snippet.split(",");
@@ -865,7 +874,7 @@ public class GoogleMapFragment extends Fragment
 											query.getInBackground(
 													objectId,
 													new GetCallback<ParseObject>() { // 以後博要給我object
-																						// ID
+														// ID
 														@Override
 														public void done(
 																ParseObject offline,
