@@ -363,7 +363,7 @@ public class GoogleMapFragment extends Fragment
 													// "parseFile done");
 													BitmapFactory.Options opt = null;
 													opt = new BitmapFactory.Options();
-													opt.inSampleSize = 2;
+													opt.inSampleSize = 8;
 													Bitmap bmp = BitmapFactory
 															.decodeByteArray(
 																	data,
@@ -454,7 +454,7 @@ public class GoogleMapFragment extends Fragment
 
 													BitmapFactory.Options opt = null;
 													opt = new BitmapFactory.Options();
-													opt.inSampleSize = 2;
+													opt.inSampleSize = 8;
 													Bitmap bmp = BitmapFactory
 															.decodeByteArray(
 																	data,
@@ -547,7 +547,7 @@ public class GoogleMapFragment extends Fragment
 													// "parseFile done");
 													BitmapFactory.Options opt = null;
 													opt = new BitmapFactory.Options();
-													opt.inSampleSize = 2;
+													opt.inSampleSize = 8;
 													Bitmap bmp = BitmapFactory
 															.decodeByteArray(
 																	data,
@@ -708,7 +708,7 @@ public class GoogleMapFragment extends Fragment
 								public void done(List<ParseObject> objects,
 										ParseException e) {
 									// TODO Auto-generated method stub
-									if (e != null) {
+									if (e == null) {
 										ParseObject parseObject = objects
 												.get(0);
 

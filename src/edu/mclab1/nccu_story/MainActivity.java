@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.UpdateManager;
+
 import org.json.JSONObject;
 
 import com.facebook.AccessToken;
@@ -51,7 +54,7 @@ public class MainActivity extends FragmentActivity implements
 	private ViewPager viewPager;
 	private ActionBar actionBar;
 	private TabsPagerAdapter mAdapter;
-	private String[] tabs = { "News", "Googlemap", "Mediaplayer", "Owner" };
+	private String[] tabs = { "News", "Googlemap", "Owner", "Mediaplayer" };
 	public static int tabsize = 0;
 	
 
@@ -221,7 +224,24 @@ public class MainActivity extends FragmentActivity implements
 		
 
 	}
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		checkForCrashes();
+	    checkForUpdates();
+	}
 
+	private void checkForCrashes() {
+	    CrashManager.register(this, "ea6bdfe747bdf04686a0354461adc757");
+	  }
+
+	  private void checkForUpdates() {
+	    // Remove this for store builds!
+	    UpdateManager.register(this, "ea6bdfe747bdf04686a0354461adc757");
+	  }
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);

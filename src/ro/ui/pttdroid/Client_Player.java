@@ -206,112 +206,99 @@ public class Client_Player extends Service
 		public void run() 
 		{
 			android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);	
-            //try {
-				try {
-					FileWriter fw =new FileWriter("/sdcard/output.txt",false);
-					BufferedWriter bw =new BufferedWriter(fw);
+            while(isRunning())
+				{				
+					init();
+					System.out.println("isRunning!!!!");
 
-
-
-
-			while(isRunning())
-			{				
-				init();
-				System.out.println("isRunning!!!!");
-
-				try {
-					while(isPlaying()) 
-					{
-						System.out.println("isPlayingInPlayer!!!!");
-						try 
+					try {
+						while(isPlaying()) 
 						{
-							System.out.println("Ready to receive!"); 
-                             try{
-  							    socket.setSoTimeout(1000);
+							System.out.println("isPlayingInPlayer!!!!");
+							try 
+							{
+								System.out.println("Ready to receive!"); 
+				                 try{
+								    socket.setSoTimeout(1000);
 
-                              }catch(Exception e){
-                            	  e.printStackTrace();
-  					         	//System.out.println("i am in catch !");
-                              }
-                             
-								socket.receive(packet);
-					         	//System.out.println("good!+ addr50_51_3"+addr50_51);
-						        count=count+1;
+				                  }catch(Exception e){
+				                	  e.printStackTrace();
+						         	//System.out.println("i am in catch !");
+				                  }
+				                 
+									socket.receive(packet);
+						         	//System.out.println("good!+ addr50_51_3"+addr50_51);
+							        count=count+1;
 
-								if(count_three%20==0){
-									socket.receive(dp);												
-						        String msg=new String(buffer,0,dp.getLength());
-						       
-						       
-						       int index=msg.indexOf("Tim");                                             //濾掉聲音的封包字串
-						       String submsg=msg.substring(index+3,msg.length());
-						       System.out.println("socket_receive"+msg);
-						       if(index!=-1){
-									if_guide_interrupt=true;
-									System.out.println("if_guide_interrupt=true");
-						       }
-							    //bw.write(msg+"\n");
-						       }
-								count_three=count_three+1;
+									if(count_three%20==0){
+										socket.receive(dp);												
+							        String msg=new String(buffer,0,dp.getLength());
+							       
+							       
+							       int index=msg.indexOf("Tim");                                             //濾掉聲音的封包字串
+							       String submsg=msg.substring(index+3,msg.length());
+							       System.out.println("socket_receive"+msg);
+							       if(index!=-1){
+										if_guide_interrupt=true;
+										System.out.println("if_guide_interrupt=true");
+							       }
+								    //bw.write(msg+"\n");
+							       }
+									count_three=count_three+1;
 
-								
-								if_interrupt=true;
-								//System.out.println("if_interrupt"+if_interrupt);
-								System.out.println("addrInPlayer2.java:"+addr50_51);
-								
-								
-
-
-
-
-								
-						}
-						catch(SocketException e) //Due to socket.close() 
-						{
-							break;
-						}
-						catch(Exception e) 
-						{
-							count_three=0;
-							if_guide_interrupt=false;
-							System.out.println("if_guide_interrupt=false");
-
-
-							continue;
-						}
+									
+									if_interrupt=true;
+									//System.out.println("if_interrupt"+if_interrupt);
+									System.out.println("addrInPlayer2.java:"+addr50_51);
+									
 									
 
-						if(AudioSettings.useSpeex()==AudioSettings.USE_SPEEX) 
-						{
-							Speex.decode(encodedFrame, encodedFrame.length, pcmFrame);
-							//System.out.println("pcmFrame:"+encodedFrame);
-							player.write(pcmFrame, 0, Audio.FRAME_SIZE);
 
+
+
+									
+							}
+							catch(SocketException e) //Due to socket.close() 
+							{
+								break;
+							}
+							catch(Exception e) 
+							{
+								count_three=0;
+								if_guide_interrupt=false;
+								System.out.println("if_guide_interrupt=false");
+
+
+								continue;
+							}
+										
+
+							if(AudioSettings.useSpeex()==AudioSettings.USE_SPEEX) 
+							{
+								Speex.decode(encodedFrame, encodedFrame.length, pcmFrame);
+								//System.out.println("pcmFrame:"+encodedFrame);
+								player.write(pcmFrame, 0, Audio.FRAME_SIZE);
+
+							}
+							else 
+							{			
+								player.write(encodedFrame, 0, Audio.FRAME_SIZE_IN_BYTES);
+							}
+							//progress.incrementAndGet();
 						}
-						else 
-						{			
-							player.write(encodedFrame, 0, Audio.FRAME_SIZE_IN_BYTES);
-						}
-						//progress.incrementAndGet();
+						//bw.close();
+						System.out.println("done");
+							
+						player.stop();
+						player.release();
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-					bw.close();
-					System.out.println("done");
-						
-					player.stop();
-					player.release();
-				} catch (Exception e) {
-					e.printStackTrace();
+					
+					
+					
+					
 				}
-				
-				
-				
-				
-			}
-
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 
 		
 			//recorder_socket.close();

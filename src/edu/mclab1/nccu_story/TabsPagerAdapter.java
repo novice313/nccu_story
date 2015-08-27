@@ -26,9 +26,9 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             return new GoogleMapFragment();
         case 2:
             // Movies fragment activity
-            return new MediaPlayerFragment();
+            return new OwnerFragment();
         case 3:
-        	return new OwnerFragment();
+        	return new MediaPlayerFragment();
         }
  
         return null;

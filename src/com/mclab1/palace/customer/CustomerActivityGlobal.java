@@ -481,6 +481,8 @@ public class CustomerActivityGlobal extends Activity {
 	public void onDestroy(){  //add sth end VAR
 		super.onDestroy();
 		try {
+	
+			
 			System.out.println("out_to_Main");
 			EventBus.getDefault().unregister(this);
 		} catch (Exception e) {
