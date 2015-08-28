@@ -183,10 +183,6 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 							System.out.println("outout");
 							while(true){
 								//if(mpintro!=null){
-<<<<<<< HEAD
-=======
-
->>>>>>> a129c6a2a3832bba9cdcb298d13978c0e701302b
 								try{
 									
 									if(mpintro.isPlaying()){
@@ -202,11 +198,6 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 									mpintro =new MediaPlayer();
 									
 								}
-<<<<<<< HEAD
-
-
-=======
->>>>>>> a129c6a2a3832bba9cdcb298d13978c0e701302b
 								//}else{
 									
 								}
@@ -291,15 +282,8 @@ public class CustomerDetailActivity extends Activity {   //************offline *
     		}
     		System.out.println("mpintro"+mpintro);
         	mpintro.stop();
-<<<<<<< HEAD
         	mpintro.release();
         	//mpintro = null;
-        	//mpintro = null;
-    		
-=======
-        	mpintro.release();
-        	//mpintro = null;
->>>>>>> a129c6a2a3832bba9cdcb298d13978c0e701302b
        }
 		System.out.println("onPause"+mpintro);
 		Log.d(msg, "The onPause() event");
