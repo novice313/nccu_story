@@ -182,7 +182,6 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 							System.out.println("outout");
 							while(true){
 								//if(mpintro!=null){
-<<<<<<< HEAD
 								try{
 									
 									if(mpintro.isPlaying()){
@@ -199,15 +198,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 									
 								}
 
-=======
-								if(mpintro!=null && mpintro.isPlaying()){
-									//System.out.println("mpintro_isPlaying");
-									}else{
-										System.out.println("mpintro_out"+" "+M+" "+test[L][M]);
-										M=M+1;
-										break;
-										}
->>>>>>> Tsai-YU-QUAN-Tsai_yua_chan
+
 								//}else{
 									
 								}
@@ -274,12 +265,9 @@ public class CustomerDetailActivity extends Activity {   //************offline *
     		System.out.println("mpintro"+mpintro);
         	mpintro.stop();
         	mpintro.release();
-<<<<<<< HEAD
         	//mpintro = null;
-=======
-        	mpintro = null;
+        	//mpintro = null;
     		
->>>>>>> Tsai-YU-QUAN-Tsai_yua_chan
        }
 		System.out.println("onPause"+mpintro);
 		Log.d(msg, "The onPause() event");

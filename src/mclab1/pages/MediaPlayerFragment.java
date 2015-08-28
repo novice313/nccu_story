@@ -127,17 +127,12 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 
 	public void startService() {
 		if (MediaPlayerFragment.playIntent == null) {
-			/*MediaPlayerFragment.playIntent = new Intent(getActivity(),
+			MediaPlayerFragment.playIntent = new Intent(getActivity(),
 					MusicService.class);
 			getActivity().bindService(MediaPlayerFragment.playIntent,
-<<<<<<< HEAD
 					MediaPlayerFragment.musicConnection,
 					Context.BIND_AUTO_CREATE);
 			getActivity().startService(MediaPlayerFragment.playIntent);
-=======
-					MediaPlayerFragment.musicConnection, Context.BIND_AUTO_CREATE);
-			getActivity().startService(MediaPlayerFragment.playIntent);*/
->>>>>>> Tsai-YU-QUAN-Tsai_yua_chan
 		}
 	}
 
@@ -252,9 +247,9 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		// TODO Auto-generated method stub
 		Log.d(tag, "height = " + controller.getHeight());
 		controller.removeAllViews();
-//		if (MediaPlayerFragment.playIntent != null) {
-//			stopService();
-//		}
+		// if (MediaPlayerFragment.playIntent != null) {
+		// stopService();
+		// }
 		super.onDestroyView();
 	}
 

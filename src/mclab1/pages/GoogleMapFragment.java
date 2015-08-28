@@ -220,10 +220,8 @@ public class GoogleMapFragment extends Fragment
 			@Override
 			public void onMapLongClick(LatLng point) {
 				// check login or not
-				//List<Owner> owner = SugarRecord.listAll(Owner.class);
-				//if (owner.isEmpty()) {
-
-<<<<<<< HEAD
+				List<Owner> owner = SugarRecord.listAll(Owner.class);
+				if (owner.isEmpty()) {
 					Toast.makeText(getActivity(),
 							"Sorry! You have to log in first.",
 							Toast.LENGTH_SHORT).show();
@@ -232,16 +230,9 @@ public class GoogleMapFragment extends Fragment
 					if (MediaPlayerFragment.musicSrv != null) {
 						MediaPlayerFragment.musicSrv.pausePlayer();
 					}
-					
-=======
-				//	Toast.makeText(getActivity(),
-				//			"Sorry! You have to log in first.",
-				//			Toast.LENGTH_SHORT).show();
-				//} else {
->>>>>>> Tsai-YU-QUAN-Tsai_yua_chan
 					// longclick upload
 					ShowAlertDialogAndList(point);
-				//}
+				}
 			}
 		});
 
@@ -394,8 +385,8 @@ public class GoogleMapFragment extends Fragment
 																	latitude,
 																	longitude));
 
-													if(bmp!=null){
-													bmp.recycle();
+													if (bmp != null) {
+														bmp.recycle();
 													}
 
 													LatLng point = new LatLng(
@@ -485,8 +476,8 @@ public class GoogleMapFragment extends Fragment
 																	latitude,
 																	longitude));
 
-													if(bmp!=null){
-													bmp.recycle();
+													if (bmp != null) {
+														bmp.recycle();
 													}
 
 													LatLng point = new LatLng(
@@ -578,7 +569,7 @@ public class GoogleMapFragment extends Fragment
 																	latitude,
 																	longitude));
 
-													if (bmp!=null) {
+													if (bmp != null) {
 														bmp.recycle();
 													}
 
@@ -657,7 +648,7 @@ public class GoogleMapFragment extends Fragment
 			public void onInfoWindowClick(Marker marker) {
 				// TODO Auto-generated method stub
 				Log.d(tag, "onInfoWindowClick: " + marker.getTitle());
-				
+
 				if (MediaPlayerFragment.musicSrv != null) {
 					MediaPlayerFragment.musicSrv.pausePlayer();
 				}
