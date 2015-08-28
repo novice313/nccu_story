@@ -65,6 +65,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 	String  Prestring_numberTAg=null;
 	int L=0;
 	int M=0;
+	
 
 
 	int i;
@@ -182,6 +183,10 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 							System.out.println("outout");
 							while(true){
 								//if(mpintro!=null){
+<<<<<<< HEAD
+=======
+
+>>>>>>> a129c6a2a3832bba9cdcb298d13978c0e701302b
 								try{
 									
 									if(mpintro.isPlaying()){
@@ -197,8 +202,11 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 									mpintro =new MediaPlayer();
 									
 								}
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> a129c6a2a3832bba9cdcb298d13978c0e701302b
 								//}else{
 									
 								}
@@ -256,6 +264,25 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 	@Override
 	protected void onPause() {
 		super.onPause();
+		
+		System.out.println("fileDestory");
+		int var=0;
+		for( ;var<Storefilepath.size();var++){   //聽完瓷業的offline後，跳出頁面立刻把mp3kill
+			System.out.println("File"+Storefilepath.get(var).substring(20));
+			File file = new File(Environment.getExternalStorageDirectory().getPath()+"/"+Storefilepath.get(var).substring(20));
+			if(!file.exists()){
+				System.out.println("file_not_kill");
+			}
+			else{
+				System.out.println(var+"fileKill");
+				file.delete();
+				
+			}
+			
+		}
+		
+
+		
         if (mpintro!= null) {
         	
     		for(int i=0;test[L][i]!=null;i++){
@@ -264,10 +291,15 @@ public class CustomerDetailActivity extends Activity {   //************offline *
     		}
     		System.out.println("mpintro"+mpintro);
         	mpintro.stop();
+<<<<<<< HEAD
         	mpintro.release();
         	//mpintro = null;
         	//mpintro = null;
     		
+=======
+        	mpintro.release();
+        	//mpintro = null;
+>>>>>>> a129c6a2a3832bba9cdcb298d13978c0e701302b
        }
 		System.out.println("onPause"+mpintro);
 		Log.d(msg, "The onPause() event");
@@ -355,6 +387,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 												final String filePath = tempFile
 														+ nameString+sdFormat2
 																.format(parseObject.getCreatedAt());
+												Storefilepath.add(filePath);
 												final String mergepathString="/storage/emulated/0/merge.mp3";
 												BufferedOutputStream bos = new BufferedOutputStream(
 														new FileOutputStream(

@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 
 //import mclab1.service.upload.UploadMediaListActivity;
@@ -16,7 +17,10 @@ import java.util.Date;
 
 import java.util.UUID;
 
+import mclab1.sugar.Owner;
+
 import com.mclab1.palaca.parsehelper.ParseHelper;
+import com.orm.SugarRecord;
 //import com.example.fileexplorer.FileexplorerActivity;
 //import com.facebook.login.LoginManager;
 import com.parse.ParseException;
@@ -63,9 +67,10 @@ import edu.mclab1.nccu_story.R;
 public class UploadPage extends Activity {
 
 	private static final String tag = "UploadPageTag";
-
+	
+	Boolean LogIn=false;
 	// layout
-	EditText userName;
+	TextView userName;
 	EditText title;
 	EditText content;
 	ImageView imageView;
@@ -78,6 +83,7 @@ public class UploadPage extends Activity {
 	WifiInfo wifiinfo ;
 	static String wifiinfo_getSSID;
 	WifiManager wifi_service;
+	String userNameString = null;
 
 
 	// phone size
@@ -132,13 +138,26 @@ public class UploadPage extends Activity {
 		mPhone = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(mPhone);
 
-		userName = (EditText) findViewById(R.id.username);
+		userName = (TextView) findViewById(R.id.username);
 		title = (EditText) findViewById(R.id.title);
 		content = (EditText) findViewById(R.id.content);
 		spinner_language = (Spinner) findViewById(R.id.language_spinner);
 		imageView = (ImageView) findViewById(R.id.imageView);
 		//music_path = (TextView) findViewById(R.id.music_path);
 		btn_upload = (Button) findViewById(R.id.btn_upload);
+		
+		
+		List<Owner> owner = SugarRecord.listAll(Owner.class);
+
+		if (owner.isEmpty()) {
+			userName.setText("你還未登入");
+		} else {
+			int currentUser = owner.size() - 1;
+			userNameString = owner.get(currentUser).userName;
+			//uuidString = owner.get(currentUser).uuid;
+			userName.setText(userNameString);      //顯示FB名稱
+			LogIn = true;
+		}
 
 		//Bundle extras = getIntent().getExtras();
 		//longitude = extras.getDouble("longitude");
@@ -150,6 +169,7 @@ public class UploadPage extends Activity {
 
 		//List<Owner> owner = Owner.listAll(Owner.class);
 
+		if(LogIn){
 		btn_upload.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -182,6 +202,12 @@ public class UploadPage extends Activity {
 
 			}
 		});
+		}
+		else{
+			Toast.makeText(getApplicationContext(), "你還未登入......請登入FB..才能上傳",
+					Toast.LENGTH_LONG).show();
+			
+		}
 
 		languageList = new ArrayAdapter<String>(UploadPage.this,
 				android.R.layout.simple_spinner_item, language);
@@ -358,6 +384,7 @@ public class UploadPage extends Activity {
 			} else if (requestCode == PHOTO) {
 				Uri uri = data.getData();
 				Log.d(tag, "uri = " + uri.getPath());
+				
 				
 				// orientation or horizontal
 				Matrix matrix = new Matrix();
