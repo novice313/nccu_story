@@ -795,45 +795,46 @@ containing a value of this type.
         public static final int headset_g=0x7f020039;
         public static final int ic_action_camera=0x7f02003a;
         public static final int ic_action_mic=0x7f02003b;
-        public static final int ic_action_search=0x7f02003c;
-        public static final int ic_action_slideshow=0x7f02003d;
-        public static final int ic_action_storage=0x7f02003e;
-        public static final int ic_action_switch_camera=0x7f02003f;
-        public static final int ic_dialog_menu_generic=0x7f020040;
-        public static final int ic_launcher=0x7f020041;
-        public static final int ic_plusone_medium_off_client=0x7f020042;
-        public static final int ic_plusone_small_off_client=0x7f020043;
-        public static final int ic_plusone_standard_off_client=0x7f020044;
-        public static final int ic_plusone_tall_off_client=0x7f020045;
-        public static final int icon=0x7f020046;
-        public static final int listen_guide=0x7f020047;
-        public static final int listen_guide_blue=0x7f020048;
-        public static final int listen_guide_darkblue=0x7f020049;
-        public static final int machine=0x7f02004a;
-        public static final int messenger_bubble_large_blue=0x7f02004b;
-        public static final int messenger_bubble_large_white=0x7f02004c;
-        public static final int messenger_bubble_small_blue=0x7f02004d;
-        public static final int messenger_bubble_small_white=0x7f02004e;
-        public static final int messenger_button_blue_bg_round=0x7f02004f;
-        public static final int messenger_button_blue_bg_selector=0x7f020050;
-        public static final int messenger_button_send_round_shadow=0x7f020051;
-        public static final int messenger_button_white_bg_round=0x7f020052;
-        public static final int messenger_button_white_bg_selector=0x7f020053;
-        public static final int microphone_disabled_image=0x7f020054;
-        public static final int microphone_normal_image=0x7f020055;
-        public static final int microphone_pressed_image=0x7f020056;
-        public static final int notif_icon=0x7f020057;
-        public static final int placeholder=0x7f020058;
-        public static final int play=0x7f020059;
-        public static final int powered_by_google_dark=0x7f02005a;
-        public static final int powered_by_google_light=0x7f02005b;
-        public static final int quit_icon=0x7f02005c;
-        public static final int rand=0x7f02005d;
-        public static final int rounded_corner=0x7f02005e;
-        public static final int star=0x7f02005f;
-        public static final int star_off=0x7f020060;
-        public static final int touchscreen=0x7f020061;
-        public static final int wi_fi_direct=0x7f020062;
+        public static final int ic_action_refresh=0x7f02003c;
+        public static final int ic_action_search=0x7f02003d;
+        public static final int ic_action_slideshow=0x7f02003e;
+        public static final int ic_action_storage=0x7f02003f;
+        public static final int ic_action_switch_camera=0x7f020040;
+        public static final int ic_dialog_menu_generic=0x7f020041;
+        public static final int ic_launcher=0x7f020042;
+        public static final int ic_plusone_medium_off_client=0x7f020043;
+        public static final int ic_plusone_small_off_client=0x7f020044;
+        public static final int ic_plusone_standard_off_client=0x7f020045;
+        public static final int ic_plusone_tall_off_client=0x7f020046;
+        public static final int icon=0x7f020047;
+        public static final int listen_guide=0x7f020048;
+        public static final int listen_guide_blue=0x7f020049;
+        public static final int listen_guide_darkblue=0x7f02004a;
+        public static final int machine=0x7f02004b;
+        public static final int messenger_bubble_large_blue=0x7f02004c;
+        public static final int messenger_bubble_large_white=0x7f02004d;
+        public static final int messenger_bubble_small_blue=0x7f02004e;
+        public static final int messenger_bubble_small_white=0x7f02004f;
+        public static final int messenger_button_blue_bg_round=0x7f020050;
+        public static final int messenger_button_blue_bg_selector=0x7f020051;
+        public static final int messenger_button_send_round_shadow=0x7f020052;
+        public static final int messenger_button_white_bg_round=0x7f020053;
+        public static final int messenger_button_white_bg_selector=0x7f020054;
+        public static final int microphone_disabled_image=0x7f020055;
+        public static final int microphone_normal_image=0x7f020056;
+        public static final int microphone_pressed_image=0x7f020057;
+        public static final int notif_icon=0x7f020058;
+        public static final int placeholder=0x7f020059;
+        public static final int play=0x7f02005a;
+        public static final int powered_by_google_dark=0x7f02005b;
+        public static final int powered_by_google_light=0x7f02005c;
+        public static final int quit_icon=0x7f02005d;
+        public static final int rand=0x7f02005e;
+        public static final int rounded_corner=0x7f02005f;
+        public static final int star=0x7f020060;
+        public static final int star_off=0x7f020061;
+        public static final int touchscreen=0x7f020062;
+        public static final int wi_fi_direct=0x7f020063;
     }
     public static final class id {
         public static final int AbsoluteLayout1=0x7f0d0046;
@@ -855,11 +856,12 @@ containing a value of this type.
         public static final int TextView01=0x7f0d005f;
         public static final int TextView02=0x7f0d0060;
         public static final int TextViewDate=0x7f0d0061;
-        public static final int action_camera=0x7f0d009b;
-        public static final int action_gallery=0x7f0d009c;
+        public static final int action_camera=0x7f0d009c;
+        public static final int action_gallery=0x7f0d009d;
         public static final int action_loginFacebook=0x7f0d0096;
-        public static final int action_media=0x7f0d009d;
+        public static final int action_media=0x7f0d009e;
         public static final int action_recorder=0x7f0d0098;
+        public static final int action_refresh=0x7f0d0099;
         public static final int action_test=0x7f0d0097;
         public static final int adjust_height=0x7f0d0000;
         public static final int adjust_width=0x7f0d0001;
@@ -867,10 +869,10 @@ containing a value of this type.
         public static final int book_now=0x7f0d0010;
         public static final int bottom=0x7f0d0023;
         public static final int box_count=0x7f0d0020;
-        public static final int btn_change_mode=0x7f0d0099;
+        public static final int btn_change_mode=0x7f0d009a;
         public static final int btn_connect=0x7f0d0050;
         public static final int btn_disconnect=0x7f0d0051;
-        public static final int btn_quit_icon=0x7f0d009a;
+        public static final int btn_quit_icon=0x7f0d009b;
         public static final int btn_start_client=0x7f0d0052;
         public static final int btn_test_mp3=0x7f0d0080;
         public static final int btn_upload=0x7f0d0085;
@@ -934,7 +936,7 @@ containing a value of this type.
         public static final int large=0x7f0d001b;
         public static final int left=0x7f0d0027;
         public static final int linearLayout1=0x7f0d0079;
-        public static final int list_to_client=0x7f0d009e;
+        public static final int list_to_client=0x7f0d009f;
         public static final int main=0x7f0d007a;
         public static final int map=0x7f0d006b;
         public static final int match_parent=0x7f0d000e;
@@ -1070,22 +1072,23 @@ containing a value of this type.
         public static final int action_fastscroll=0x7f07003c;
         public static final int action_gallery=0x7f070040;
         public static final int action_loginFacebook=0x7f07003b;
-        public static final int action_media=0x7f070041;
-        public static final int action_recorder=0x7f070042;
+        public static final int action_media=0x7f070042;
+        public static final int action_recorder=0x7f070043;
+        public static final int action_refresh=0x7f070041;
         public static final int action_settings=0x7f070039;
-        public static final int action_showHeaderAndFooter=0x7f070043;
+        public static final int action_showHeaderAndFooter=0x7f070044;
         public static final int action_showShadow=0x7f07003e;
-        public static final int action_updateDataset=0x7f070044;
-        public static final int adhoc_not_supported_yet=0x7f070074;
+        public static final int action_updateDataset=0x7f070045;
+        public static final int adhoc_not_supported_yet=0x7f070075;
         public static final int app_name=0x7f070037;
         public static final int app_running=0x7f07003a;
-        public static final int broadcast_addr_default=0x7f070078;
-        public static final int broadcast_addr_summary=0x7f070077;
-        public static final int broadcast_addr_title=0x7f070076;
-        public static final int buttonOp=0x7f070059;
-        public static final int button_change_password=0x7f070071;
-        public static final int cast_type_summary=0x7f07008c;
-        public static final int cast_type_title=0x7f07008b;
+        public static final int broadcast_addr_default=0x7f070079;
+        public static final int broadcast_addr_summary=0x7f070078;
+        public static final int broadcast_addr_title=0x7f070077;
+        public static final int buttonOp=0x7f07005a;
+        public static final int button_change_password=0x7f070072;
+        public static final int cast_type_summary=0x7f07008d;
+        public static final int cast_type_title=0x7f07008c;
         public static final int com_facebook_image_download_unknown_error=0x7f070034;
         public static final int com_facebook_internet_permission_error_message=0x7f070032;
         public static final int com_facebook_internet_permission_error_title=0x7f070031;
@@ -1212,129 +1215,129 @@ containing a value of this type.
         public static final int commono_google_play_services_api_unavailable_text=0x7f070022;
         /**  Button label to connect to a wifi network 
          */
-        public static final int connect=0x7f07005e;
-        public static final int connect_peer_button=0x7f07008e;
+        public static final int connect=0x7f07005f;
+        public static final int connect_peer_button=0x7f07008f;
         public static final int create_calendar_message=0x7f070005;
         public static final int create_calendar_title=0x7f070004;
         public static final int decline=0x7f070003;
-        public static final int disconnect_peer_button=0x7f07008f;
-        public static final int dummy_content_description=0x7f070075;
-        public static final int echo_off=0x7f070089;
-        public static final int echo_on=0x7f070088;
-        public static final int echo_title=0x7f070087;
-        public static final int empty=0x7f070094;
-        public static final int empty_message=0x7f070097;
-        public static final int enable_p2p_button=0x7f07005c;
-        public static final int facebook_app_id=0x7f070045;
+        public static final int disconnect_peer_button=0x7f070090;
+        public static final int dummy_content_description=0x7f070076;
+        public static final int echo_off=0x7f07008a;
+        public static final int echo_on=0x7f070089;
+        public static final int echo_title=0x7f070088;
+        public static final int empty=0x7f070095;
+        public static final int empty_message=0x7f070098;
+        public static final int enable_p2p_button=0x7f07005d;
+        public static final int facebook_app_id=0x7f070046;
         /**  Button caption to forget a wifi network 
          */
-        public static final int forget_network=0x7f07005f;
-        public static final int get_file_button=0x7f070090;
-        public static final int group_owner_text=0x7f070091;
+        public static final int forget_network=0x7f070060;
+        public static final int get_file_button=0x7f070091;
+        public static final int group_owner_text=0x7f070092;
         public static final int hello_world=0x7f070038;
         /**  Wi-Fi IP address label 
          */
-        public static final int ip_address=0x7f070055;
-        public static final int label_me=0x7f070095;
-        public static final int label_peers=0x7f070096;
+        public static final int ip_address=0x7f070056;
+        public static final int label_me=0x7f070096;
+        public static final int label_peers=0x7f070097;
         public static final int messenger_send_button_text=0x7f070026;
-        public static final int multicast_addr_default=0x7f07007b;
-        public static final int multicast_addr_summary=0x7f07007a;
-        public static final int multicast_addr_title=0x7f070079;
-        public static final int no=0x7f070093;
-        public static final int p2p_off_warning=0x7f07005d;
-        public static final int parse_app_id=0x7f070046;
-        public static final int parse_client_key=0x7f070047;
-        public static final int please_type_passphrase=0x7f07006e;
-        public static final int port_default=0x7f070081;
-        public static final int port_summary=0x7f070080;
-        public static final int port_title=0x7f07007f;
-        public static final int ptt=0x7f070058;
-        public static final int quit_label=0x7f07005b;
+        public static final int multicast_addr_default=0x7f07007c;
+        public static final int multicast_addr_summary=0x7f07007b;
+        public static final int multicast_addr_title=0x7f07007a;
+        public static final int no=0x7f070094;
+        public static final int p2p_off_warning=0x7f07005e;
+        public static final int parse_app_id=0x7f070047;
+        public static final int parse_client_key=0x7f070048;
+        public static final int please_type_passphrase=0x7f07006f;
+        public static final int port_default=0x7f070082;
+        public static final int port_summary=0x7f070081;
+        public static final int port_title=0x7f070080;
+        public static final int ptt=0x7f070059;
+        public static final int quit_label=0x7f07005c;
         /**  Label for the security of a wifi network 
          */
-        public static final int security=0x7f070067;
-        public static final int set_cast_and_port=0x7f07008a;
-        public static final int set_ip_addr=0x7f07008d;
-        public static final int setting_reset_all_confirm=0x7f07005a;
+        public static final int security=0x7f070068;
+        public static final int set_cast_and_port=0x7f07008b;
+        public static final int set_ip_addr=0x7f07008e;
+        public static final int setting_reset_all_confirm=0x7f07005b;
         /**  Label for the signal strength 
          */
-        public static final int signal=0x7f070056;
-        public static final int speex_quality_summary=0x7f070086;
-        public static final int speex_quality_title=0x7f070085;
+        public static final int signal=0x7f070057;
+        public static final int speex_quality_summary=0x7f070087;
+        public static final int speex_quality_title=0x7f070086;
         /**  Label for status of connection 
  Wi-Fi settings screen, summary text for network when connected 
          */
-        public static final int status_connected=0x7f070060;
-        public static final int status_connecting=0x7f070061;
+        public static final int status_connected=0x7f070061;
+        public static final int status_connecting=0x7f070062;
         public static final int store_picture_message=0x7f070001;
         public static final int store_picture_title=0x7f070000;
-        public static final int test_String=0x7f070048;
-        public static final int title_activity_CameraActivity=0x7f07004c;
-        public static final int title_activity_Client_Main=0x7f070049;
-        public static final int title_activity_DetailPage=0x7f07004f;
-        public static final int title_activity_DetailsActivity=0x7f07004d;
-        public static final int title_activity_GalleryActivity=0x7f07004b;
-        public static final int title_activity_Main=0x7f070051;
-        public static final int title_activity_TestWifiScan=0x7f070050;
-        public static final int title_activity_UploadMediaListActivity=0x7f07004e;
-        public static final int title_activity_UploadPage=0x7f070052;
-        public static final int title_activity_fileexplorer=0x7f07004a;
-        public static final int toastFailed=0x7f070057;
-        public static final int unicast_addr_default=0x7f07007e;
-        public static final int unicast_addr_summary=0x7f07007d;
-        public static final int unicast_addr_title=0x7f07007c;
-        public static final int use_speex_off=0x7f070084;
-        public static final int use_speex_on=0x7f070083;
-        public static final int use_speex_title=0x7f070082;
+        public static final int test_String=0x7f070049;
+        public static final int title_activity_CameraActivity=0x7f07004d;
+        public static final int title_activity_Client_Main=0x7f07004a;
+        public static final int title_activity_DetailPage=0x7f070050;
+        public static final int title_activity_DetailsActivity=0x7f07004e;
+        public static final int title_activity_GalleryActivity=0x7f07004c;
+        public static final int title_activity_Main=0x7f070052;
+        public static final int title_activity_TestWifiScan=0x7f070051;
+        public static final int title_activity_UploadMediaListActivity=0x7f07004f;
+        public static final int title_activity_UploadPage=0x7f070053;
+        public static final int title_activity_fileexplorer=0x7f07004b;
+        public static final int toastFailed=0x7f070058;
+        public static final int unicast_addr_default=0x7f07007f;
+        public static final int unicast_addr_summary=0x7f07007e;
+        public static final int unicast_addr_title=0x7f07007d;
+        public static final int use_speex_off=0x7f070085;
+        public static final int use_speex_on=0x7f070084;
+        public static final int use_speex_title=0x7f070083;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */
         public static final int wallet_buy_button_place_holder=0x7f070025;
-        public static final int wifi_change_password=0x7f070070;
-        public static final int wifi_connect_to=0x7f070054;
+        public static final int wifi_change_password=0x7f070071;
+        public static final int wifi_connect_to=0x7f070055;
         /**  Label for link speed (wifi) 
          */
-        public static final int wifi_link_speed=0x7f070062;
+        public static final int wifi_link_speed=0x7f070063;
         /**  An edit field's grayed out value when it has not been modified 
          */
-        public static final int wifi_password_unchanged=0x7f070072;
+        public static final int wifi_password_unchanged=0x7f070073;
         /**  Button caption to save a configuration wifi 
          */
-        public static final int wifi_save_config=0x7f070073;
+        public static final int wifi_save_config=0x7f070074;
         /**  Value for the wifi security 
          */
-        public static final int wifi_security_ieee8021x=0x7f07006d;
+        public static final int wifi_security_ieee8021x=0x7f07006e;
         /**  Value for the wifi security.  This means no encryption. 
          */
-        public static final int wifi_security_open=0x7f070068;
+        public static final int wifi_security_open=0x7f070069;
         /**  Value for the wifi security 
          */
-        public static final int wifi_security_wep=0x7f070069;
+        public static final int wifi_security_wep=0x7f07006a;
         /**  Value for the wifi security 
          */
-        public static final int wifi_security_wpa=0x7f07006a;
+        public static final int wifi_security_wpa=0x7f07006b;
         /**  Value for the wifi security 
          */
-        public static final int wifi_security_wpa2=0x7f07006b;
+        public static final int wifi_security_wpa2=0x7f07006c;
         /**  Value for the wifi security 
          */
-        public static final int wifi_security_wpa_eap=0x7f07006c;
-        public static final int wifi_show_password=0x7f07006f;
+        public static final int wifi_security_wpa_eap=0x7f07006d;
+        public static final int wifi_show_password=0x7f070070;
         /**  Verbose wifi signal strength.  This is the worst out of 4 levels. 
          */
-        public static final int wifi_signal_0=0x7f070066;
+        public static final int wifi_signal_0=0x7f070067;
         /**  Verbose wifi signal strength.  This is the 3rd best out of 4 levels. 
          */
-        public static final int wifi_signal_1=0x7f070065;
+        public static final int wifi_signal_1=0x7f070066;
         /**  Verbose wifi signal strength.  This is the 2nd best out of 4 levels. 
          */
-        public static final int wifi_signal_2=0x7f070064;
+        public static final int wifi_signal_2=0x7f070065;
         /**  Verbose wifi signal strength.  This is the best out of 4 levels. 
          */
-        public static final int wifi_signal_3=0x7f070063;
-        public static final int wifi_status=0x7f070053;
-        public static final int yes=0x7f070092;
+        public static final int wifi_signal_3=0x7f070064;
+        public static final int wifi_status=0x7f070054;
+        public static final int yes=0x7f070093;
     }
     public static final class style {
         /** 

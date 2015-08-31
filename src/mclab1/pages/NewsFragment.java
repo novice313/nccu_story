@@ -21,6 +21,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -32,11 +34,11 @@ import android.widget.ListView;
 public class NewsFragment extends Fragment {
 
 	private final static String tag = "NewsFragment";
-	private int LIMIT = 10;
+	private static int LIMIT = 10;
 
-	public ArrayList<News> newsList;
+	public static ArrayList<News> newsList;
 	public ListView newsView;
-	NewsAdapter newsAdt;
+	static NewsAdapter newsAdt;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,9 @@ public class NewsFragment extends Fragment {
 		Log.d(tag, "onCreateView");
 		View view = inflater.inflate(R.layout.fragment_news, container, false);
 		newsView = (ListView) view.findViewById(R.id.news_list);
+
+		// set recorder icon at action bar
+		setHasOptionsMenu(true);
 
 		// instantiate list
 		newsList = new ArrayList<News>();
@@ -73,12 +78,11 @@ public class NewsFragment extends Fragment {
 			public boolean onItemLongClick(AdapterView<?> parent, View v,
 					int pos, long id) {
 				Log.d(tag, "uuid = " + newsList.get(pos).getobjectId());
-				
+
 				if (MediaPlayerFragment.musicSrv != null) {
 					MediaPlayerFragment.musicSrv.pausePlayer();
 				}
 
-				
 				Intent intent_toDetailPage = new Intent();
 				intent_toDetailPage.putExtra("objectId", newsList.get(pos)
 						.getobjectId());
@@ -90,6 +94,13 @@ public class NewsFragment extends Fragment {
 
 		return view;
 	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		// TODO Auto-generated method stub
+		super.onCreateOptionsMenu(menu, inflater);
+		menu.findItem(R.id.action_refresh).setVisible(true);
+	}
 
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -98,7 +109,7 @@ public class NewsFragment extends Fragment {
 
 	}
 
-	public void getNewsList() {
+	public static void getNewsList() {
 		ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
 				"story");
 		// parseQuery.whereEqualTo("userName", "Jeny Zheng Lan");

@@ -22,6 +22,7 @@ import com.orm.SugarRecord;
 import com.parse.Parse;
 
 import mclab1.pages.MediaPlayerFragment;
+import mclab1.pages.NewsFragment;
 import mclab1.service.music.MusicService;
 import mclab1.service.music.MusicService.MusicBinder;
 import mclab1.sugar.Owner;
@@ -54,7 +55,7 @@ public class MainActivity extends FragmentActivity implements
 	private ViewPager viewPager;
 	private ActionBar actionBar;
 	private TabsPagerAdapter mAdapter;
-	private String[] tabs = { "News", "Googlemap", "Owner", "Mediaplayer" };
+	private String[] tabs = { "News", "Googlemap", "Mediaplayer", "Owner" };
 	public static int tabsize = 0;
 	
 
@@ -324,6 +325,7 @@ public class MainActivity extends FragmentActivity implements
 		getMenuInflater().inflate(R.menu.main, menu);
 		menu.findItem(R.id.action_recorder).setVisible(false);
 		menu.findItem(R.id.action_test).setVisible(false);
+		menu.findItem(R.id.action_refresh).setVisible(false);
 		return true;
 	}
 
@@ -367,6 +369,12 @@ public class MainActivity extends FragmentActivity implements
 			// intent_recorder.setClass(MainActivity.this,
 			// FileexplorerActivity.class);
 			// startActivity(intent_recorder);
+			break;
+		case R.id.action_refresh:
+			Log.d(tag, "refresh onclick");
+			
+			NewsFragment.newsList.clear();
+			NewsFragment.getNewsList();
 			break;
 		}
 		return super.onOptionsItemSelected(item);

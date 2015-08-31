@@ -60,9 +60,6 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		super.onCreate(savedInstanceState);
 		Log.d(tag, "onCreate.");
 
-		// set recorder icon at action bar
-		setHasOptionsMenu(true);
-
 	}
 
 	@Override
@@ -83,6 +80,10 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		// retrieve list view
 		songView = (ListView) view.findViewById(R.id.song_list);
 		// controller.show();
+
+		// set recorder icon at action bar
+		setHasOptionsMenu(true);
+
 		startService();
 		return view;
 

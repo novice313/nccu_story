@@ -11,6 +11,7 @@
     <string name="action_showShadow">Show shadow</string>
     <string name="action_camera">Open camera</string>
     <string name="action_gallery">Open galley</string>
+    <string name="action_refresh">Refresh</string>
     <string name="action_media">Open media list</string>
     <string name="action_recorder">Open recorder</string>
     <string name="action_showHeaderAndFooter">Show Header &amp; Footer</string>
