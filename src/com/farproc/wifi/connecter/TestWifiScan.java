@@ -133,6 +133,7 @@ public class TestWifiScan extends ListActivity {
 			Bundle bundle_broadcast = new Bundle();
 			bundle_broadcast.putDouble("longitude", longitude);
 			bundle_broadcast.putDouble("latitude", latitude);
+			
 			// 將Bundle物件assign給intent
 			intent.putExtras(bundle_broadcast);
 
