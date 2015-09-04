@@ -76,12 +76,12 @@ public class MainActivity extends FragmentActivity implements
 		Parse.initialize(this, "wtSFcggR896xMJQUGblYuphkF6EVw4ChcLcpSowP",
 				"IwJ3gTRBe8cARlxMf3xh97eai2a7MNLP68vdL3IY");
 		
-		WifiManager mWifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-		
-		if(!mWifiManager.isWifiEnabled()){
-			mWifiManager.setWifiEnabled(true);
-			Toast.makeText(MainActivity.this, "Wi-Fi開啟中....", Toast.LENGTH_LONG).show();
-		}
+//		WifiManager mWifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+//		
+//		if(!mWifiManager.isWifiEnabled()){
+//			mWifiManager.setWifiEnabled(true);
+//			Toast.makeText(MainActivity.this, "Wi-Fi開啟中....", Toast.LENGTH_LONG).show();
+//		}
 
 		// ParseObject testObject = new ParseObject("TestObject");
 		// testObject.put("foo", "bar");

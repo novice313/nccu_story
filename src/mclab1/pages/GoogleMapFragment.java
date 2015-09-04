@@ -1,6 +1,8 @@
 package mclab1.pages;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import ro.ui.pttdroid.Client_Main;
@@ -22,6 +24,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -42,6 +45,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.GpsSatellite;
+import android.location.GpsStatus;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -49,6 +58,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -70,9 +83,16 @@ public class GoogleMapFragment extends Fragment
 	private final int TYPE_STORY = 1;
 	private final int TYPE_OFFLINE_STORY = 2;
 	private final int TYPE_ONLINE_BROADCAST = 3;
+	private final int TYPE_READY = 4;
 
 	GoogleMap map;
-	final int PARSE_LIMIT = 50;
+	final int PARSE_LIMIT = 20;
+
+	/** GPS */
+	private LocationManager locationMgr;
+	private String provider;
+	private Marker markerMe;
+	MenuItem locateMe;
 
 	private WifiManager wiFiManager;
 	int if_Global_local = -1;
@@ -89,7 +109,38 @@ public class GoogleMapFragment extends Fragment
 
 		// instantiate list
 		storyList = new ArrayList<News>();
+
+		setHasOptionsMenu(true);
 	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		// TODO Auto-generated method stub
+		locateMe = menu.add("locateMe");
+		locateMe.setIcon(R.drawable.ic_action_location_found).setShowAsAction(
+				MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		locateMe.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				// TODO Auto-generated method stub
+				Log.d(tag, "item "+ item.getItemId()+" onclick");
+				
+				// start locate user
+				if (initLocationProvider()) {
+					Log.d(tag, "start whereAmI");
+					whereAmI();
+				} else {
+					Toast.makeText(getActivity(), "請開啟定位！", Toast.LENGTH_SHORT).show();
+				}
+				
+				return false;
+			}
+		});
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+	
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -165,46 +216,49 @@ public class GoogleMapFragment extends Fragment
 		super.onStart();
 		Log.d(tag, "onStart");
 
-		getActivity().runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				query_Story();
-			}
-		});
+		// locate where am I
 
-		getActivity().runOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				query_offlineStory();
-			}
-		});
-
-		getActivity().runOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				query_onlineStory();
-			}
-		});
+		// getActivity().runOnUiThread(new Runnable() {
+		// @Override
+		// public void run() {
+		// query_Story();
+		// }
+		// });
+		//
+		// getActivity().runOnUiThread(new Runnable() {
+		//
+		// @Override
+		// public void run() {
+		// // TODO Auto-generated method stub
+		// query_offlineStory();
+		// }
+		// });
+		//
+		// getActivity().runOnUiThread(new Runnable() {
+		//
+		// @Override
+		// public void run() {
+		// // TODO Auto-generated method stub
+		// query_onlineStory();
+		// }
+		// });
 	}
 
 	@Override
 	public void onMapReady(GoogleMap map) {
 		Log.d(tag, "onMapReady.");
 		this.map = map;
+		// show NCCU
 		// nccu: 24°58'46"N 121°34'15"E
 		// map.addMarker(new MarkerOptions().position(new LatLng(24.5846,
 		// 121.3415)).title("Marker"));
-		map.addMarker(new MarkerOptions()
-				.position(NCCU)
-				.title("NCCU")
-				.icon(BitmapDescriptorFactory
-						.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(NCCU,
-				initial_zoom_size));
+		// map.addMarker(new MarkerOptions()
+		// .position(NCCU)
+		// .title("NCCU")
+		// .icon(BitmapDescriptorFactory
+		// .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+		// map.moveCamera(CameraUpdateFactory.newLatLngZoom(NCCU,
+		// initial_zoom_size));
 
 		map.setOnMapClickListener(new OnMapClickListener() {
 
@@ -238,6 +292,7 @@ public class GoogleMapFragment extends Fragment
 
 		// set googlaMap infoWindow
 		setGoogleMapInfoWindow(map);
+		
 	}
 
 	private void ShowAlertDialogAndList(final LatLng point) {
@@ -294,6 +349,182 @@ public class GoogleMapFragment extends Fragment
 
 	}
 
+	// GPS
+	private boolean initLocationProvider() {
+		locationMgr = (LocationManager) getActivity().getSystemService(
+				Context.LOCATION_SERVICE);
+		// GPS provider
+		if (locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			provider = LocationManager.GPS_PROVIDER;
+			return true;
+		}
+		// Network provider
+		else if (locationMgr
+				.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			provider = LocationManager.NETWORK_PROVIDER;
+			return true;
+		}
+		Log.d(tag, "return false");
+		return false;
+	}
+
+	LocationListener locationListener = new LocationListener() {
+		@Override
+		public void onLocationChanged(Location location) {
+			updateWithNewLocation(location);
+		}
+
+		@Override
+		public void onProviderDisabled(String provider) {
+			updateWithNewLocation(null);
+		}
+
+		@Override
+		public void onProviderEnabled(String provider) {
+
+		}
+
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+			switch (status) {
+			case LocationProvider.OUT_OF_SERVICE:
+				Log.v(tag, "Status Changed: Out of Service");
+				Toast.makeText(getActivity(), "Status Changed: Out of Service",
+						Toast.LENGTH_SHORT).show();
+				break;
+			case LocationProvider.TEMPORARILY_UNAVAILABLE:
+				Log.v(tag, "Status Changed: Temporarily Unavailable");
+				Toast.makeText(getActivity(),
+						"Status Changed: Temporarily Unavailable",
+						Toast.LENGTH_SHORT).show();
+				break;
+			case LocationProvider.AVAILABLE:
+				Log.v(tag, "Status Changed: Available");
+				Toast.makeText(getActivity(), "Status Changed: Available",
+						Toast.LENGTH_SHORT).show();
+				break;
+			}
+		}
+
+	};
+
+	private void whereAmI() {
+		// 取得上次已知的位置
+		Location location = locationMgr.getLastKnownLocation(provider);
+		updateWithNewLocation(location);
+
+		// GPS Listener
+		locationMgr.addGpsStatusListener(gpsListener);
+
+		// Location Listener
+		int minTime = 5000;// ms
+		int minDist = 5;// meter
+		locationMgr.requestLocationUpdates(provider, minTime, minDist,
+				locationListener);
+	}
+
+	GpsStatus.Listener gpsListener = new GpsStatus.Listener() {
+		@Override
+		public void onGpsStatusChanged(int event) {
+			switch (event) {
+			case GpsStatus.GPS_EVENT_STARTED:
+				Log.d(tag, "GPS_EVENT_STARTED");
+				Toast.makeText(getActivity(), "GPS_EVENT_STARTED",
+						Toast.LENGTH_SHORT).show();
+				break;
+			case GpsStatus.GPS_EVENT_STOPPED:
+				Log.d(tag, "GPS_EVENT_STOPPED");
+				Toast.makeText(getActivity(), "GPS_EVENT_STOPPED",
+						Toast.LENGTH_SHORT).show();
+				break;
+			case GpsStatus.GPS_EVENT_FIRST_FIX:
+				Log.d(tag, "GPS_EVENT_FIRST_FIX");
+				Toast.makeText(getActivity(), "GPS_EVENT_FIRST_FIX",
+						Toast.LENGTH_SHORT).show();
+				break;
+			case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
+				Log.d(tag, "GPS_EVENT_SATELLITE_STATUS");
+
+				// 获取当前状态
+				GpsStatus gpsStatus = locationMgr.getGpsStatus(null);
+				// 获取卫星颗数的默认最大值
+				int maxSatellites = gpsStatus.getMaxSatellites();
+				// 创建一个迭代器保存所有卫星
+				Iterator<GpsSatellite> iters = gpsStatus.getSatellites()
+						.iterator();
+				int count = 0;
+				while (iters.hasNext() && count <= maxSatellites) {
+					GpsSatellite s = iters.next();
+					count++;
+				}
+				System.out.println("搜索到：" + count + "颗衛星");
+				Toast.makeText(getActivity(), "搜索到：" + count + "颗衛星",
+						Toast.LENGTH_SHORT).show();
+				break;
+			}
+		}
+	};
+
+	private void showMarkerMe(double lat, double lng) {
+		if (markerMe != null) {
+			markerMe.remove();
+		}
+
+		MarkerOptions markerOpt = new MarkerOptions();
+		markerOpt.position(new LatLng(lat, lng));
+		markerOpt.title("我在這裡");
+		if (map == null) {
+			Log.d(tag, "map == null");
+		}
+		markerMe = map.addMarker(markerOpt);
+
+		Toast.makeText(getActivity(), "lat:" + lat + ",lng:" + lng,
+				Toast.LENGTH_SHORT).show();
+	}
+
+	private void cameraFocusOnMe(double lat, double lng) {
+		CameraPosition camPosition = new CameraPosition.Builder()
+				.target(new LatLng(lat, lng)).zoom(16).build();
+
+		map.animateCamera(CameraUpdateFactory.newCameraPosition(camPosition));
+	}
+
+	private void updateWithNewLocation(Location location) {
+		String where = "";
+		if (location != null) {
+			// 經度
+			double lng = location.getLongitude();
+			// 緯度
+			double lat = location.getLatitude();
+			// 速度
+			float speed = location.getSpeed();
+			// 時間
+			long time = location.getTime();
+			String timeString = getTimeString(time);
+
+			where = "經度: " + lng + "\n緯度: " + lat + "\n速度: " + speed + "\n時間: "
+					+ timeString + "\nProvider: " + provider;
+
+			// "我"
+			showMarkerMe(lat, lng);
+			cameraFocusOnMe(lat, lng);
+			// trackToMe(lat, lng);
+
+		} else {
+			where = "No location found.";
+		}
+
+		// 顯示資訊
+		// txtOutput.setText(where);
+	}
+
+	private String getTimeString(long timeInMilliseconds) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return format.format(timeInMilliseconds);
+	}
+
+	// END GPS
+
 	private void addMarker_Story(String objectIdString, String userNameString,
 			String title, LatLng point, int score, int type) {
 		// TODO Auto-generated method stub
@@ -305,6 +536,19 @@ public class GoogleMapFragment extends Fragment
 				.title(title)
 				.icon(BitmapDescriptorFactory
 						.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+	}
+
+	private void addMarker_Ready(String objectIdString, String userNameString,
+			String title, LatLng point, int score, int type) {
+		// TODO Auto-generated method stub
+		String snippet = objectIdString + "," + userNameString + "," + score
+				+ "," + type;
+		this.map.addMarker(new MarkerOptions()
+				.position(point)
+				.snippet(snippet)
+				.title(title)
+				.icon(BitmapDescriptorFactory
+						.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 	}
 
 	private void addMarker_Broadcast(String objectIdString,
@@ -396,6 +640,97 @@ public class GoogleMapFragment extends Fragment
 															userNameString,
 															titleString, point,
 															score, TYPE_STORY);
+
+												}
+											}
+										});
+							}
+						}
+					}
+				}
+			}
+		});
+	}
+
+	private void query_ready() {
+		// TODO Auto-generated method stub
+		ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
+				"offline");
+		parseQuery.whereEqualTo("State", "Ready");
+		parseQuery.setLimit(PARSE_LIMIT);
+		parseQuery.addDescendingOrder("createdAt");
+		parseQuery.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+				if (e == null) {
+					if (!objects.isEmpty()) {
+						for (int i = 0; i < objects.size(); i++) {
+							ParseObject parseObject = objects.get(i);
+							final String objectIdString = parseObject
+									.getObjectId();
+							final String userNameString = parseObject
+									.getString("userName");
+							final String userUuidString = parseObject
+									.getString("userUuid");
+							final String titleString = parseObject
+									.getString("title");
+							final int score = parseObject.getInt("score");
+							final String contentString = parseObject
+									.getString("content");
+
+							final double latitude = parseObject
+									.getDouble("latitude");
+							final double longitude = parseObject
+									.getDouble("longitude");
+
+							ParseFile imageFile = (ParseFile) parseObject
+									.get("image");
+							if (imageFile != null) {
+								Log.d(tag, "parseObjectId = " + objectIdString);
+								imageFile
+										.getDataInBackground(new GetDataCallback() {
+
+											@Override
+											public void done(byte[] data,
+													ParseException e) {
+												if (e == null) {
+													// Log.d(tag,
+													// "parseFile done");
+
+													BitmapFactory.Options opt = null;
+													opt = new BitmapFactory.Options();
+													opt.inSampleSize = 8;
+													Bitmap bmp = BitmapFactory
+															.decodeByteArray(
+																	data,
+																	0,
+																	data.length,
+																	opt);
+													storyList
+															.add(new News(
+																	objectIdString,
+																	userNameString,
+																	userUuidString,
+																	titleString,
+																	score,
+																	bmp,
+																	contentString,
+																	latitude,
+																	longitude));
+
+													if (bmp != null) {
+														bmp.recycle();
+													}
+
+													LatLng point = new LatLng(
+															latitude, longitude);
+													addMarker_Ready(
+															objectIdString,
+															userNameString,
+															titleString, point,
+															score, TYPE_READY);
 
 												}
 											}
@@ -913,6 +1248,9 @@ public class GoogleMapFragment extends Fragment
 							});
 
 					break;
+				case TYPE_READY:
+					Log.d(tag, "Icon TYPE_READY onclick.");
+					break;
 
 				default:
 					Log.d(tag, "Icon NO_TYPE onclick.");
@@ -924,6 +1262,7 @@ public class GoogleMapFragment extends Fragment
 
 	@Override
 	public void onStop() {
+		locationMgr.removeUpdates(locationListener);
 		super.onStop();
 		Log.d(tag, "onStop.");
 	}
