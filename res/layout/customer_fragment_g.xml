@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/AbsoluteLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    
+    <ImageView
+                android:id="@+id/microphone_image"
+                android:layout_width="100dip"
+                android:layout_height="100dip"
+                android:contentDescription="@string/ptt"
+                android:src="@drawable/microphone_normal_image" />
+
+
+        <!--
+        <Button
+            android:id="@+id/customer_force_connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="Manual Connect" /> 
+        <Button
+            android:id="@+id/customer_erase_connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/customer_force_connect"
+            android:text="Erase Connect" />
+
+        <Button
+            android:id="@+id/customer_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/customer_erase_connect"
+            android:text="Refresh" />
+        -->
+
+
+    <ListView
+        android:id="@+id/customerG_log"
+        android:layout_width="match_parent"
+        android:layout_height="348dp"
+        android:layout_y="110dp" >
+
+    </ListView>
+
+</AbsoluteLayout>
+
+
+
+
+

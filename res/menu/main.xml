@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="edu.mclab1.nccu_story.MainActivity" >
+
+    
+    <item
+        android:id="@+id/action_loginFacebook"
+        android:icon="@drawable/facebook_icon"
+		android:orderInCategory="100"
+		android:showAsAction="always"
+		android:title="@string/action_loginFacebook"/>
+    <item
+        android:id="@+id/action_test"
+        android:icon="@drawable/end"
+		android:orderInCategory="10"
+		android:showAsAction="always"
+		android:title="@string/test_String"/>
+    <item
+        android:id="@+id/action_recorder"
+        android:icon="@drawable/ic_action_mic"
+		android:orderInCategory="30"
+		android:showAsAction="always"
+		android:title="@string/action_recorder"/>
+</menu>

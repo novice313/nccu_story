@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="edu.mclab1.nccu_story"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="18"
+        android:targetSdkVersion="18" />
+
+    <!-- media player -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- END media player -->
+
+
+    <!-- file commander -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- END file commander -->
+
+
+    <!-- google map -->
+    <permission
+        android:name="mclab1.pages.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="mclab1.pages.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <!--
+     The following two permissions are not required to use
+     Google Maps Android API v2, but are recommended.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+    <!-- PART END google map -->
+
+
+    <!-- camera -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="false" />
+    <!-- END camera -->
+    
+    <!-- record -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+	<!-- END record -->
+	
+	<!-- wifi -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <!-- END wifi -->
+    
+    <!--READ_PHONE_STATE-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--READ_PHONE_STATE-->
+    
+    
+    <application
+        android:name="com.orm.SugarApp"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+
+        <!-- Sugar ORM -->
+        <meta-data
+            android:name="DATABASE"
+            android:value="sugar.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="2" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="mclab1.sugar" />
+        <!-- END Sugar ORM -->
+
+
+        <!-- google map -->
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"             
+            android:value="AIzaSyAxUWmJ6ftyh441WQZ39xO86F-1igwN5ms" />  <!-- AIzaSyAxUWmJ6ftyh441WQZ39xO86F-1igwN5ms
+                                                                             AIzaSyAtdXBrBZ051aQYqKquo1QGCG73OScJXIA 柏 
+                                                                              google map沒設好會影響聲音傳不過去
+                                                                             
+                                                                             
+                                                                             -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <!-- END google map -->
+
+
+        <!-- facebook -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:screenOrientation="portrait"
+             />
+        <!-- END facebook -->
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="mclab1.pages.UploadPage"
+            android:label="UploadPage"            
+            android:screenOrientation="portrait"
+             >
+        </activity>
+
+        <!-- file commander -->
+        <activity
+            android:name="com.example.fileexplorer.FileexplorerActivity"
+            android:label="@string/title_activity_fileexplorer"
+            android:theme="@android:style/Theme.Holo" 
+            android:screenOrientation="portrait"
+            >
+        </activity>
+        <activity
+            android:name="com.example.fileexplorer.FileChooser"
+            android:label="Choose File"
+            android:theme="@android:style/Theme.Holo"
+            android:screenOrientation="portrait"
+             >
+            <action android:name="com.example.fileexplorer.FileChooser" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+        </activity>
+        <!-- END file commander -->
+
+
+        <!-- camera GalleryActivity -->
+        <activity
+            android:name="mclab1.pages.CameraPage"
+            android:label="@string/title_activity_CameraActivity"
+            android:screenOrientation="portrait"
+             >
+        </activity>
+        
+        <activity
+            android:name="mclab1.service.camera.GalleryActivity"
+            android:label="@string/title_activity_GalleryActivity"
+            android:screenOrientation="portrait"
+             >
+        </activity>
+        <activity
+            android:name="mclab1.service.camera.DetailsActivity"
+            android:label="@string/title_activity_DetailsActivity"
+            android:screenOrientation="portrait"
+             >
+        </activity>
+        <!-- END camera GalleryActivity -->
+
+		<!-- upload -->
+		<activity
+            android:name="mclab1.service.upload.UploadMediaListActivity"
+            android:label="@string/title_activity_UploadMediaListActivity"
+            android:screenOrientation="portrait"
+             >
+        </activity>
+		<!-- END upload -->
+		
+		<!-- detail page -->
+		<activity
+            android:name="mclab1.pages.DetailPage"
+            android:label="@string/title_activity_DetailPage"
+            android:screenOrientation="portrait"
+             >
+        </activity>
+		<!-- END detail page -->
+		
+		<!-- broadcast -->
+		<activity
+            android:name="com.farproc.wifi.connecter.TestWifiScan"
+            android:label="@string/title_activity_TestWifiScan"
+            android:screenOrientation="portrait"
+             >
+        </activity>
+        
+        <activity
+            android:name="ro.ui.pttdroid.Main"
+            android:label="@string/title_activity_Main" 
+            android:screenOrientation="portrait"
+            >
+        </activity>
+        
+        <activity
+            android:name="ro.ui.pttdroid.UploadPage"
+            android:label="@string/title_activity_UploadPage"
+            android:screenOrientation="portrait"
+             >
+        </activity>
+		<!-- END broadcast -->
+		
+		<!-- listen broadcast -->
+        
+		<activity
+            android:name="ro.ui.pttdroid.Client_Main"
+            android:label="@string/title_activity_Client_Main"        
+            android:screenOrientation="portrait"
+             >
+        </activity>
+		
+        
+		<activity
+            android:name="com.mclab1.palace.customer.CustomerDetailActivity"
+            android:label="CustomDetail" 
+            android:screenOrientation="portrait"
+            >
+
+        </activity>
+		<!-- END listen broadcast -->
+		
+		<!-- hockey app -->
+		<activity android:name="net.hockeyapp.android.UpdateActivity" />
+		<!-- END hockey app -->
+
+        <!-- music service -->
+        <service android:name="mclab1.service.music.MusicService" >
+        </service>
+        <!-- END music service -->
+        
+        <service android:name="ro.ui.pttdroid.Player" > </service>
+        <service android:name="ro.ui.pttdroid.Client_Player" >
+        </service>
+        
+    </application>
+
+</manifest>
