@@ -143,7 +143,7 @@ public class Main extends FragmentActivity implements ChannelListener,
    ,{"4Chinese","239.255.255.251"},{"4English","239.255.255.252"},{"4Japanese","239.255.255.253"},{"4Korean","239.255.255.254"}};
 	public static String Selected="";
 	public static String Number="";
-	public static String commIP="239.255.255.250";
+	public static String commIP="239.255.255.251";
 
 
 

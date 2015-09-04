@@ -21,11 +21,13 @@ import mclab1.sugar.Owner;
 
 import com.mclab1.palaca.parsehelper.ParseHelper;
 import com.orm.SugarRecord;
+import com.parse.FindCallback;
 //import com.example.fileexplorer.FileexplorerActivity;
 //import com.facebook.login.LoginManager;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 
@@ -122,6 +124,7 @@ public class UploadPage extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.page_upload_offline);
 		ParseHelper.initParse(this);
+
 		
 		System.out.println("UploadPage");    //conflict過
 		Bundle extras = getIntent().getExtras();
@@ -132,6 +135,7 @@ public class UploadPage extends Activity {
 		 wifiinfo = wifi_service.getConnectionInfo();
 		 System.out.println("getBssid"+wifiinfo.getBSSID()+wifiinfo.getSSID());
 		 wifiinfo_getSSID=wifiinfo.getSSID();
+		 Globalvariable.getGlobalSSID=wifiinfo_getSSID;   //得到global ssid
 
 
 		// 讀取手機解析度
@@ -147,7 +151,7 @@ public class UploadPage extends Activity {
 		btn_upload = (Button) findViewById(R.id.btn_upload);
 		
 		
-		List<Owner> owner = SugarRecord.listAll(Owner.class);
+		List<Owner> owner = SugarRecord.listAll(Owner.class);   //可用此得知FB的名稱
 
 		if (owner.isEmpty()) {
 			userName.setText("你還未登入");
@@ -169,7 +173,7 @@ public class UploadPage extends Activity {
 
 		//List<Owner> owner = Owner.listAll(Owner.class);
 
-		if(LogIn){
+		if(LogIn==false){//暫時改
 		btn_upload.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -228,6 +232,7 @@ public class UploadPage extends Activity {
 		super.onStop();
 		
 	}
+	
 	
 
 	protected void Upload() throws ParseException, IOException {

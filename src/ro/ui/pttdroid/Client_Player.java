@@ -346,7 +346,7 @@ public class Client_Player extends Service
 			{
 				System.out.println("count-"+count);
 				
-				addr50_51=InetAddress.getByName("239.255.255.250");
+				addr50_51=InetAddress.getByName("239.255.255.251");   //can give 239.255.255.250 or etc 
 
 				switch(CommSettings.getCastType()) 
 				{
