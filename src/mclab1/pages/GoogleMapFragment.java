@@ -39,6 +39,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -100,7 +101,16 @@ public class GoogleMapFragment extends Fragment
 	String SSID;
 	Boolean if_find_wificonnect = false;
 	ArrayList<String> SSIDList = new ArrayList<String>();
+	
+	Activity mActivity;
 
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		mActivity = activity;
+		super.onAttach(activity);
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -131,7 +141,7 @@ public class GoogleMapFragment extends Fragment
 					Log.d(tag, "start whereAmI");
 					whereAmI();
 				} else {
-					Toast.makeText(getActivity(), "請開啟定位！", Toast.LENGTH_SHORT).show();
+					Toast.makeText(mActivity, "請開啟定位！", Toast.LENGTH_SHORT).show();
 				}
 				
 				return false;
@@ -157,8 +167,8 @@ public class GoogleMapFragment extends Fragment
 		super.onActivityCreated(savedInstanceState);
 		Log.d(tag, "onActivityCreated");
 
-		MapsInitializer.initialize(getActivity());
-		getActivity().runOnUiThread(new Runnable() {
+		MapsInitializer.initialize(mActivity);
+		mActivity.runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
@@ -167,9 +177,9 @@ public class GoogleMapFragment extends Fragment
 			}
 		});
 		switch (GooglePlayServicesUtil
-				.isGooglePlayServicesAvailable(getActivity())) {
+				.isGooglePlayServicesAvailable(mActivity)) {
 		case ConnectionResult.SUCCESS:
-			Toast.makeText(getActivity(), "SUCCESS", Toast.LENGTH_SHORT).show();
+			Toast.makeText(mActivity, "SUCCESS", Toast.LENGTH_SHORT).show();
 
 			// It isn't possible to set a fragment's id programmatically so we
 			// set a tag instead and
@@ -194,18 +204,18 @@ public class GoogleMapFragment extends Fragment
 			}
 			break;
 		case ConnectionResult.SERVICE_MISSING:
-			Toast.makeText(getActivity(), "SERVICE MISSING", Toast.LENGTH_SHORT)
+			Toast.makeText(mActivity, "SERVICE MISSING", Toast.LENGTH_SHORT)
 					.show();
 			break;
 		case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
-			Toast.makeText(getActivity(), "UPDATE REQUIRED", Toast.LENGTH_SHORT)
+			Toast.makeText(mActivity, "UPDATE REQUIRED", Toast.LENGTH_SHORT)
 					.show();
 			break;
 		default:
 			Toast.makeText(
-					getActivity(),
+					mActivity,
 					GooglePlayServicesUtil
-							.isGooglePlayServicesAvailable(getActivity()),
+							.isGooglePlayServicesAvailable(mActivity),
 					Toast.LENGTH_SHORT).show();
 		}// END switch
 
@@ -218,14 +228,14 @@ public class GoogleMapFragment extends Fragment
 
 		// locate where am I
 
-		// getActivity().runOnUiThread(new Runnable() {
+		// mActivity.runOnUiThread(new Runnable() {
 		// @Override
 		// public void run() {
 		// query_Story();
 		// }
 		// });
 		//
-		// getActivity().runOnUiThread(new Runnable() {
+		// mActivity.runOnUiThread(new Runnable() {
 		//
 		// @Override
 		// public void run() {
@@ -234,7 +244,7 @@ public class GoogleMapFragment extends Fragment
 		// }
 		// });
 		//
-		// getActivity().runOnUiThread(new Runnable() {
+		// mActivity.runOnUiThread(new Runnable() {
 		//
 		// @Override
 		// public void run() {
@@ -276,7 +286,7 @@ public class GoogleMapFragment extends Fragment
 				// check login or not
 				List<Owner> owner = SugarRecord.listAll(Owner.class);
 				if (owner.isEmpty()) {
-					Toast.makeText(getActivity(),
+					Toast.makeText(mActivity,
 							"Sorry! You have to log in first.",
 							Toast.LENGTH_SHORT).show();
 				} else {
@@ -297,7 +307,7 @@ public class GoogleMapFragment extends Fragment
 
 	private void ShowAlertDialogAndList(final LatLng point) {
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
 		builder.setTitle("Upload");
 		// 建立選擇的事件
 		DialogInterface.OnClickListener ListClick = new DialogInterface.OnClickListener() {
@@ -309,7 +319,7 @@ public class GoogleMapFragment extends Fragment
 							+ " onclick");
 					Intent intent_broadcast = new Intent();
 					intent_broadcast
-							.setClass(getActivity(), TestWifiScan.class);
+							.setClass(mActivity, TestWifiScan.class);
 					Bundle bundle_broadcast = new Bundle();
 					bundle_broadcast.putDouble("longitude", point.longitude);
 					bundle_broadcast.putDouble("latitude", point.latitude);
@@ -324,7 +334,7 @@ public class GoogleMapFragment extends Fragment
 							+ " onclick");
 					Intent intent_uploadStory = new Intent();
 					intent_uploadStory
-							.setClass(getActivity(), UploadPage.class);
+							.setClass(mActivity, UploadPage.class);
 					Bundle bundle_uploadStory = new Bundle();
 					bundle_uploadStory.putDouble("longitude", point.longitude);
 					bundle_uploadStory.putDouble("latitude", point.latitude);
@@ -351,7 +361,7 @@ public class GoogleMapFragment extends Fragment
 
 	// GPS
 	private boolean initLocationProvider() {
-		locationMgr = (LocationManager) getActivity().getSystemService(
+		locationMgr = (LocationManager) mActivity.getSystemService(
 				Context.LOCATION_SERVICE);
 		// GPS provider
 		if (locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -389,18 +399,18 @@ public class GoogleMapFragment extends Fragment
 			switch (status) {
 			case LocationProvider.OUT_OF_SERVICE:
 				Log.v(tag, "Status Changed: Out of Service");
-				Toast.makeText(getActivity(), "Status Changed: Out of Service",
+				Toast.makeText(mActivity, "Status Changed: Out of Service",
 						Toast.LENGTH_SHORT).show();
 				break;
 			case LocationProvider.TEMPORARILY_UNAVAILABLE:
 				Log.v(tag, "Status Changed: Temporarily Unavailable");
-				Toast.makeText(getActivity(),
+				Toast.makeText(mActivity,
 						"Status Changed: Temporarily Unavailable",
 						Toast.LENGTH_SHORT).show();
 				break;
 			case LocationProvider.AVAILABLE:
 				Log.v(tag, "Status Changed: Available");
-				Toast.makeText(getActivity(), "Status Changed: Available",
+				Toast.makeText(mActivity, "Status Changed: Available",
 						Toast.LENGTH_SHORT).show();
 				break;
 			}
@@ -429,17 +439,23 @@ public class GoogleMapFragment extends Fragment
 			switch (event) {
 			case GpsStatus.GPS_EVENT_STARTED:
 				Log.d(tag, "GPS_EVENT_STARTED");
-				Toast.makeText(getActivity(), "GPS_EVENT_STARTED",
+				if(mActivity==null){
+					Log.d(tag, "mActivity==null");
+				}
+				Toast.makeText(mActivity, "GPS_EVENT_STARTED",
 						Toast.LENGTH_SHORT).show();
 				break;
 			case GpsStatus.GPS_EVENT_STOPPED:
 				Log.d(tag, "GPS_EVENT_STOPPED");
-				Toast.makeText(getActivity(), "GPS_EVENT_STOPPED",
+				if(mActivity==null){
+					Log.d(tag, "mActivity==null");
+				}
+				Toast.makeText(mActivity, "GPS_EVENT_STOPPED",
 						Toast.LENGTH_SHORT).show();
 				break;
 			case GpsStatus.GPS_EVENT_FIRST_FIX:
 				Log.d(tag, "GPS_EVENT_FIRST_FIX");
-				Toast.makeText(getActivity(), "GPS_EVENT_FIRST_FIX",
+				Toast.makeText(mActivity, "GPS_EVENT_FIRST_FIX",
 						Toast.LENGTH_SHORT).show();
 				break;
 			case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
@@ -458,7 +474,7 @@ public class GoogleMapFragment extends Fragment
 					count++;
 				}
 				System.out.println("搜索到：" + count + "颗衛星");
-				Toast.makeText(getActivity(), "搜索到：" + count + "颗衛星",
+				Toast.makeText(mActivity, "搜索到：" + count + "颗衛星",
 						Toast.LENGTH_SHORT).show();
 				break;
 			}
@@ -478,7 +494,7 @@ public class GoogleMapFragment extends Fragment
 		}
 		markerMe = map.addMarker(markerOpt);
 
-		Toast.makeText(getActivity(), "lat:" + lat + ",lng:" + lng,
+		Toast.makeText(mActivity, "lat:" + lat + ",lng:" + lng,
 				Toast.LENGTH_SHORT).show();
 	}
 
@@ -948,7 +964,7 @@ public class GoogleMapFragment extends Fragment
 			public View getInfoContents(Marker marker) {
 
 				// Getting view from the layout file info_window_layout
-				View v = getActivity().getLayoutInflater().inflate(
+				View v = mActivity.getLayoutInflater().inflate(
 						R.layout.info_window_layout, null);
 
 				// Getting the position from the marker
@@ -1000,7 +1016,7 @@ public class GoogleMapFragment extends Fragment
 					Log.d(tag, "Icon TYPE_STORY onclick.");
 					Intent intent_detail = new Intent();
 					intent_detail.putExtra("objectId", objectId);
-					intent_detail.setClass(getActivity(), DetailPage.class);
+					intent_detail.setClass(mActivity, DetailPage.class);
 					startActivity(intent_detail);
 					break;
 				case TYPE_OFFLINE_STORY:
@@ -1026,9 +1042,9 @@ public class GoogleMapFragment extends Fragment
 										System.out.println("Globalvariable"
 												+ Globalvariable.contentString);
 										Intent intent = new Intent(
-												getActivity(),
+												mActivity,
 												CustomerDetailActivity.class);
-										getActivity().startActivity(intent);
+										mActivity.startActivity(intent);
 
 									}
 								}
@@ -1060,14 +1076,14 @@ public class GoogleMapFragment extends Fragment
 											String SSIDstring = temp[4];
 											// parse broadcast
 											// 若wifi狀態為關閉則將它開啟
-											wiFiManager = (WifiManager) getActivity()
+											wiFiManager = (WifiManager) mActivity
 													.getSystemService(
 															Context.WIFI_SERVICE);
 											if (!wiFiManager.isWifiEnabled()) {
 												wiFiManager
 														.setWifiEnabled(true);
 											}
-											wiFiManager = (WifiManager) getActivity()
+											wiFiManager = (WifiManager) mActivity
 													.getSystemService(
 															Context.WIFI_SERVICE);
 											System.out.println("wiFiManagergetConnectionInfo"
@@ -1079,7 +1095,7 @@ public class GoogleMapFragment extends Fragment
 													+ " ");
 
 											if (!wiFiManager.isWifiEnabled()) { // 判斷是否有網路
-												Toast.makeText(getActivity(),
+												Toast.makeText(mActivity,
 														"要開啟網路(Wifi/3G)!",
 														Toast.LENGTH_SHORT)
 														.show();
@@ -1138,7 +1154,7 @@ public class GoogleMapFragment extends Fragment
 														.set(WifiConfiguration.GroupCipher.WEP40);
 												conf.allowedKeyManagement
 														.set(WifiConfiguration.KeyMgmt.NONE);
-												WifiManager wifiManager2 = (WifiManager) getActivity()
+												WifiManager wifiManager2 = (WifiManager) mActivity
 														.getSystemService(
 																Context.WIFI_SERVICE);
 												wifiManager2.addNetwork(conf);
@@ -1193,7 +1209,7 @@ public class GoogleMapFragment extends Fragment
 												System.out.println("GOGOGO4"
 														+ if_Global_local);
 												Intent intent = new Intent(
-														getActivity(),
+														mActivity,
 														Client_Main.class); // 改寫成TestWifiScan.this
 												intent.putExtra(
 														"if_Global_local",
@@ -1203,7 +1219,7 @@ public class GoogleMapFragment extends Fragment
 										} else {// no longer exists
 											Log.d(tag,
 													"Broadcast is over change to offline.");
-											Toast.makeText(getActivity(),
+											Toast.makeText(mActivity,
 													"Broadcast is offline",
 													Toast.LENGTH_SHORT).show();
 
@@ -1232,9 +1248,9 @@ public class GoogleMapFragment extends Fragment
 																		.println("Globalvariable"
 																				+ Globalvariable.contentString);
 																Intent intent = new Intent(
-																		getActivity(),
+																		mActivity,
 																		CustomerDetailActivity.class);
-																getActivity()
+																mActivity
 																		.startActivity(
 																				intent);
 
