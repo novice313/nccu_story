@@ -305,19 +305,23 @@ public class GoogleMapFragment extends Fragment
 						}
 						Log.d(tag, "temp_position = " + current_position);
 						if (temp_position == current_position) {
-							
+
 							double LatitudeDistance = GoogleMapHelper
 									.getGPSLatitudeDistance(mActivity,
 											current_position, current_zoom);
 							double LongitudeDistance = GoogleMapHelper
 									.getGPSLongitudeDistance(mActivity,
 											current_position, current_zoom);
-							
+
 							// start query parse
-							query_Story(current_position, LatitudeDistance, LongitudeDistance);
-							query_ready(current_position, LatitudeDistance, LongitudeDistance);
-							query_offlineStory(current_position, LatitudeDistance, LongitudeDistance);
-							query_onlineStory(current_position, LatitudeDistance, LongitudeDistance);
+							query_Story(current_position, LatitudeDistance,
+									LongitudeDistance);
+							query_ready(current_position, LatitudeDistance,
+									LongitudeDistance);
+							query_offlineStory(current_position,
+									LatitudeDistance, LongitudeDistance);
+							query_onlineStory(current_position,
+									LatitudeDistance, LongitudeDistance);
 						}
 					};
 				}.start();
@@ -602,16 +606,21 @@ public class GoogleMapFragment extends Fragment
 						.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 	}
 
-	private void query_Story(LatLng current_position, double latitudeDistance, double longitudeDistance) {
+	private void query_Story(LatLng current_position, double latitudeDistance,
+			double longitudeDistance) {
 		ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
 				"story");
 		parseQuery.setLimit(PARSE_LIMIT);
 
-		parseQuery.whereGreaterThan("latitude", current_position.latitude-latitudeDistance);
-		parseQuery.whereLessThan("latitude", current_position.latitude+latitudeDistance);
-		parseQuery.whereGreaterThan("longitude", current_position.longitude-longitudeDistance);
-		parseQuery.whereLessThan("longitude", current_position.longitude+longitudeDistance);
-		
+		parseQuery.whereGreaterThan("latitude", current_position.latitude
+				- latitudeDistance);
+		parseQuery.whereLessThan("latitude", current_position.latitude
+				+ latitudeDistance);
+		parseQuery.whereGreaterThan("longitude", current_position.longitude
+				- longitudeDistance);
+		parseQuery.whereLessThan("longitude", current_position.longitude
+				+ longitudeDistance);
+
 		parseQuery.addDescendingOrder("createdAt");
 		parseQuery.findInBackground(new FindCallback<ParseObject>() {
 
@@ -621,72 +630,85 @@ public class GoogleMapFragment extends Fragment
 				if (e == null) {
 					if (!objects.isEmpty()) {
 						for (int i = 0; i < objects.size(); i++) {
+							boolean isNew = true;
 							ParseObject parseObject = objects.get(i);
 							final String objectIdString = parseObject
 									.getObjectId();
-							final String userNameString = parseObject
-									.getString("userName");
-							final String userUuidString = parseObject
-									.getString("userUuid");
-							final String titleString = parseObject
-									.getString("title");
-							final int score = parseObject.getInt("score");
-							final String contentString = parseObject
-									.getString("content");
 
-							final double latitude = parseObject
-									.getDouble("latitude");
-							final double longitude = parseObject
-									.getDouble("longitude");
+							for (int listCounter = 0; listCounter < storyList
+									.size(); listCounter++) {
+								if (objectIdString.compareTo(storyList.get(listCounter)
+										.getobjectId()) == 0) {
+									isNew = false;
+									break;
+								}
+							}
+							if (isNew) {
 
-							ParseFile imageFile = (ParseFile) parseObject
-									.get("image");
-							if (imageFile != null) {
-								imageFile
-										.getDataInBackground(new GetDataCallback() {
+								final String userNameString = parseObject
+										.getString("userName");
+								final String userUuidString = parseObject
+										.getString("userUuid");
+								final String titleString = parseObject
+										.getString("title");
+								final int score = parseObject.getInt("score");
+								final String contentString = parseObject
+										.getString("content");
 
-											@Override
-											public void done(byte[] data,
-													ParseException e) {
-												if (e == null) {
-													// Log.d(tag,
-													// "parseFile done");
-													BitmapFactory.Options opt = null;
-													opt = new BitmapFactory.Options();
-													opt.inSampleSize = 8;
-													Bitmap bmp = BitmapFactory
-															.decodeByteArray(
-																	data,
-																	0,
-																	data.length,
-																	opt);
-													storyList
-															.add(new News(
-																	objectIdString,
-																	userNameString,
-																	userUuidString,
-																	titleString,
-																	score,
-																	bmp,
-																	contentString,
-																	latitude,
-																	longitude));
+								final double latitude = parseObject
+										.getDouble("latitude");
+								final double longitude = parseObject
+										.getDouble("longitude");
 
-													if (bmp != null) {
-														bmp.recycle();
+								ParseFile imageFile = (ParseFile) parseObject
+										.get("image");
+								if (imageFile != null) {
+									imageFile
+											.getDataInBackground(new GetDataCallback() {
+
+												@Override
+												public void done(byte[] data,
+														ParseException e) {
+													if (e == null) {
+														// Log.d(tag,
+														// "parseFile done");
+														BitmapFactory.Options opt = null;
+														opt = new BitmapFactory.Options();
+														opt.inSampleSize = 8;
+														Bitmap bmp = BitmapFactory
+																.decodeByteArray(
+																		data,
+																		0,
+																		data.length,
+																		opt);
+														storyList.add(new News(
+																objectIdString,
+																userNameString,
+																userUuidString,
+																titleString,
+																score, bmp,
+																contentString,
+																latitude,
+																longitude));
+
+														if (bmp != null) {
+															bmp.recycle();
+														}
+
+														LatLng point = new LatLng(
+																latitude,
+																longitude);
+														addMarker_Story(
+																objectIdString,
+																userNameString,
+																titleString,
+																point, score,
+																TYPE_STORY);
+
 													}
-
-													LatLng point = new LatLng(
-															latitude, longitude);
-													addMarker_Story(
-															objectIdString,
-															userNameString,
-															titleString, point,
-															score, TYPE_STORY);
-
 												}
-											}
-										});
+											});
+								}
 							}
 						}
 					}
@@ -695,18 +717,23 @@ public class GoogleMapFragment extends Fragment
 		});
 	}
 
-	private void query_ready(LatLng current_position, double latitudeDistance, double longitudeDistance) {
+	private void query_ready(LatLng current_position, double latitudeDistance,
+			double longitudeDistance) {
 		// TODO Auto-generated method stub
 		ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
 				"offline");
 		parseQuery.whereEqualTo("State", "Ready");
 		parseQuery.setLimit(PARSE_LIMIT);
-		
-		parseQuery.whereGreaterThan("latitude", current_position.latitude-latitudeDistance);
-		parseQuery.whereLessThan("latitude", current_position.latitude+latitudeDistance);
-		parseQuery.whereGreaterThan("longitude", current_position.longitude-longitudeDistance);
-		parseQuery.whereLessThan("longitude", current_position.longitude+longitudeDistance);
-		
+
+		parseQuery.whereGreaterThan("latitude", current_position.latitude
+				- latitudeDistance);
+		parseQuery.whereLessThan("latitude", current_position.latitude
+				+ latitudeDistance);
+		parseQuery.whereGreaterThan("longitude", current_position.longitude
+				- longitudeDistance);
+		parseQuery.whereLessThan("longitude", current_position.longitude
+				+ longitudeDistance);
+
 		parseQuery.addDescendingOrder("createdAt");
 		parseQuery.findInBackground(new FindCallback<ParseObject>() {
 
@@ -716,77 +743,90 @@ public class GoogleMapFragment extends Fragment
 				if (e == null) {
 					if (!objects.isEmpty()) {
 						for (int i = 0; i < objects.size(); i++) {
+							boolean isNew = true;
 							ParseObject parseObject = objects.get(i);
 							final String objectIdString = parseObject
 									.getObjectId();
-							final String userNameString = parseObject
-									.getString("userName");
-							final String userUuidString = parseObject
-									.getString("userUuid");
-							final String titleString = parseObject
-									.getString("title");
-							final int score = parseObject.getInt("score");
-							final String contentString = parseObject
-									.getString("content");
-							final String SSIDString = parseObject
-									.getString("SSID");
 
-							final double latitude = parseObject
-									.getDouble("latitude");
-							final double longitude = parseObject
-									.getDouble("longitude");
+							for (int listCounter = 0; listCounter < storyList
+									.size(); listCounter++) {
+								if (objectIdString.compareTo(storyList.get(listCounter)
+										.getobjectId()) == 0) {
+									isNew = false;
+									break;
+								}
+							}
+							if (isNew) {
+								final String userNameString = parseObject
+										.getString("userName");
+								final String userUuidString = parseObject
+										.getString("userUuid");
+								final String titleString = parseObject
+										.getString("title");
+								final int score = parseObject.getInt("score");
+								final String contentString = parseObject
+										.getString("content");
+								final String SSIDString = parseObject
+										.getString("SSID");
 
-							ParseFile imageFile = (ParseFile) parseObject
-									.get("image");
-							if (imageFile != null) {
-								Log.d(tag, "parseObjectId = " + objectIdString);
-								imageFile
-										.getDataInBackground(new GetDataCallback() {
+								final double latitude = parseObject
+										.getDouble("latitude");
+								final double longitude = parseObject
+										.getDouble("longitude");
 
-											@Override
-											public void done(byte[] data,
-													ParseException e) {
-												if (e == null) {
-													// Log.d(tag,
-													// "parseFile done");
+								ParseFile imageFile = (ParseFile) parseObject
+										.get("image");
+								if (imageFile != null) {
+									Log.d(tag, "parseObjectId = "
+											+ objectIdString);
+									imageFile
+											.getDataInBackground(new GetDataCallback() {
 
-													BitmapFactory.Options opt = null;
-													opt = new BitmapFactory.Options();
-													opt.inSampleSize = 8;
-													Bitmap bmp = BitmapFactory
-															.decodeByteArray(
-																	data,
-																	0,
-																	data.length,
-																	opt);
-													storyList
-															.add(new News(
-																	objectIdString,
-																	userNameString,
-																	userUuidString,
-																	titleString,
-																	score,
-																	bmp,
-																	contentString,
-																	latitude,
-																	longitude));
+												@Override
+												public void done(byte[] data,
+														ParseException e) {
+													if (e == null) {
+														// Log.d(tag,
+														// "parseFile done");
 
-													if (bmp != null) {
-														bmp.recycle();
+														BitmapFactory.Options opt = null;
+														opt = new BitmapFactory.Options();
+														opt.inSampleSize = 8;
+														Bitmap bmp = BitmapFactory
+																.decodeByteArray(
+																		data,
+																		0,
+																		data.length,
+																		opt);
+														storyList.add(new News(
+																objectIdString,
+																userNameString,
+																userUuidString,
+																titleString,
+																score, bmp,
+																contentString,
+																latitude,
+																longitude));
+
+														if (bmp != null) {
+															bmp.recycle();
+														}
+
+														LatLng point = new LatLng(
+																latitude,
+																longitude);
+														addMarker_Ready(
+																objectIdString,
+																userNameString,
+																titleString,
+																point, score,
+																TYPE_READY,
+																SSIDString);
+
 													}
-
-													LatLng point = new LatLng(
-															latitude, longitude);
-													addMarker_Ready(
-															objectIdString,
-															userNameString,
-															titleString, point,
-															score, TYPE_READY,
-															SSIDString);
-
 												}
-											}
-										});
+											});
+								}
 							}
 						}
 					}
@@ -795,18 +835,23 @@ public class GoogleMapFragment extends Fragment
 		});
 	}
 
-	private void query_offlineStory(LatLng current_position, double latitudeDistance, double longitudeDistance) {
+	private void query_offlineStory(LatLng current_position,
+			double latitudeDistance, double longitudeDistance) {
 		// TODO Auto-generated method stub
 		ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
 				"offline");
 		parseQuery.whereEqualTo("State", "offline");
 		parseQuery.setLimit(PARSE_LIMIT);
-		
-		parseQuery.whereGreaterThan("latitude", current_position.latitude-latitudeDistance);
-		parseQuery.whereLessThan("latitude", current_position.latitude+latitudeDistance);
-		parseQuery.whereGreaterThan("longitude", current_position.longitude-longitudeDistance);
-		parseQuery.whereLessThan("longitude", current_position.longitude+longitudeDistance);
-		
+
+		parseQuery.whereGreaterThan("latitude", current_position.latitude
+				- latitudeDistance);
+		parseQuery.whereLessThan("latitude", current_position.latitude
+				+ latitudeDistance);
+		parseQuery.whereGreaterThan("longitude", current_position.longitude
+				- longitudeDistance);
+		parseQuery.whereLessThan("longitude", current_position.longitude
+				+ longitudeDistance);
+
 		parseQuery.addDescendingOrder("createdAt");
 		parseQuery.findInBackground(new FindCallback<ParseObject>() {
 
@@ -816,75 +861,87 @@ public class GoogleMapFragment extends Fragment
 				if (e == null) {
 					if (!objects.isEmpty()) {
 						for (int i = 0; i < objects.size(); i++) {
+							boolean isNew = true;
 							ParseObject parseObject = objects.get(i);
 							final String objectIdString = parseObject
 									.getObjectId();
-							final String userNameString = parseObject
-									.getString("userName");
-							final String userUuidString = parseObject
-									.getString("userUuid");
-							final String titleString = parseObject
-									.getString("title");
-							final int score = parseObject.getInt("score");
-							final String contentString = parseObject
-									.getString("content");
 
-							final double latitude = parseObject
-									.getDouble("latitude");
-							final double longitude = parseObject
-									.getDouble("longitude");
+							for (int listCounter = 0; listCounter < storyList
+									.size(); listCounter++) {
+								if (objectIdString.compareTo(storyList.get(listCounter)
+										.getobjectId()) == 0) {
+									isNew = false;
+									break;
+								}
+							}
+							if (isNew) {
+								final String userNameString = parseObject
+										.getString("userName");
+								final String userUuidString = parseObject
+										.getString("userUuid");
+								final String titleString = parseObject
+										.getString("title");
+								final int score = parseObject.getInt("score");
+								final String contentString = parseObject
+										.getString("content");
 
-							ParseFile imageFile = (ParseFile) parseObject
-									.get("image");
-							if (imageFile != null) {
-								Log.d(tag, "parseObjectId = " + objectIdString);
-								imageFile
-										.getDataInBackground(new GetDataCallback() {
+								final double latitude = parseObject
+										.getDouble("latitude");
+								final double longitude = parseObject
+										.getDouble("longitude");
 
-											@Override
-											public void done(byte[] data,
-													ParseException e) {
-												if (e == null) {
-													// Log.d(tag,
-													// "parseFile done");
+								ParseFile imageFile = (ParseFile) parseObject
+										.get("image");
+								if (imageFile != null) {
+									Log.d(tag, "parseObjectId = "
+											+ objectIdString);
+									imageFile
+											.getDataInBackground(new GetDataCallback() {
 
-													BitmapFactory.Options opt = null;
-													opt = new BitmapFactory.Options();
-													opt.inSampleSize = 8;
-													Bitmap bmp = BitmapFactory
-															.decodeByteArray(
-																	data,
-																	0,
-																	data.length,
-																	opt);
-													storyList
-															.add(new News(
-																	objectIdString,
-																	userNameString,
-																	userUuidString,
-																	titleString,
-																	score,
-																	bmp,
-																	contentString,
-																	latitude,
-																	longitude));
+												@Override
+												public void done(byte[] data,
+														ParseException e) {
+													if (e == null) {
+														// Log.d(tag,
+														// "parseFile done");
 
-													if (bmp != null) {
-														bmp.recycle();
+														BitmapFactory.Options opt = null;
+														opt = new BitmapFactory.Options();
+														opt.inSampleSize = 8;
+														Bitmap bmp = BitmapFactory
+																.decodeByteArray(
+																		data,
+																		0,
+																		data.length,
+																		opt);
+														storyList.add(new News(
+																objectIdString,
+																userNameString,
+																userUuidString,
+																titleString,
+																score, bmp,
+																contentString,
+																latitude,
+																longitude));
+
+														if (bmp != null) {
+															bmp.recycle();
+														}
+
+														LatLng point = new LatLng(
+																latitude,
+																longitude);
+														addMarker_Story(
+																objectIdString,
+																userNameString,
+																titleString,
+																point, score,
+																TYPE_OFFLINE_STORY);
+
 													}
-
-													LatLng point = new LatLng(
-															latitude, longitude);
-													addMarker_Story(
-															objectIdString,
-															userNameString,
-															titleString, point,
-															score,
-															TYPE_OFFLINE_STORY);
-
 												}
-											}
-										});
+											});
+								}
 							}
 						}
 					}
@@ -893,18 +950,23 @@ public class GoogleMapFragment extends Fragment
 		});
 	}
 
-	private void query_onlineStory(LatLng current_position, double latitudeDistance, double longitudeDistance) {
+	private void query_onlineStory(LatLng current_position,
+			double latitudeDistance, double longitudeDistance) {
 		// TODO Auto-generated method stub
 		ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
 				"offline");
 		parseQuery.whereEqualTo("State", "online");
 		parseQuery.setLimit(PARSE_LIMIT);
-		
-		parseQuery.whereGreaterThan("latitude", current_position.latitude-latitudeDistance);
-		parseQuery.whereLessThan("latitude", current_position.latitude+latitudeDistance);
-		parseQuery.whereGreaterThan("longitude", current_position.longitude-longitudeDistance);
-		parseQuery.whereLessThan("longitude", current_position.longitude+longitudeDistance);
-		
+
+		parseQuery.whereGreaterThan("latitude", current_position.latitude
+				- latitudeDistance);
+		parseQuery.whereLessThan("latitude", current_position.latitude
+				+ latitudeDistance);
+		parseQuery.whereGreaterThan("longitude", current_position.longitude
+				- longitudeDistance);
+		parseQuery.whereLessThan("longitude", current_position.longitude
+				+ longitudeDistance);
+
 		parseQuery.addDescendingOrder("createdAt");
 		parseQuery.findInBackground(new FindCallback<ParseObject>() {
 
@@ -914,78 +976,90 @@ public class GoogleMapFragment extends Fragment
 				if (e == null) {
 					if (!objects.isEmpty()) {
 						for (int i = 0; i < objects.size(); i++) {
+							boolean isNew = true;
 							ParseObject parseObject = objects.get(i);
 							final String objectIdString = parseObject
 									.getObjectId();
-							final String userNameString = parseObject
-									.getString("userName");
-							final String userUuidString = parseObject
-									.getString("userUuid");
-							final String titleString = parseObject
-									.getString("title");
-							final int score = parseObject.getInt("score");
-							final String contentString = parseObject
-									.getString("content");
-							final String SSIDString = parseObject
-									.getString("SSID");
 
-							final double latitude = parseObject
-									.getDouble("latitude");
-							final double longitude = parseObject
-									.getDouble("longitude");
+							for (int listCounter = 0; listCounter < storyList
+									.size(); listCounter++) {
+								if (objectIdString.compareTo(storyList.get(listCounter)
+										.getobjectId()) == 0) {
+									isNew = false;
+									break;
+								}
+							}
+							if (isNew) {
+								final String userNameString = parseObject
+										.getString("userName");
+								final String userUuidString = parseObject
+										.getString("userUuid");
+								final String titleString = parseObject
+										.getString("title");
+								final int score = parseObject.getInt("score");
+								final String contentString = parseObject
+										.getString("content");
+								final String SSIDString = parseObject
+										.getString("SSID");
 
-							ParseFile imageFile = (ParseFile) parseObject
-									.get("image");
-							if (imageFile != null) {
-								Log.d(tag, "parseObjectId = " + objectIdString);
-								imageFile
-										.getDataInBackground(new GetDataCallback() {
+								final double latitude = parseObject
+										.getDouble("latitude");
+								final double longitude = parseObject
+										.getDouble("longitude");
 
-											@Override
-											public void done(byte[] data,
-													ParseException e) {
-												if (e == null) {
-													// Log.d(tag,
-													// "parseFile done");
-													BitmapFactory.Options opt = null;
-													opt = new BitmapFactory.Options();
-													opt.inSampleSize = 8;
-													Bitmap bmp = BitmapFactory
-															.decodeByteArray(
-																	data,
-																	0,
-																	data.length,
-																	opt);
-													storyList
-															.add(new News(
-																	objectIdString,
-																	userNameString,
-																	userUuidString,
-																	titleString,
-																	score,
-																	bmp,
-																	contentString,
-																	latitude,
-																	longitude));
+								ParseFile imageFile = (ParseFile) parseObject
+										.get("image");
+								if (imageFile != null) {
+									Log.d(tag, "parseObjectId = "
+											+ objectIdString);
+									imageFile
+											.getDataInBackground(new GetDataCallback() {
 
-													if (bmp != null) {
-														bmp.recycle();
+												@Override
+												public void done(byte[] data,
+														ParseException e) {
+													if (e == null) {
+														// Log.d(tag,
+														// "parseFile done");
+														BitmapFactory.Options opt = null;
+														opt = new BitmapFactory.Options();
+														opt.inSampleSize = 8;
+														Bitmap bmp = BitmapFactory
+																.decodeByteArray(
+																		data,
+																		0,
+																		data.length,
+																		opt);
+														storyList.add(new News(
+																objectIdString,
+																userNameString,
+																userUuidString,
+																titleString,
+																score, bmp,
+																contentString,
+																latitude,
+																longitude));
+
+														if (bmp != null) {
+															bmp.recycle();
+														}
+
+														LatLng point = new LatLng(
+																latitude,
+																longitude);
+														addMarker_Broadcast(
+																objectIdString,
+																userNameString,
+																titleString,
+																point,
+																score,
+																TYPE_ONLINE_BROADCAST,
+																SSIDString);
+
 													}
-
-													LatLng point = new LatLng(
-															latitude, longitude);
-													addMarker_Broadcast(
-															objectIdString,
-															userNameString,
-															titleString,
-															point,
-															score,
-															TYPE_ONLINE_BROADCAST,
-															SSIDString);
-
 												}
-											}
-										});
+											});
+								}
 							}
 						}
 					}

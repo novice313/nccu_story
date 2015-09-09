@@ -17,30 +17,7 @@ public class GoogleMapHelper {
 			1222.99245, 611.49622, 305.74811, 152.87405, 76.43702, 38.21851,
 			19.10925, 9.55462, 4.77731, 2.38865, 1.19432, 0.59716, 0.29858 };
 
-	// public GoogleMapHelper() {
-	// // TODO Auto-generated constructor stub
-	//
-	// }
-
-//	public static double getScreenWidth(Activity activity, double zoom_level) {
-//		DisplayMetrics displayMetrics = new DisplayMetrics();
-//		WindowManager wm = (WindowManager) activity
-//				.getSystemService(Context.WINDOW_SERVICE); // the results will
-//															// be higher than
-//															// using the
-//															// activity context
-//															// object or the
-//															// getWindowManager()
-//															// shortcut
-//		wm.getDefaultDisplay().getMetrics(displayMetrics);
-//		int screenWidth = displayMetrics.widthPixels;
-//		Double zoom = new Double(zoom_level);
-//		int zoom_int = zoom.intValue();
-//		Log.d(TAG, "zoom_int = " + zoom_int);
-//
-//		Log.d(TAG, "screenWidrg = " + screenWidth);
-//		return meters_per_pixel[zoom_int] * screenWidth / 2;
-//	}
+	
 
 	public static double getScreenWidth(Activity activity) {
 		DisplayMetrics displayMetrics = new DisplayMetrics();
