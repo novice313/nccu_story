@@ -177,6 +177,7 @@ public class ConfigurationSecuritiesOld extends ConfigurationSecurities {
         }
     }
 
+
 	@Override
 	public boolean isOpenNetwork(String security) {
 		return OPEN.equals(security);

@@ -12,14 +12,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import edu.mclab1.nccu_story.R;
-import android.support.v4.app.Fragment;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +38,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import de.greenrobot.event.EventBus;
+import edu.mclab1.nccu_story.R;
 
 public class CustomerFragmentGlobal extends Fragment {
 	public static final String SOCKET_TAG_STRING = "wifi-socket-test";

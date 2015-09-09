@@ -17,6 +17,9 @@ along with pttdroid.  If not, see <http://www.gnu.org/licenses/>. */
 
 package ro.ui.pttdroid;
 
+
+import java.util.List;
+
 import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
 import ro.ui.pttdroid.settings.CommSettings;
@@ -25,7 +28,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.p2p.WifiP2pConfig;
@@ -45,7 +49,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -61,6 +64,13 @@ import com.mclab1.palace.guider.DisplayEvent;
 import com.mclab1.place.events.NewClientConnectionEvent;
 import com.mclab1.place.events.PauseAudioEvent;
 import com.mclab1.place.events.ResumeAudioEvent;
+import com.parse.FindCallback;
+import com.parse.GetDataCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseImageView;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import de.greenrobot.event.EventBus;
 import edu.mclab1.nccu_story.R;
@@ -109,6 +119,15 @@ private ImageView writing;
 private NfcAdapter adapter;
 private int if_Global_local;
 int SPLASH_DISPLAY_LENGHT = 3000;
+
+
+private TextView userName;
+private TextView title;
+private TextView content;
+private ParseImageView imageView;
+
+
+
 @Override
 public void onDestroy() {
 super.onDestroy();
@@ -124,6 +143,12 @@ shutdown();
 public void onCreate(Bundle savedInstanceState) {
 super.onCreate(savedInstanceState);
 setContentView(R.layout.main);
+
+userName=(TextView)findViewById(R.id.userName);
+title=(TextView)findViewById(R.id.title);
+content=(TextView)findViewById(R.id.content);
+
+
 /*ImageButton ready_image_guide;
 ready_image_guide=(ImageButton)findViewById(R.id.ready_image_guide); 
 
@@ -230,6 +255,7 @@ private void  change_to_client_Global_online_fragment(){
 public void onEvent(NewClientConnectionEvent event) {
 
 }
+
 /*public void test_connect() {
 String networkSSID = "DIRECT-Q6-Android_4ff3";
 String networkPass = "CegDR821";
@@ -396,7 +422,13 @@ case R.id.btn_change_mode:
 	if(if_Global_local==1){
 		System.out.println("local");
 		if (if_clientL_offline_mode) {
-			if_clientL_offline_mode = false;
+
+			userName.setVisibility(View.GONE);
+			title.setVisibility(View.GONE);
+			content.setVisibility(View.GONE);
+	        imageView.setVisibility(View.GONE);
+
+	        if_clientL_offline_mode = false;
 			change_to_client_online_fragment();
 			playerIntent = new Intent(this, Client_Player.class);
 			startService(playerIntent);
@@ -406,8 +438,15 @@ case R.id.btn_change_mode:
 	if(if_Global_local==0){
 		System.out.println("global");
 			if(if_clientL_offline_mode){
-				if_clientL_offline_mode=false;
 
+
+
+				userName.setVisibility(View.GONE);
+				title.setVisibility(View.GONE);
+				content.setVisibility(View.GONE);
+		        imageView.setVisibility(View.GONE);
+				
+				if_clientL_offline_mode=false;
 				change_to_client_Global_online_fragment();
 			} 
 			invalidateOptionsMenu();
@@ -442,6 +481,94 @@ default:
 
 
 private void init() {  //init=> OnResume
+
+	ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
+	System.out.println("latitiude"+Globalvariable.latitude+"$"+Globalvariable.longitude);
+	// Retrieve the object by id	
+	query.whereEqualTo("latitude", Globalvariable.latitude);    //柏傳給我經緯度，我做經緯度限制
+	query.whereEqualTo("longitude", Globalvariable.longitude);  	
+	query.findInBackground(new FindCallback<ParseObject>() {	
+		@Override
+		public void done(List<ParseObject> objects, ParseException e) {
+			// TODO Auto-generated method stub
+	        if (e == null) {
+	        	if(objects!=null){
+				String userNameString  =(String) objects.get(0).get("userName");
+				String titleString  =(String) objects.get(0).get("title");
+				String contentString  =(String) objects.get(0).get("content");
+        		System.out.println("SHow"+userNameString+" "+titleString+" "+contentString);
+
+				userName.setText(userNameString);
+				title.setText(titleString);
+				title.append("\t"+contentString);
+				
+				
+			final ParseFile image =(ParseFile)objects.get(0).get("image");
+				// ((ParseObject) me).getParseFile("data");
+			// final ParseImageView imageView = (ParseImageView) findViewById(R.id.personalprfile);
+			// imageView.setParseFile(image);
+			// System.out.println("image"+image);
+			// if(image!=null){
+			image.getDataInBackground(new GetDataCallback() {
+
+			@Override
+			public void done(byte[] data, ParseException e) {
+				// TODO Auto-generated method stub
+				if(e==null){
+					System.out.println("personalprofile"+" "+data.length);
+			        final Bitmap bmp = BitmapFactory.decodeByteArray(data, 0,data.length);
+			        // Get the ImageView from main.xml
+			        //ImageView image = (ImageView) findViewById(R.id.ad1);
+			        imageView = (ParseImageView) findViewById(R.id.showimage);
+
+			       // ImageView imageView=(ImageView) findViewById(R.id.personalprfile);
+			        // Set the Bitmap into the
+			        // ImageView
+			        imageView.setParseFile(image);
+			        imageView.setImageBitmap(bmp);
+			       /* imageView.loadInBackground(new GetDataCallback() {
+			            public void done(byte[] data, ParseException e) {
+			            // The image is loaded and displayed!                    
+			            int oldHeight = imageView.getHeight();
+			            int oldWidth = imageView.getWidth();     
+			            System.out.println("imageView height = " + oldHeight);
+			            System.out.println("imageView width = " + oldWidth);
+			            imageView.setImageBitmap(bmp);
+
+
+			           // Log.v("LOG!!!!!!", "imageView height = " + oldHeight);      // DISPLAYS 90 px
+			           // Log.v("LOG!!!!!!", "imageView width = " + oldWidth);        // DISPLAYS 90 px      
+			            }
+			        });*/
+					
+				}
+				else{
+					System.out.println("personalprofilerror");
+
+				}
+				
+			}
+			});
+	        	}
+				
+
+				
+				
+	        	
+	        }
+	        else {
+	        	System.out.println("offlineerror");
+
+	        	
+	        }
+			}
+			
+			
+		
+	});
+	
+
+	
 	
 	microphoneSwitcher = new MicrophoneSwitcher();
 	microphoneSwitcher.init();
@@ -702,10 +829,12 @@ fragment.showDetails(device);
 public void onChannelDisconnected() {
 }
 
+
 @Override
 public void disconnect() {
 	
 }
+
 
 @Override
 public void cancelDisconnect() {

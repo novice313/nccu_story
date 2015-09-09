@@ -1,12 +1,6 @@
 package ro.ui.pttdroid;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+
 
 
 //import mclab1.service.upload.UploadMediaListActivity;
@@ -15,29 +9,16 @@ import java.util.List;
 
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import mclab1.sugar.Owner;
-
-import com.mclab1.palaca.parsehelper.ParseHelper;
-import com.orm.SugarRecord;
-import com.parse.FindCallback;
-//import com.example.fileexplorer.FileexplorerActivity;
-//import com.facebook.login.LoginManager;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.SaveCallback;
-
-
-
-
-
-
-
-//import edu.mclab1.nccu_story.MainActivity;
-//import edu.mclab1.nccu_story.R;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -64,6 +45,14 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.mclab1.palaca.parsehelper.ParseHelper;
+import com.orm.SugarRecord;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.SaveCallback;
+
 import edu.mclab1.nccu_story.R;
 
 public class UploadPage extends Activity {
@@ -173,7 +162,7 @@ public class UploadPage extends Activity {
 
 		//List<Owner> owner = Owner.listAll(Owner.class);
 
-		if(LogIn==false){//暫時改
+		if(LogIn==true){//暫時改
 		btn_upload.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -263,6 +252,10 @@ public class UploadPage extends Activity {
 		if (imageFile != null) {
 			uploadObject.put("image", imageFile);
 		}
+
+		
+		Globalvariable.guider_latitudeString = latitudeString;   //為了要對照註冊ip給使用者用
+		Globalvariable.guider_longitudeString=longitudeString;
 		uploadObject.put("content", content.getText().toString());
 		uploadObject.put(SSID, wifiinfo.getSSID());
 		uploadObject.put(latitude, latitudeString);
@@ -495,7 +488,7 @@ public class UploadPage extends Activity {
 
 		// 判斷縮放比例
 		if (bitmap.getWidth() > phone_width) {
-			mScale = (float) phone_width / (float) bitmap.getWidth();
+			mScale = phone_width / (float) bitmap.getWidth();
 			Log.d(tag, "mScale = " + mScale);
 		}
 
@@ -504,7 +497,7 @@ public class UploadPage extends Activity {
 					.getHeight());
 			Log.d(tag, "mScale = " + mScale);
 		} else {// too small situation
-			float mScale_width = (float) phone_width
+			float mScale_width = phone_width
 					/ (float) bitmap.getWidth();
 			float mScale_height = (float) ((phone_height / 1.5) / bitmap
 					.getHeight());

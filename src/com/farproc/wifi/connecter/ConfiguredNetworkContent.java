@@ -25,18 +25,17 @@
 
 package com.farproc.wifi.connecter;
 
-import edu.mclab1.nccu_story.R;
-
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
+import edu.mclab1.nccu_story.R;
 
 public class ConfiguredNetworkContent extends BaseContent {
 
@@ -50,10 +49,12 @@ public class ConfiguredNetworkContent extends BaseContent {
 		mView.findViewById(R.id.Password).setVisibility(View.GONE);
 	}
 
+
 	@Override
 	public int getButtonCount() {
 		return 3;
 	}
+
 
 	@Override
 	public OnClickListener getButtonOnClickListener(int index) {
@@ -90,6 +91,7 @@ public class ConfiguredNetworkContent extends BaseContent {
 			return null;
 		}
 	}
+
 
 	@Override
 	public CharSequence getTitle() {

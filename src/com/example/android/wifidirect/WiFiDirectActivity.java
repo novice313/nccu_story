@@ -33,8 +33,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-import edu.mclab1.nccu_story.R;
+
 import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
+
+import edu.mclab1.nccu_story.R;
 
 /**
  * An activity that uses WiFi Direct APIs to discover and connect with available
@@ -191,6 +193,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
     }
 
     @Override
+
     public void disconnect() {
         final DeviceDetailFragment fragment = (DeviceDetailFragment) getFragmentManager()
                 .findFragmentById(R.id.frag_detail);
@@ -227,6 +230,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
     }
 
     @Override
+
     public void cancelDisconnect() {
 
         /*

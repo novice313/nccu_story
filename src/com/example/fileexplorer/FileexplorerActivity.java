@@ -1,11 +1,11 @@
-package com.example.fileexplorer;
-  
-import edu.mclab1.nccu_story.R;
-import android.os.Bundle; 
-import android.app.Activity; 
-import android.content.Intent; 
+package com.example.fileexplorer; 
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText; 
+import android.widget.EditText;
+import edu.mclab1.nccu_story.R;
 
 public class FileexplorerActivity extends Activity {
  

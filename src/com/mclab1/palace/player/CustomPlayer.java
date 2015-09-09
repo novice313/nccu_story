@@ -6,7 +6,7 @@ import java.net.DatagramSocket;
 import java.net.MulticastSocket;
 import java.net.SocketException;
 import java.util.concurrent.atomic.AtomicInteger;
-import edu.mclab1.nccu_story.R;
+
 import ro.ui.pttdroid.Main;
 import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
@@ -30,6 +30,7 @@ import android.telephony.TelephonyManager;
 import com.mclab1.place.events.NewServerConnectionEvent;
 
 import de.greenrobot.event.EventBus;
+import edu.mclab1.nccu_story.R;
 
 public class CustomPlayer extends Service {
 	private PlayerThread playerThread;

@@ -3,9 +3,7 @@ package mclab1.service.upload;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import mclab1.service.upload.Song;
-import mclab1.service.upload.SongAdapter;
-import edu.mclab1.nccu_story.R;
+
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -20,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import edu.mclab1.nccu_story.R;
 
 public class UploadMediaListActivity extends Activity {
 	

@@ -3,9 +3,6 @@ package mclab1.service.music;
 import java.util.ArrayList;
 
 import mclab1.pages.MediaPlayerFragment;
-
-import edu.mclab1.nccu_story.R;
-
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +11,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
-import android.widget.TextView;;
+import android.widget.TextView;
+import edu.mclab1.nccu_story.R;
 
 public class SongAdapter extends BaseAdapter {
 

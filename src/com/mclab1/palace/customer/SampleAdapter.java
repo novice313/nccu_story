@@ -2,7 +2,6 @@ package com.mclab1.palace.customer;
 
 import java.util.Random;
 
-import edu.mclab1.nccu_story.R;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
@@ -17,6 +16,8 @@ import android.widget.TextView;
 import com.makeramen.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
+
+import edu.mclab1.nccu_story.R;
 
 /***
  * ADAPTER *******顯示附近offline景點的mp3

@@ -5,40 +5,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import ro.ui.pttdroid.Client_Main;
-import ro.ui.pttdroid.Globalvariable;
-
 import mclab1.custom.listview.News;
 import mclab1.sugar.Owner;
-
-import com.farproc.wifi.connecter.TestWifiScan;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
-import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.plus.model.people.Person.ObjectType;
-import com.mclab1.palace.customer.CustomerDetailActivity;
-import com.orm.SugarRecord;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
-import com.parse.GetDataCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
+import ro.ui.pttdroid.Client_Main;
+import ro.ui.pttdroid.Globalvariable;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -67,7 +37,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ZoomButton;
+
+import com.farproc.wifi.connecter.TestWifiScan;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
+import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.mclab1.palace.customer.CustomerDetailActivity;
+import com.orm.SugarRecord;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.GetDataCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
 import edu.mclab1.nccu_story.R;
+import mclab1.service.googlemap.GoogleMapHelper;
 
 public class GoogleMapFragment extends Fragment
 /* implements OnMapReadyCallback */implements OnMapReadyCallback {
@@ -87,13 +88,15 @@ public class GoogleMapFragment extends Fragment
 	private final int TYPE_READY = 4;
 
 	GoogleMap map;
-	final int PARSE_LIMIT = 20;
+	final int PARSE_LIMIT = 10;
 
 	/** GPS */
 	private LocationManager locationMgr;
 	private String provider;
 	private Marker markerMe;
 	MenuItem locateMe;
+	private LatLng current_position;
+	private double current_zoom;
 
 	private WifiManager wiFiManager;
 	int if_Global_local = -1;
@@ -101,7 +104,7 @@ public class GoogleMapFragment extends Fragment
 	String SSID;
 	Boolean if_find_wificonnect = false;
 	ArrayList<String> SSIDList = new ArrayList<String>();
-	
+
 	Activity mActivity;
 
 	@Override
@@ -110,7 +113,7 @@ public class GoogleMapFragment extends Fragment
 		mActivity = activity;
 		super.onAttach(activity);
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -119,7 +122,6 @@ public class GoogleMapFragment extends Fragment
 
 		// instantiate list
 		storyList = new ArrayList<News>();
-
 		setHasOptionsMenu(true);
 	}
 
@@ -130,27 +132,26 @@ public class GoogleMapFragment extends Fragment
 		locateMe.setIcon(R.drawable.ic_action_location_found).setShowAsAction(
 				MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		locateMe.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			
+
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				// TODO Auto-generated method stub
-				Log.d(tag, "item "+ item.getItemId()+" onclick");
-				
+				Log.d(tag, "item " + item.getItemId() + " onclick");
+
 				// start locate user
 				if (initLocationProvider()) {
 					Log.d(tag, "start whereAmI");
 					whereAmI();
 				} else {
-					Toast.makeText(mActivity, "請開啟定位！", Toast.LENGTH_SHORT).show();
+					Toast.makeText(mActivity, "請開啟定位！", Toast.LENGTH_SHORT)
+							.show();
 				}
-				
+
 				return false;
 			}
 		});
 		super.onCreateOptionsMenu(menu, inflater);
 	}
-	
-	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -176,8 +177,7 @@ public class GoogleMapFragment extends Fragment
 
 			}
 		});
-		switch (GooglePlayServicesUtil
-				.isGooglePlayServicesAvailable(mActivity)) {
+		switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(mActivity)) {
 		case ConnectionResult.SUCCESS:
 			Toast.makeText(mActivity, "SUCCESS", Toast.LENGTH_SHORT).show();
 
@@ -226,32 +226,6 @@ public class GoogleMapFragment extends Fragment
 		super.onStart();
 		Log.d(tag, "onStart");
 
-		// locate where am I
-
-		// mActivity.runOnUiThread(new Runnable() {
-		// @Override
-		// public void run() {
-		// query_Story();
-		// }
-		// });
-		//
-		// mActivity.runOnUiThread(new Runnable() {
-		//
-		// @Override
-		// public void run() {
-		// // TODO Auto-generated method stub
-		// query_offlineStory();
-		// }
-		// });
-		//
-		// mActivity.runOnUiThread(new Runnable() {
-		//
-		// @Override
-		// public void run() {
-		// // TODO Auto-generated method stub
-		// query_onlineStory();
-		// }
-		// });
 	}
 
 	@Override
@@ -260,15 +234,15 @@ public class GoogleMapFragment extends Fragment
 		this.map = map;
 		// show NCCU
 		// nccu: 24°58'46"N 121°34'15"E
-		// map.addMarker(new MarkerOptions().position(new LatLng(24.5846,
-		// 121.3415)).title("Marker"));
-		// map.addMarker(new MarkerOptions()
-		// .position(NCCU)
-		// .title("NCCU")
-		// .icon(BitmapDescriptorFactory
-		// .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-		// map.moveCamera(CameraUpdateFactory.newLatLngZoom(NCCU,
-		// initial_zoom_size));
+		map.addMarker(new MarkerOptions().position(
+				new LatLng(24.5846, 121.3415)).title("Marker"));
+		map.addMarker(new MarkerOptions()
+				.position(NCCU)
+				.title("NCCU")
+				.icon(BitmapDescriptorFactory
+						.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(NCCU,
+				initial_zoom_size));
 
 		map.setOnMapClickListener(new OnMapClickListener() {
 
@@ -277,6 +251,7 @@ public class GoogleMapFragment extends Fragment
 				// TODO Auto-generated method stub
 				Log.d(tag, "point latitude=" + point.latitude);
 				Log.d(tag, "point longituide=" + point.longitude);
+
 			}
 		});
 		map.setOnMapLongClickListener(new OnMapLongClickListener() {
@@ -300,9 +275,57 @@ public class GoogleMapFragment extends Fragment
 			}
 		});
 
+		// camera change listener
+		map.setOnCameraChangeListener(new OnCameraChangeListener() {
+
+			@Override
+			public void onCameraChange(CameraPosition position) {
+				// TODO Auto-generated method stub
+				current_position = position.target;
+				current_zoom = position.zoom;
+
+				Log.d(tag, "position latitude= " + position.target.latitude);
+				Log.d(tag, "position longitude= " + position.target.longitude);
+				Log.d(tag, "zoom =" + position.zoom);
+				Log.d(tag,
+						"longitude distance = "
+								+ GoogleMapHelper.getGPSLongitudeDistance(
+										mActivity, position.target,
+										position.zoom));
+				new Thread() {
+					@Override
+					public void run() {
+						LatLng temp_position = current_position;
+						Log.d(tag, "temp_position = " + current_position);
+						try {
+							Thread.sleep(3000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						Log.d(tag, "temp_position = " + current_position);
+						if (temp_position == current_position) {
+							
+							double LatitudeDistance = GoogleMapHelper
+									.getGPSLatitudeDistance(mActivity,
+											current_position, current_zoom);
+							double LongitudeDistance = GoogleMapHelper
+									.getGPSLongitudeDistance(mActivity,
+											current_position, current_zoom);
+							
+							// start query parse
+							query_Story(current_position, LatitudeDistance, LongitudeDistance);
+							query_ready(current_position, LatitudeDistance, LongitudeDistance);
+							query_offlineStory(current_position, LatitudeDistance, LongitudeDistance);
+							query_onlineStory(current_position, LatitudeDistance, LongitudeDistance);
+						}
+					};
+				}.start();
+			}
+		});
+
 		// set googlaMap infoWindow
 		setGoogleMapInfoWindow(map);
-		
 	}
 
 	private void ShowAlertDialogAndList(final LatLng point) {
@@ -318,8 +341,7 @@ public class GoogleMapFragment extends Fragment
 					Log.d(tag, "list_uploadType " + list_uploadType[which]
 							+ " onclick");
 					Intent intent_broadcast = new Intent();
-					intent_broadcast
-							.setClass(mActivity, TestWifiScan.class);
+					intent_broadcast.setClass(mActivity, TestWifiScan.class);
 					Bundle bundle_broadcast = new Bundle();
 					bundle_broadcast.putDouble("longitude", point.longitude);
 					bundle_broadcast.putDouble("latitude", point.latitude);
@@ -333,8 +355,7 @@ public class GoogleMapFragment extends Fragment
 					Log.d(tag, "list_uploadType " + list_uploadType[which]
 							+ " onclick");
 					Intent intent_uploadStory = new Intent();
-					intent_uploadStory
-							.setClass(mActivity, UploadPage.class);
+					intent_uploadStory.setClass(mActivity, UploadPage.class);
 					Bundle bundle_uploadStory = new Bundle();
 					bundle_uploadStory.putDouble("longitude", point.longitude);
 					bundle_uploadStory.putDouble("latitude", point.latitude);
@@ -361,8 +382,8 @@ public class GoogleMapFragment extends Fragment
 
 	// GPS
 	private boolean initLocationProvider() {
-		locationMgr = (LocationManager) mActivity.getSystemService(
-				Context.LOCATION_SERVICE);
+		locationMgr = (LocationManager) mActivity
+				.getSystemService(Context.LOCATION_SERVICE);
 		// GPS provider
 		if (locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 			provider = LocationManager.GPS_PROVIDER;
@@ -439,7 +460,7 @@ public class GoogleMapFragment extends Fragment
 			switch (event) {
 			case GpsStatus.GPS_EVENT_STARTED:
 				Log.d(tag, "GPS_EVENT_STARTED");
-				if(mActivity==null){
+				if (mActivity == null) {
 					Log.d(tag, "mActivity==null");
 				}
 				Toast.makeText(mActivity, "GPS_EVENT_STARTED",
@@ -447,7 +468,7 @@ public class GoogleMapFragment extends Fragment
 				break;
 			case GpsStatus.GPS_EVENT_STOPPED:
 				Log.d(tag, "GPS_EVENT_STOPPED");
-				if(mActivity==null){
+				if (mActivity == null) {
 					Log.d(tag, "mActivity==null");
 				}
 				Toast.makeText(mActivity, "GPS_EVENT_STOPPED",
@@ -555,10 +576,10 @@ public class GoogleMapFragment extends Fragment
 	}
 
 	private void addMarker_Ready(String objectIdString, String userNameString,
-			String title, LatLng point, int score, int type) {
+			String title, LatLng point, int score, int type, String SSIDString) {
 		// TODO Auto-generated method stub
 		String snippet = objectIdString + "," + userNameString + "," + score
-				+ "," + type;
+				+ "," + type + "," + SSIDString;
 		this.map.addMarker(new MarkerOptions()
 				.position(point)
 				.snippet(snippet)
@@ -581,10 +602,16 @@ public class GoogleMapFragment extends Fragment
 						.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 	}
 
-	private void query_Story() {
+	private void query_Story(LatLng current_position, double latitudeDistance, double longitudeDistance) {
 		ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
 				"story");
 		parseQuery.setLimit(PARSE_LIMIT);
+
+		parseQuery.whereGreaterThan("latitude", current_position.latitude-latitudeDistance);
+		parseQuery.whereLessThan("latitude", current_position.latitude+latitudeDistance);
+		parseQuery.whereGreaterThan("longitude", current_position.longitude-longitudeDistance);
+		parseQuery.whereLessThan("longitude", current_position.longitude+longitudeDistance);
+		
 		parseQuery.addDescendingOrder("createdAt");
 		parseQuery.findInBackground(new FindCallback<ParseObject>() {
 
@@ -668,12 +695,18 @@ public class GoogleMapFragment extends Fragment
 		});
 	}
 
-	private void query_ready() {
+	private void query_ready(LatLng current_position, double latitudeDistance, double longitudeDistance) {
 		// TODO Auto-generated method stub
 		ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
 				"offline");
 		parseQuery.whereEqualTo("State", "Ready");
 		parseQuery.setLimit(PARSE_LIMIT);
+		
+		parseQuery.whereGreaterThan("latitude", current_position.latitude-latitudeDistance);
+		parseQuery.whereLessThan("latitude", current_position.latitude+latitudeDistance);
+		parseQuery.whereGreaterThan("longitude", current_position.longitude-longitudeDistance);
+		parseQuery.whereLessThan("longitude", current_position.longitude+longitudeDistance);
+		
 		parseQuery.addDescendingOrder("createdAt");
 		parseQuery.findInBackground(new FindCallback<ParseObject>() {
 
@@ -695,6 +728,8 @@ public class GoogleMapFragment extends Fragment
 							final int score = parseObject.getInt("score");
 							final String contentString = parseObject
 									.getString("content");
+							final String SSIDString = parseObject
+									.getString("SSID");
 
 							final double latitude = parseObject
 									.getDouble("latitude");
@@ -746,7 +781,8 @@ public class GoogleMapFragment extends Fragment
 															objectIdString,
 															userNameString,
 															titleString, point,
-															score, TYPE_READY);
+															score, TYPE_READY,
+															SSIDString);
 
 												}
 											}
@@ -759,12 +795,18 @@ public class GoogleMapFragment extends Fragment
 		});
 	}
 
-	private void query_offlineStory() {
+	private void query_offlineStory(LatLng current_position, double latitudeDistance, double longitudeDistance) {
 		// TODO Auto-generated method stub
 		ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
 				"offline");
 		parseQuery.whereEqualTo("State", "offline");
 		parseQuery.setLimit(PARSE_LIMIT);
+		
+		parseQuery.whereGreaterThan("latitude", current_position.latitude-latitudeDistance);
+		parseQuery.whereLessThan("latitude", current_position.latitude+latitudeDistance);
+		parseQuery.whereGreaterThan("longitude", current_position.longitude-longitudeDistance);
+		parseQuery.whereLessThan("longitude", current_position.longitude+longitudeDistance);
+		
 		parseQuery.addDescendingOrder("createdAt");
 		parseQuery.findInBackground(new FindCallback<ParseObject>() {
 
@@ -851,12 +893,18 @@ public class GoogleMapFragment extends Fragment
 		});
 	}
 
-	private void query_onlineStory() {
+	private void query_onlineStory(LatLng current_position, double latitudeDistance, double longitudeDistance) {
 		// TODO Auto-generated method stub
 		ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
 				"offline");
 		parseQuery.whereEqualTo("State", "online");
 		parseQuery.setLimit(PARSE_LIMIT);
+		
+		parseQuery.whereGreaterThan("latitude", current_position.latitude-latitudeDistance);
+		parseQuery.whereLessThan("latitude", current_position.latitude+latitudeDistance);
+		parseQuery.whereGreaterThan("longitude", current_position.longitude-longitudeDistance);
+		parseQuery.whereLessThan("longitude", current_position.longitude+longitudeDistance);
+		
 		parseQuery.addDescendingOrder("createdAt");
 		parseQuery.findInBackground(new FindCallback<ParseObject>() {
 
@@ -1020,8 +1068,8 @@ public class GoogleMapFragment extends Fragment
 					startActivity(intent_detail);
 					break;
 				case TYPE_OFFLINE_STORY:
-
 					Log.d(tag, "Icon TYPE_OFFLINE_STORY onclick.");
+
 					ParseQuery<ParseObject> query = ParseQuery
 							.getQuery("offline");
 					// Retrieve the object by id
@@ -1041,8 +1089,7 @@ public class GoogleMapFragment extends Fragment
 												+ Globalvariable.titleString);
 										System.out.println("Globalvariable"
 												+ Globalvariable.contentString);
-										Intent intent = new Intent(
-												mActivity,
+										Intent intent = new Intent(mActivity,
 												CustomerDetailActivity.class);
 										mActivity.startActivity(intent);
 
@@ -1052,8 +1099,10 @@ public class GoogleMapFragment extends Fragment
 
 					break;
 				case TYPE_ONLINE_BROADCAST:
-
 					Log.d(tag, "Icon TYPE_ONLINE_BROADCAST onclick.");
+
+				case TYPE_READY:
+					Log.d(tag, "Icon TYPE_READY onclick.");
 
 					// check is still online or not
 					ParseQuery<ParseObject> checkQuery = new ParseQuery<ParseObject>(
@@ -1071,21 +1120,22 @@ public class GoogleMapFragment extends Fragment
 												.get(0);
 
 										if (parseObject.getString("State")
-												.compareTo("online") == 0) {// still
-																			// online
+												.compareTo("online") == 0
+												|| parseObject.getString(
+														"State").compareTo(
+														"Ready") == 0) {// still
+																		// online
 											String SSIDstring = temp[4];
 											// parse broadcast
 											// 若wifi狀態為關閉則將它開啟
 											wiFiManager = (WifiManager) mActivity
-													.getSystemService(
-															Context.WIFI_SERVICE);
+													.getSystemService(Context.WIFI_SERVICE);
 											if (!wiFiManager.isWifiEnabled()) {
 												wiFiManager
 														.setWifiEnabled(true);
 											}
 											wiFiManager = (WifiManager) mActivity
-													.getSystemService(
-															Context.WIFI_SERVICE);
+													.getSystemService(Context.WIFI_SERVICE);
 											System.out.println("wiFiManagergetConnectionInfo"
 													+ wiFiManager
 															.getConnectionInfo()
@@ -1155,8 +1205,7 @@ public class GoogleMapFragment extends Fragment
 												conf.allowedKeyManagement
 														.set(WifiConfiguration.KeyMgmt.NONE);
 												WifiManager wifiManager2 = (WifiManager) mActivity
-														.getSystemService(
-																Context.WIFI_SERVICE);
+														.getSystemService(Context.WIFI_SERVICE);
 												wifiManager2.addNetwork(conf);
 
 												List<WifiConfiguration> list = wifiManager2
@@ -1208,6 +1257,11 @@ public class GoogleMapFragment extends Fragment
 												}
 												System.out.println("GOGOGO4"
 														+ if_Global_local);
+												System.out.println("latitude"
+														+ latitude + "@"
+														+ longitude);
+												Globalvariable.latitude = latitude;
+												Globalvariable.longitude = longitude;
 												Intent intent = new Intent(
 														mActivity,
 														Client_Main.class); // 改寫成TestWifiScan.this
@@ -1251,8 +1305,7 @@ public class GoogleMapFragment extends Fragment
 																		mActivity,
 																		CustomerDetailActivity.class);
 																mActivity
-																		.startActivity(
-																				intent);
+																		.startActivity(intent);
 
 															}
 														}
@@ -1263,9 +1316,6 @@ public class GoogleMapFragment extends Fragment
 								}
 							});
 
-					break;
-				case TYPE_READY:
-					Log.d(tag, "Icon TYPE_READY onclick.");
 					break;
 
 				default:
@@ -1278,7 +1328,9 @@ public class GoogleMapFragment extends Fragment
 
 	@Override
 	public void onStop() {
-		locationMgr.removeUpdates(locationListener);
+		if (locationMgr != null) {
+			locationMgr.removeUpdates(locationListener);
+		}
 		super.onStop();
 		Log.d(tag, "onStop.");
 	}

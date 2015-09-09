@@ -1,17 +1,16 @@
 package com.example.fileexplorer;
 
-import java.util.List; 
+import java.util.List;
 
-import edu.mclab1.nccu_story.R;
- 
-import android.content.Context; 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup; 
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView; 
+import android.widget.ImageView;
 import android.widget.TextView;
+import edu.mclab1.nccu_story.R;
 
 
 public class FileArrayAdapter extends ArrayAdapter<Item>{

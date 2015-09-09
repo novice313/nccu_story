@@ -83,7 +83,7 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 
 		// set recorder icon at action bar
 		setHasOptionsMenu(true);
-
+		
 		startService();
 		return view;
 

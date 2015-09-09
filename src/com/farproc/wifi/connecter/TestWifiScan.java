@@ -26,8 +26,8 @@
 package com.farproc.wifi.connecter;
 
 import java.util.List;
-//import ro.ui.pttdroid.Main.MicrophoneSwitcher;
-import edu.mclab1.nccu_story.R;
+
+import ro.ui.pttdroid.Globalvariable;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ListActivity;
@@ -45,10 +45,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 import android.widget.TwoLineListItem;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import edu.mclab1.nccu_story.R;
 
 public class TestWifiScan extends ListActivity {
 	
@@ -89,6 +96,67 @@ public class TestWifiScan extends ListActivity {
 		final IntentFilter filter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 		registerReceiver(mReceiver, filter);
 		mWifiManager.startScan();
+		
+		//開始清註冊的資訊摟
+		ParseQuery<ParseObject> queryregidter = ParseQuery.getQuery("Register_SSID_ip");   //可
+		queryregidter.whereEqualTo("Register_uuid",Globalvariable.register_uuid);
+		queryregidter.findInBackground(new FindCallback<ParseObject>() {
+		    public void done(List<ParseObject> registerList, ParseException e) {
+	        	System.out.println("開始清註冊的資訊摟");
+		        if (e == null){
+		        	if(registerList.size()>0){
+		        	registerList.get(0).deleteInBackground();
+		        	}
+		        
+		        	
+		        } else {
+		        	System.out.println("Errorin開始清註冊的資訊摟");
+		        	
+		        }
+				
+				
+				 
+		    
+		    }
+		});
+		
+		
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
+		// Retrieve the object by id
+		System.out.println("Ready to update State"+Globalvariable.guiderid);
+		query.whereEqualTo("GuiderID", Globalvariable.guiderid);
+		
+		query.findInBackground(new FindCallback<ParseObject>() {
+			
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+		        	System.out.println("State_offline");
+		        if (e == null) {
+		        	if(objects.size()>0){
+		        	System.out.println("State_offline2");
+		            // Now let's update it with some new data. In this case, only cheatMode and score
+		            // will get sent to the Parse Cloud. playerName hasn't changed.
+					final ParseObject State = objects.get(0);
+		        	State.put("State", "offline");     // offline 
+		        	//State.put("numberTag", numberTag);     // offline 
+		        	
+		        	State.saveInBackground();
+		        	}
+		        }
+		        else {
+		        	System.out.println("offlineerror");
+
+		        	
+		        }
+				}
+				
+				
+			
+		});
+		
+		
+		
 	}
 	
 	@Override

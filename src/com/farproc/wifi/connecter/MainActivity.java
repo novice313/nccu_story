@@ -33,6 +33,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.widget.Toast;
 import edu.mclab1.nccu_story.R;
+
 public class MainActivity extends Floating {
 	
 	public static final String EXTRA_HOTSPOT = "com.farproc.wifi.connecter.extra.HOTSPOT";

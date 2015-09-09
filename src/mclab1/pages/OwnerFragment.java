@@ -16,7 +16,6 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -169,6 +168,7 @@ public class OwnerFragment extends Fragment {
 												Toast.LENGTH_SHORT).show();
 									}
 								}
+
 							});
 
 					break;

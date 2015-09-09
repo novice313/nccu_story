@@ -3,6 +3,7 @@ package mclab1.service.camera;
 import java.util.ArrayList;
 
 import edu.mclab1.nccu_story.R;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,8 +15,8 @@ import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
 
 
 public class GalleryActivity extends Activity {

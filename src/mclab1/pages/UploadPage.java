@@ -13,15 +13,6 @@ import java.util.List;
 
 import mclab1.service.upload.UploadMediaListActivity;
 import mclab1.sugar.Owner;
-
-import com.orm.SugarRecord;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.SaveCallback;
-
-import edu.mclab1.nccu_story.MainActivity;
-import edu.mclab1.nccu_story.R;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -46,6 +37,15 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.orm.SugarRecord;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.SaveCallback;
+
+import edu.mclab1.nccu_story.MainActivity;
+import edu.mclab1.nccu_story.R;
 
 public class UploadPage extends Activity {
 
@@ -422,7 +422,7 @@ public class UploadPage extends Activity {
 
 		// 判斷縮放比例
 		if (bitmap.getWidth() > phone_width) {
-			mScale = (float) phone_width / (float) bitmap.getWidth();
+			mScale = phone_width / (float) bitmap.getWidth();
 			Log.d(tag, "mScale = " + mScale);
 		}
 
@@ -430,7 +430,7 @@ public class UploadPage extends Activity {
 			mScale = (float) ((phone_height / 1.5) / bitmap.getHeight());
 			Log.d(tag, "mScale = " + mScale);
 		} else {// too small situation
-			float mScale_width = (float) phone_width
+			float mScale_width = phone_width
 					/ (float) bitmap.getWidth();
 			float mScale_height = (float) ((phone_height / 1.5) / bitmap
 					.getHeight());

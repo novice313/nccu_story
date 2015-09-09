@@ -1,5 +1,4 @@
 package com.mclab1.palace.customer;
-//
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,8 +11,9 @@ import java.util.Date;
 import java.util.List;
 
 import ro.ui.pttdroid.Globalvariable;
-
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,7 +23,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,8 +32,10 @@ import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseImageView;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
 import edu.mclab1.nccu_story.R;
 public class CustomerDetailActivity extends Activity {   //************offline *********** Story 
 	                                                     //VoiceDataActivity VoiceDataElment
@@ -65,7 +66,8 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 	String  Prestring_numberTAg=null;
 	int L=0;
 	int M=0;
-	
+	Boolean play_one=true;
+	ParseImageView imageView ;
 
 
 	int i;
@@ -98,7 +100,82 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 	}
 
 	private void initViews() {
-		ImageView imageView = (ImageView) findViewById(R.id.customer_activity_image);
+		
+	    imageView = (ParseImageView) findViewById(R.id.customer_activity_image);
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
+		System.out.println("latitiude"+Globalvariable.latitude+" "+Globalvariable.longitude);
+		// Retrieve the object by id	
+		query.whereEqualTo("latitude", Globalvariable.latitude);    //柏傳給我經緯度，我做經緯度限制
+		query.whereEqualTo("longitude", Globalvariable.longitude);  	
+		query.findInBackground(new FindCallback<ParseObject>() {	
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+		        if (e == null) {					
+				final ParseFile image =(ParseFile)objects.get(0).get("image");
+					// ((ParseObject) me).getParseFile("data");
+				// final ParseImageView imageView = (ParseImageView) findViewById(R.id.personalprfile);
+				// imageView.setParseFile(image);
+				// System.out.println("image"+image);
+				// if(image!=null){
+				image.getDataInBackground(new GetDataCallback() {
+
+				@Override
+				public void done(byte[] data, ParseException e) {
+					// TODO Auto-generated method stub
+					if(e==null){
+						System.out.println("personalprofile"+" "+data.length);
+				        final Bitmap bmp = BitmapFactory.decodeByteArray(data, 0,data.length);
+				        // Get the ImageView from main.xml
+				        //ImageView image = (ImageView) findViewById(R.id.ad1);
+				        imageView = (ParseImageView) findViewById(R.id.customer_activity_image);
+
+				       // ImageView imageView=(ImageView) findViewById(R.id.personalprfile);
+				        // Set the Bitmap into the
+				        // ImageView
+				      if(imageView!=null){
+				        imageView.setParseFile(image);
+				        imageView.setImageBitmap(bmp);
+				        }
+				       /* imageView.loadInBackground(new GetDataCallback() {
+				            public void done(byte[] data, ParseException e) {
+				            // The image is loaded and displayed!                    
+				            int oldHeight = imageView.getHeight();
+				            int oldWidth = imageView.getWidth();     
+				            System.out.println("imageView height = " + oldHeight);
+				            System.out.println("imageView width = " + oldWidth);
+				            imageView.setImageBitmap(bmp);
+
+
+				           // Log.v("LOG!!!!!!", "imageView height = " + oldHeight);      // DISPLAYS 90 px
+				           // Log.v("LOG!!!!!!", "imageView width = " + oldWidth);        // DISPLAYS 90 px      
+				            }
+				        });*/
+						
+					}
+					else{
+						System.out.println("personalprofilerror");
+
+					}
+					
+				}
+				});
+					
+
+					
+					
+		        	
+		        }
+		        else {
+		        	System.out.println("offlineerror");
+
+		        	
+		        }
+				}
+				
+				
+			
+		});
 		// TextView title = (TextView)
 		// findViewById(R.id.customer_activity_title);
 		TextView content = (TextView) findViewById(R.id.customer_activity_content);
@@ -123,7 +200,8 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 		customerVoiceListAdapter = new CustomerVoiceListAdapter(this, mp3unuiques);
 		listView.setAdapter(customerVoiceListAdapter);
 		
-
+		if(play_one==true){
+			play_one=false;
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -233,6 +311,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 
 			
 		});
+		}
 		loaddata();
 
 	}

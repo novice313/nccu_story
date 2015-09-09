@@ -23,15 +23,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import com.mclab1.palaca.parsehelper.VoiceObject;
-import com.mclab1.palace.connection.VoiceData;
-import com.mclab1.palace.guider.DisplayEvent;
 
-import de.greenrobot.event.EventBus;
 import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
 import ro.ui.pttdroid.util.Audio;
@@ -39,10 +35,14 @@ import ro.ui.pttdroid.util.IP;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder.AudioSource;
+import android.os.Environment;
 
+import com.mclab1.palaca.parsehelper.VoiceObject;
+import com.mclab1.palace.connection.VoiceData;
+import com.mclab1.palace.guider.DisplayEvent;
 import com.pocketdigi.utils.FLameUtils;
 
-import android.os.Environment;
+import de.greenrobot.event.EventBus;
 
 public class Mp3Recorder extends Thread
 {	

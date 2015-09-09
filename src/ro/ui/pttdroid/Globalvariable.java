@@ -14,7 +14,12 @@ public class Globalvariable {
 	//public static final String Latitude="121";
 	public static String guiderid="";
 	public static String getGlobalSSID="";
-	
+
+	public static String register_uuid="";
+	public static double guider_latitudeString;
+	public static double guider_longitudeString;
+ 
+
 	
 
 

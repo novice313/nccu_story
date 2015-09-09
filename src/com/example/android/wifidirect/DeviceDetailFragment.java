@@ -43,9 +43,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import edu.mclab1.nccu_story.R;
-
 import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
+
+import edu.mclab1.nccu_story.R;
 
 /**
  * A fragment that manages a particular peer and allows interaction with device

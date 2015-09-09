@@ -20,6 +20,7 @@ package ro.ui.pttdroid;
 import java.io.BufferedOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+
 import ro.ui.pttdroid.Player.PlayerBinder;
 import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
@@ -72,14 +73,13 @@ import com.mclab1.palace.connection.ClientConnectionService;
 import com.mclab1.palace.customer.CustomerFragment;
 import com.mclab1.palace.guider.DisplayEvent;
 import com.mclab1.palace.guider.GuiderFragment;
-import com.mclab1.palace.recorder.Mp3Helper;
 import com.mclab1.place.events.NewClientConnectionEvent;
 import com.mclab1.place.events.NewServerConnectionEvent;
 import com.mclab1.place.events.PauseAudioEvent;
 import com.mclab1.place.events.ResumeAudioEvent;
 
-import edu.mclab1.nccu_story.R;
 import de.greenrobot.event.EventBus;
+import edu.mclab1.nccu_story.R;
 
 public class Main extends FragmentActivity implements ChannelListener,
 		DeviceActionListener {
@@ -143,7 +143,8 @@ public class Main extends FragmentActivity implements ChannelListener,
    ,{"4Chinese","239.255.255.251"},{"4English","239.255.255.252"},{"4Japanese","239.255.255.253"},{"4Korean","239.255.255.254"}};
 	public static String Selected="";
 	public static String Number="";
-	public static String commIP="239.255.255.251";
+
+	public static String commIP="239.255.255.250";
 
 
 
@@ -237,7 +238,7 @@ public class Main extends FragmentActivity implements ChannelListener,
 		//	writing.setBackgroundResource(R.drawable.circle_green);
 		}
 
-		btn_test_mp3 = (Button) findViewById(R.id.btn_test_mp3);
+	/*	btn_test_mp3 = (Button) findViewById(R.id.btn_test_mp3);
 		btn_test_mp3.setOnClickListener(new OnClickListener() {
 
 			@Override 
@@ -257,6 +258,7 @@ public class Main extends FragmentActivity implements ChannelListener,
 				test_socket_server();
 			}
 		});
+		});*/
 
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
@@ -833,6 +835,7 @@ public class Main extends FragmentActivity implements ChannelListener,
 			}
 		});
 	}
+
 
 	@Override
 	public void disconnect() {

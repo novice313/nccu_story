@@ -24,7 +24,6 @@ import java.net.MulticastSocket;
 import java.net.SocketException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import edu.mclab1.nccu_story.R;
 import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
 import ro.ui.pttdroid.settings.CommSettings;
@@ -46,6 +45,7 @@ import android.telephony.TelephonyManager;
 import com.mclab1.palace.guider.DisplayEvent;
 
 import de.greenrobot.event.EventBus;
+import edu.mclab1.nccu_story.R;
 
 public class Player extends Service
 {
@@ -242,7 +242,8 @@ public class Player extends Service
 					case CommSettings.MULTICAST:
 						socket = new MulticastSocket(CommSettings.getPort());
 						//System.out.println("PlayerInetAddress"+InetAddress.getByName(Premain.Selected));
-						((MulticastSocket) socket).joinGroup(InetAddress.getByName("239.255.255.250"));	 //接收到聲音的ip									
+
+						((MulticastSocket) socket).joinGroup(InetAddress.getByName(Main.commIP));	 //接收到聲音的ip									
 					break;
 					case CommSettings.UNICAST:
 						socket = new DatagramSocket(CommSettings.getPort());

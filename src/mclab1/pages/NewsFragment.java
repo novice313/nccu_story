@@ -3,16 +3,8 @@ package mclab1.pages;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.parse.FindCallback;
-import com.parse.GetDataCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
 import mclab1.custom.listview.News;
 import mclab1.custom.listview.NewsAdapter;
-import edu.mclab1.nccu_story.R;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,12 +16,19 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
+
+import com.parse.FindCallback;
+import com.parse.GetDataCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import edu.mclab1.nccu_story.R;
 
 public class NewsFragment extends Fragment {
 
@@ -173,6 +172,7 @@ public class NewsFragment extends Fragment {
 					}
 				}
 			}
+
 		});
 	}
 
