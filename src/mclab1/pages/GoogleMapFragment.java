@@ -81,6 +81,7 @@ public class GoogleMapFragment extends Fragment
 	SupportMapFragment mapFragment;
 
 	String[] list_uploadType = { "Broadcast", "Upload story" };
+	String[] list_uploadType_client = { "Upload story"};                   //修改給client
 
 	private final int TYPE_STORY = 1;
 	private final int TYPE_OFFLINE_STORY = 2;
@@ -378,7 +379,12 @@ public class GoogleMapFragment extends Fragment
 			public void onClick(DialogInterface dialog, int which) {
 			}
 		};
+		//if(Globalvariable.if_Guider==true){
 		builder.setItems(list_uploadType, ListClick);
+		//}
+		//else{
+			//builder.setItems(list_uploadType_client, ListClick);
+		//}
 		builder.setNeutralButton("cancel", OkClick);
 		builder.show();
 
@@ -1288,14 +1294,14 @@ public class GoogleMapFragment extends Fragment
 												for (WifiConfiguration wificonfig : list) { // 解決ap遇到不在現場就會無法連線的問題
 													if (if_find_wificonnect == true) {
 														System.out
-																.println("Main_configwifi");
+																.println("Main_configwifi1");
 														if_find_wificonnect = false;
 														break;
 
 													}
 													for (int i = 0; i < SSIDList
 															.size(); i++) {
-														System.out.println("Main_configwifi"
+														System.out.println("Main_configwifi1.5"
 																+ " "
 																+ SSIDList
 																		.get(i));
@@ -1329,6 +1335,8 @@ public class GoogleMapFragment extends Fragment
 													}
 
 												}
+												Globalvariable.latitude = latitude;   // 等等比對是否要250 or 251
+												Globalvariable.longitude = longitude;
 												System.out.println("GOGOGO4"
 														+ if_Global_local);
 												System.out.println("latitude"

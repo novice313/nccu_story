@@ -5,6 +5,14 @@ import java.util.List;
 import java.util.Random;
 
 import ro.ui.pttdroid.Globalvariable;
+
+import com.mclab1.palaca.parsehelper.VoiceDataElement;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import edu.mclab1.nccu_story.R;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;

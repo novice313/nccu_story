@@ -28,6 +28,7 @@
                  android:layout_height="wrap_content" 
                  />
             
+            
 
             
             
@@ -84,7 +85,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-
            <FrameLayout
                 android:id="@+id/content_holder"
                 android:layout_width="match_parent"
@@ -116,16 +116,12 @@
             </FrameLayout>
             
 
-
-
           <LinearLayout
                 android:id="@+id/old_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:visibility="gone" >
-
-
                 <fragment
                     android:id="@+id/frag_list"
                     android:layout_width="match_parent"
@@ -135,8 +131,6 @@
                     <!-- Preview: layout=@layout/row_devices -->
                 </fragment>
                 
-
-
 
                 <fragment
                     android:id="@+id/frag_detail"

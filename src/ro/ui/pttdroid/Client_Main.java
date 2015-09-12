@@ -17,17 +17,18 @@ along with pttdroid.  If not, see <http://www.gnu.org/licenses/>. */
 
 package ro.ui.pttdroid;
 
-
 import java.util.List;
 
 import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
 import ro.ui.pttdroid.settings.CommSettings;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
@@ -49,6 +50,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -120,11 +123,11 @@ private NfcAdapter adapter;
 private int if_Global_local;
 int SPLASH_DISPLAY_LENGHT = 3000;
 
-
 private TextView userName;
 private TextView title;
 private TextView content;
 private ParseImageView imageView;
+ProgressDialog dialog;
 
 
 
@@ -143,11 +146,9 @@ shutdown();
 public void onCreate(Bundle savedInstanceState) {
 super.onCreate(savedInstanceState);
 setContentView(R.layout.main);
-
 userName=(TextView)findViewById(R.id.userName);
 title=(TextView)findViewById(R.id.title);
 content=(TextView)findViewById(R.id.content);
-
 
 /*ImageButton ready_image_guide;
 ready_image_guide=(ImageButton)findViewById(R.id.ready_image_guide); 
@@ -255,7 +256,6 @@ private void  change_to_client_Global_online_fragment(){
 public void onEvent(NewClientConnectionEvent event) {
 
 }
-
 /*public void test_connect() {
 String networkSSID = "DIRECT-Q6-Android_4ff3";
 String networkPass = "CegDR821";
@@ -422,13 +422,11 @@ case R.id.btn_change_mode:
 	if(if_Global_local==1){
 		System.out.println("local");
 		if (if_clientL_offline_mode) {
-
 			userName.setVisibility(View.GONE);
 			title.setVisibility(View.GONE);
 			content.setVisibility(View.GONE);
 	        imageView.setVisibility(View.GONE);
-
-	        if_clientL_offline_mode = false;
+			if_clientL_offline_mode = false;
 			change_to_client_online_fragment();
 			playerIntent = new Intent(this, Client_Player.class);
 			startService(playerIntent);
@@ -438,9 +436,6 @@ case R.id.btn_change_mode:
 	if(if_Global_local==0){
 		System.out.println("global");
 			if(if_clientL_offline_mode){
-
-
-
 				userName.setVisibility(View.GONE);
 				title.setVisibility(View.GONE);
 				content.setVisibility(View.GONE);
@@ -479,11 +474,13 @@ default:
 
 
 
-
 private void init() {  //init=> OnResume
 
 	ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
-	System.out.println("latitiude"+Globalvariable.latitude+"$"+Globalvariable.longitude);
+	System.out.println("latitiude"+Globalvariable.latitude+" "+Globalvariable.longitude);
+	
+    dialog = ProgressDialog.show(Client_Main.this,
+            "讀取資料中", "請 稍 等 . . . . ",true);
 	// Retrieve the object by id	
 	query.whereEqualTo("latitude", Globalvariable.latitude);    //柏傳給我經緯度，我做經緯度限制
 	query.whereEqualTo("longitude", Globalvariable.longitude);  	
@@ -491,8 +488,7 @@ private void init() {  //init=> OnResume
 		@Override
 		public void done(List<ParseObject> objects, ParseException e) {
 			// TODO Auto-generated method stub
-	        if (e == null) {
-	        	if(objects!=null){
+	        if (e == null) {	        	
 				String userNameString  =(String) objects.get(0).get("userName");
 				String titleString  =(String) objects.get(0).get("title");
 				String contentString  =(String) objects.get(0).get("content");
@@ -526,6 +522,8 @@ private void init() {  //init=> OnResume
 			        // ImageView
 			        imageView.setParseFile(image);
 			        imageView.setImageBitmap(bmp);
+                    dialog.dismiss();
+
 			       /* imageView.loadInBackground(new GetDataCallback() {
 			            public void done(byte[] data, ParseException e) {
 			            // The image is loaded and displayed!                    
@@ -549,7 +547,6 @@ private void init() {  //init=> OnResume
 				
 			}
 			});
-	        	}
 				
 
 				

@@ -172,6 +172,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 		        	
 		        }
 				}
+
 				
 				
 			
@@ -309,7 +310,6 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 				}
 				
 
-			
 		});
 		}
 		loaddata();

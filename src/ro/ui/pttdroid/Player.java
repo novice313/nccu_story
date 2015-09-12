@@ -242,7 +242,6 @@ public class Player extends Service
 					case CommSettings.MULTICAST:
 						socket = new MulticastSocket(CommSettings.getPort());
 						//System.out.println("PlayerInetAddress"+InetAddress.getByName(Premain.Selected));
-
 						((MulticastSocket) socket).joinGroup(InetAddress.getByName(Main.commIP));	 //接收到聲音的ip									
 					break;
 					case CommSettings.UNICAST:

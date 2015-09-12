@@ -22,6 +22,9 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -41,6 +44,10 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
 import com.mclab1.palace.guider.DisplayEvent;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import de.greenrobot.event.EventBus;
 
@@ -70,6 +77,8 @@ public class Client_Player extends Service
 	private volatile boolean playing = true;
 	Thread loopthread;
 	volatile boolean terminate = false;
+	String getIP="";
+	int just_one=1;
 
 	//private MultiRecorder multiRecorder;
 	public class PlayerBinder extends Binder 
@@ -143,6 +152,32 @@ public class Client_Player extends Service
 		        
 		startForeground(1, notification);	*/
 		
+		
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Register_SSID_ip");
+		System.out.println("latitiude"+Globalvariable.latitude+" "+Globalvariable.longitude);
+		// Retrieve the object by id	
+		query.whereEqualTo("latitude", Globalvariable.latitude);    //柏傳給我經緯度，我做經緯度限制
+		query.whereEqualTo("longitude", Globalvariable.longitude);  	
+		query.findInBackground(new FindCallback<ParseObject>() {	
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+		        if (e == null) {
+		        	for(int i=0;i<objects.size();i++){
+		        		getIP=(String)objects.get(i).get("ip");
+		        		System.out.println("getIP"+getIP);
+		        	}
+		        }
+		        else{
+		        	System.out.println("getSSIDerror");
+		        	
+		        }
+			}
+		});
+					
+		
+		
+		
     }
 
 	@Override
@@ -212,6 +247,69 @@ public class Client_Player extends Service
 						while(isPlaying()) 
 						{
 							System.out.println("isPlayingInPlayer!!!!");
+							new Thread(){
+								@Override
+								public void run(){ 
+							if(if_interrupt==false && just_one==1){           //if 遇到沒有data時就測有沒有IP
+								just_one=2;
+								for(int i=1;i<=255;i++){
+									getIP="192.168.2."+i;
+				        		System.out.println("getIP2"+getIP);
+								try {
+									addr50_51=InetAddress.getByName(getIP);
+								} catch (UnknownHostException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}   //can give 239.255.255.250 or etc (兩個MULTICAST)
+								try {
+									Thread.sleep(1500);
+								} catch (InterruptedException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+
+								
+
+							switch(CommSettings.getCastType()) 
+							{
+								case CommSettings.BROADCAST:
+									try{
+										
+								    System.out.println("ReadytoBROADCAST");
+									android.util.Log.i("pttdroid", "Broadcast!");
+									socket = new DatagramSocket(CommSettings.getPort());
+									socket.setBroadcast(true);
+									}
+									catch (Exception e) {
+										// TODO: handle exception
+									}
+								break;
+								case CommSettings.MULTICAST:
+									try{
+										System.out.println("Readytomulticast");
+									socket = new MulticastSocket(CommSettings.getPort());
+									((MulticastSocket) socket).joinGroup(addr50_51);
+									
+									}
+									catch (Exception e) {
+										// TODO: handle exception
+									}
+
+								break;
+								case CommSettings.UNICAST:
+									try{
+									socket = new DatagramSocket(CommSettings.getPort());
+									}
+									catch (Exception e) {
+										// TODO: handle exception
+									}
+								break;
+							}
+								}
+							}
+							}}.start();
+
+							
 							try 
 							{
 								System.out.println("Ready to receive!"); 
@@ -234,13 +332,10 @@ public class Client_Player extends Service
 							       
 							       int index=msg.indexOf("Tim");                                             //濾掉聲音的封包字串
 							       String submsg=msg.substring(index+3,msg.length());
-							       System.out.println("socket_receive"+msg);
+							       System.out.println("socket_receive"+msg+getIP);
 							       if(index!=-1){
 										if_guide_interrupt=true;
-										System.out.println("if_guide_interrupt=true");
-
 										System.out.println("if_guide_interrupttrue");
-
 							       }
 								    //bw.write(msg+"\n");
 							       }
@@ -345,11 +440,7 @@ public class Client_Player extends Service
 			try 
 			{
 				System.out.println("count-"+count);
-				
-				//addr50_51=InetAddress.getByName("239.255.255.251");   //can give 239.255.255.250 or etc 
-
-				addr50_51=InetAddress.getByName("239.255.255.250");   //can give 239.255.255.250 or etc 
-
+				addr50_51=InetAddress.getByName(getIP);   //can give 239.255.255.250 or etc 
 
 				switch(CommSettings.getCastType()) 
 				{

@@ -28,6 +28,14 @@ package com.farproc.wifi.connecter;
 import java.util.List;
 
 import ro.ui.pttdroid.Globalvariable;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+
+//import ro.ui.pttdroid.Main.MicrophoneSwitcher;
+import edu.mclab1.nccu_story.R;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ListActivity;
@@ -98,8 +106,9 @@ public class TestWifiScan extends ListActivity {
 		mWifiManager.startScan();
 		
 		//開始清註冊的資訊摟
-		ParseQuery<ParseObject> queryregidter = ParseQuery.getQuery("Register_SSID_ip");   //可
-		queryregidter.whereEqualTo("Register_uuid",Globalvariable.register_uuid);
+		ParseQuery<ParseObject> queryregidter = ParseQuery.getQuery("Register_SSID_ip");   
+	    System.out.println("BuildSERIAL_wifiscan"+Globalvariable.BuildSERIAL);	
+		queryregidter.whereEqualTo("BuildSERIAL",Globalvariable.BuildSERIAL);
 		queryregidter.findInBackground(new FindCallback<ParseObject>() {
 		    public void done(List<ParseObject> registerList, ParseException e) {
 	        	System.out.println("開始清註冊的資訊摟");
@@ -123,8 +132,8 @@ public class TestWifiScan extends ListActivity {
 		
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
 		// Retrieve the object by id
-		System.out.println("Ready to update State"+Globalvariable.guiderid);
-		query.whereEqualTo("GuiderID", Globalvariable.guiderid);
+		System.out.println("Ready to update State"+Globalvariable.BuildSERIAL);
+		query.whereEqualTo("GuiderID", Globalvariable.BuildSERIAL);
 		
 		query.findInBackground(new FindCallback<ParseObject>() {
 			

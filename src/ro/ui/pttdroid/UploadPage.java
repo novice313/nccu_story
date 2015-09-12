@@ -164,9 +164,11 @@ public class UploadPage extends Activity {
 
 		if(LogIn==true){//暫時改
 		btn_upload.setOnClickListener(new OnClickListener() {
+			
 
 			@Override
 			public void onClick(View arg0) {
+
 				Log.d(tag, "btn_upload onclick");
 					runOnUiThread(new Runnable() {
 
@@ -178,9 +180,10 @@ public class UploadPage extends Activity {
 										"You must select one picture!",
 										Toast.LENGTH_SHORT);
 							} else {
-								Toast.makeText(getApplicationContext(),
+								/*Toast.makeText(getApplicationContext(),
 										"Start uploading", Toast.LENGTH_SHORT)
-										.show();
+										.show();*/
+								
 								try {
 									Upload();
 								} catch (ParseException e) {
@@ -228,9 +231,9 @@ public class UploadPage extends Activity {
 		ParseFile imageFile = null;
 		ParseFile musicFile = null;
 		
-		
         dialog = ProgressDialog.show(UploadPage.this,
                 "正在上傳資料中", "請 稍 等 . . . . ",true);
+
 		// image
 		if (uploadImage != null) {
 			imageFile = new ParseFile("uploadImage", uploadImage);
@@ -240,8 +243,8 @@ public class UploadPage extends Activity {
 			Log.d(tag, "no image file.");
 		}
 		
-		Globalvariable.guiderid = UUID.randomUUID().toString(); 
-		System.out.println("guiderid"+Globalvariable.guiderid);
+		//Globalvariable.guiderid = UUID.randomUUID().toString(); 
+		System.out.println("BuildSERIAL"+Globalvariable.BuildSERIAL);
 		// END image
 		ParseObject uploadObject = new ParseObject("offline");
 		uploadObject.put("userName", userName.getText().toString());
@@ -252,7 +255,6 @@ public class UploadPage extends Activity {
 		if (imageFile != null) {
 			uploadObject.put("image", imageFile);
 		}
-
 		
 		Globalvariable.guider_latitudeString = latitudeString;   //為了要對照註冊ip給使用者用
 		Globalvariable.guider_longitudeString=longitudeString;
@@ -260,7 +262,7 @@ public class UploadPage extends Activity {
 		uploadObject.put(SSID, wifiinfo.getSSID());
 		uploadObject.put(latitude, latitudeString);
 		uploadObject.put(longitude, longitudeString);    //取得UUID後，上傳parse，為了offfline和Broadcast的結合
-		uploadObject.put(GuiderID,Globalvariable.guiderid);
+		uploadObject.put(GuiderID,Globalvariable.BuildSERIAL);
 		
 		uploadObject.put("score", INITIAL_SCORE);
 		//uploadObject.put("latitude", latitude);
@@ -277,6 +279,7 @@ public class UploadPage extends Activity {
 				intent.setClass(UploadPage.this, Main.class);
 				startActivity(intent);
 				finish();
+				dialog.dismiss();
 			}
 		});
 		

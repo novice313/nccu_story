@@ -257,7 +257,10 @@ public class Main extends FragmentActivity implements ChannelListener,
 				// TODO Auto-generated method stub
 				test_socket_server();
 			}
+<<<<<<< HEAD
 		});
+=======
+>>>>>>> c6fd1a75b4f75c49255437a0ebb13338b7a0084e
 		});*/
 
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
