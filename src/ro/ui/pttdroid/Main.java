@@ -237,7 +237,7 @@ public class Main extends FragmentActivity implements ChannelListener,
 		//	writing.setBackgroundResource(R.drawable.circle_green);
 		}
 
-		btn_test_mp3 = (Button) findViewById(R.id.btn_test_mp3);
+	/*	btn_test_mp3 = (Button) findViewById(R.id.btn_test_mp3);
 		btn_test_mp3.setOnClickListener(new OnClickListener() {
 
 			@Override 
@@ -256,7 +256,7 @@ public class Main extends FragmentActivity implements ChannelListener,
 				// TODO Auto-generated method stub
 				test_socket_server();
 			}
-		});
+		});*/
 
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);

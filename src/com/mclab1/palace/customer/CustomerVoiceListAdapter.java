@@ -1,9 +1,16 @@
 package com.mclab1.palace.customer;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import ro.ui.pttdroid.Globalvariable;
+
 import com.mclab1.palaca.parsehelper.VoiceDataElement;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import edu.mclab1.nccu_story.R;
 import android.app.Activity;
@@ -59,29 +66,32 @@ public class CustomerVoiceListAdapter extends ArrayAdapter<VoiceDataElement> {
 		}
 
 		// fill data
-		ViewHolder holder = (ViewHolder) rowView.getTag();
+		final ViewHolder holder = (ViewHolder) rowView.getTag();
 		Random ran = new Random();
-		int val = ran.nextInt(2) + 1;
 		holder.datdate.setText(mp3Path.get(position).createdTime);
-		holder.ratingBar.setRating(ran.nextInt(5)+1);
-		switch (val) {
-		case 0:
-			holder.title.setText("1");
-//			Picasso.with(context).load(R.drawable.guider).into(holder.image);
-			
-			break;
-		case 1:
-			holder.title.setText("2");
-//			Picasso.with(context).load(R.drawable.guider2).into(holder.image);
-			break;
-		case 2:
-			holder.title.setText("3");
-//			Picasso.with(context).load(R.drawable.guider3).into(holder.image);
-			break;
-
-		default:
-			break;
-		}
+		holder.ratingBar.setRating(ran.nextInt(5)+1);                   //////柏要給我分數
+		
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
+		System.out.println("latitiude"+Globalvariable.latitude+" "+Globalvariable.longitude);
+		// Retrieve the object by id	
+		query.whereEqualTo("latitude", Globalvariable.latitude);    //柏傳給我經緯度，我做經緯度限制
+		query.whereEqualTo("longitude", Globalvariable.longitude);  	
+		query.findInBackground(new FindCallback<ParseObject>() {	
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+		        if (e == null) {	
+		        	System.out.println("title");
+		        	holder.title.setText((String)objects.get(0).get("userName"));
+		        	
+		        }
+		        
+		        {
+		        	System.out.println("ErrorCustomer");
+		        }
+			}
+		});
+	
 
 		return rowView;
 	}

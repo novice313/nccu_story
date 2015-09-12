@@ -412,12 +412,12 @@ public class CustomerActivityGlobal extends Activity {
 	
 	// listen to events
 
-	private void add_log(final String todisplay) {
+	private void add_log(final String todisplay) {        ////抓出時間
 		
 		CustomerActivityGlobal.this.runOnUiThread(new Runnable() {
 
 			@Override
-			public void run() {
+			public void run() {     ///
 				// TODO Auto-generated method stub
 				log.add(0, sdFormat.format(new Date())+" : "+todisplay);
 				listAdapter.notifyDataSetChanged();

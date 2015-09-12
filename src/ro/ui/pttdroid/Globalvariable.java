@@ -1,6 +1,8 @@
 package ro.ui.pttdroid;
 
 public class Globalvariable {
+	
+	public static String BuildSERIAL = android.os.Build.SERIAL;   //硬體的唯一值
 	public static final String nicknameString="yuachuan";
 	public static final String languageString="中";
 	public static String titleString="";
@@ -14,7 +16,10 @@ public class Globalvariable {
 	//public static final String Latitude="121";
 	public static String guiderid="";
 	public static String getGlobalSSID="";
-	
+	public static String register_uuid="";
+	public static double guider_latitudeString;
+	public static double guider_longitudeString;
+ 
 	
 
 

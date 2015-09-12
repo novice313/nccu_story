@@ -92,7 +92,7 @@ public class GuiderRecorder extends Thread
 	int index=0;
 	UUID uuid  =  UUID.randomUUID(); 
 	String numberTag = UUID.randomUUID().toString();
-	String register_uuid;
+	String BuildSERIAL;
 	int SubnumbeTag=0;
 	Boolean if_300=true;
 	Boolean if_60=true;
@@ -119,7 +119,7 @@ public class GuiderRecorder extends Thread
 	//在Guider的時候判斷是否ip有重複到239.255.255.250 ;239.255.255.251 ;239.255.255.252...etc
 	String Selection[]={"239.255.255.250","239.255.255.251","239.255.255.252","239.255.255.253","239.255.255.254"};
 	Boolean Selection_boolean[]={false,false,false,false,false};
-
+	
 	@Override
 	public void run() 
 	{
@@ -141,7 +141,7 @@ public class GuiderRecorder extends Thread
 				msg="Tim"+j;
 				j=j+1;
 				System.out.println("Global"+Globalvariable.Macaddress+" "+Globalvariable.Uuid
-						);
+						+" "+Main.commIP);
 				if(AudioSettings.useSpeex()==AudioSettings.USE_SPEEX) 
 				{
 					int readSize = recorder.read(pcmFrame, 0, Audio.FRAME_SIZE);
@@ -221,7 +221,7 @@ public class GuiderRecorder extends Thread
 					*/
 					
 					//packet_number= new DatagramPacket(buffer,buffer.length,addr,CommSettings.getPort());
-				    if(index%100==0){     //調整參數因為為了Client端和Guider端的全限問題
+				    if(index%300==0){     //調整參數因為為了Client端和Guider端的全限問題
 					recorder_socket.send(newpacket);  //to local player
 				    }else{
 				    	recorder_socket.send(packet);
@@ -313,7 +313,87 @@ public class GuiderRecorder extends Thread
 	private void init() 
 	{				
 		try 
-		{	    	
+		{
+			
+			ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");   // add offline table to Online
+			// Retrieve the object by id
+			System.out.println("Ready to update State"+Globalvariable.guiderid);
+			query.whereEqualTo("GuiderID", Globalvariable.BuildSERIAL);
+			
+			query.findInBackground(new FindCallback<ParseObject>() {
+				
+				@Override
+				public void done(List<ParseObject> objects, ParseException e) {
+					// TODO Auto-generated method stub
+					for(int i=0;i<objects.size();i++){
+			        if (e == null) {
+			            // Now let's update it with some new data. In this case, only cheatMode and score
+			            // will get sent to the Parse Cloud. playerName hasn't changed.
+						final ParseObject State = objects.get(i);
+			        	State.put("State", "Ready");     // Ready 
+			        	State.put("numberTag", numberTag);
+			        	State.saveInBackground();
+			        	System.out.println("ReadySuccess");
+			        }
+			        else {
+			        	System.out.println("Readyerror");
+
+			        	
+			        }
+					}
+					
+				}
+			});
+			
+			
+		    ParseQuery<ParseObject> queryregidter = ParseQuery.getQuery("Register_SSID_ip");
+			queryregidter.whereEqualTo("SSID",Globalvariable.getGlobalSSID);
+			queryregidter.findInBackground(new FindCallback<ParseObject>() {
+			    public void done(List<ParseObject> registerList, ParseException e) {
+		        	System.out.println("registerList"+registerList.size());
+
+					for(int i=0;i<registerList.size();i++){
+
+			        if (e == null){
+						String ip = (String) registerList.get(i).get("ip");
+						for(int j=0; j< Selection.length;j++){
+							if(ip.contains(Selection[j])){    //parse上面的ip和想要註冊ip比對
+								System.out.println("GuiderRecorder_還要再找");
+								Selection_boolean[j]=true;
+								break;
+								
+							}
+							
+						}
+			        	
+			        } else {
+			        	System.out.println("Error");
+			        	
+			        }
+					}
+					
+					 for(int k=0;k<Selection.length ;k++){
+						if(Selection_boolean[k]==false){
+					    System.out.println("find register ip!!!");
+					    //register_uuid= UUID.randomUUID().toString();
+					    //Globalvariable.register_uuid=register_uuid;
+					    System.out.println("BuildSERIAL_Guider"+Globalvariable.BuildSERIAL);
+					    Main.commIP=Selection[k];
+						ParseObject register = new ParseObject("Register_SSID_ip");      //找到註冊摟
+						register.put("BuildSERIAL",Globalvariable.BuildSERIAL);
+						register.put("latitude", Globalvariable.guider_latitudeString);
+						register.put("longitude", Globalvariable.guider_longitudeString); 
+						register.put("ip",Selection[k]);
+						register.put("SSID",Globalvariable.getGlobalSSID);
+						register.saveInBackground();
+						break;
+						}
+						
+					 }
+					 
+			    }
+			});
+			
 			IP.load();
 			
 			recorder_socket = new DatagramSocket();		
@@ -372,7 +452,7 @@ public class GuiderRecorder extends Thread
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");   // add offline table to Online
 		// Retrieve the object by id
 		System.out.println("Ready to update State"+Globalvariable.guiderid);
-		query.whereEqualTo("GuiderID", Globalvariable.guiderid);
+		query.whereEqualTo("GuiderID", Globalvariable.BuildSERIAL);
 		
 		query.findInBackground(new FindCallback<ParseObject>() {
 			
@@ -399,50 +479,6 @@ public class GuiderRecorder extends Thread
 			}
 		});
 		
-		
-		    
-		    ParseQuery<ParseObject> queryregidter = ParseQuery.getQuery("Register_SSID_ip");
-			queryregidter.whereEqualTo("SSID",Globalvariable.getGlobalSSID);
-			queryregidter.findInBackground(new FindCallback<ParseObject>() {
-			    public void done(List<ParseObject> registerList, ParseException e) {
-		        	System.out.println("registerList"+registerList.size());
-
-					for(int i=0;i<registerList.size();i++){
-
-			        if (e == null){
-						String ip = (String) registerList.get(i).get("ip");
-						for(int j=0; j< Selection.length;j++){
-							if(ip==Selection[j]){    //parse上面的ip和想要註冊ip比對
-								System.out.println("GuiderRecorder_還要再找");
-								Selection_boolean[j]=true;
-								break;
-								
-							}
-							
-						}
-			        	
-			        } else {
-			        	System.out.println("Error");
-			        	
-			        }
-					}
-					
-					 for(int k=0;k<Selection.length ;k++){
-						if(Selection_boolean[k]==false){
-					    System.out.println("find register ip!!!");
-					    register_uuid= UUID.randomUUID().toString();
-						ParseObject register = new ParseObject("Register_SSID_ip");      //找到註冊摟
-						register.put("Register_uuid",register_uuid);
-						register.put("ip",Selection[k]);
-						register.put("SSID",Globalvariable.getGlobalSSID);
-						register.saveInBackground();
-						break;
-						}
-						
-					 }
-					 
-			    }
-			});
 			
 			
 
@@ -524,7 +560,7 @@ public class GuiderRecorder extends Thread
 				ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
 				// Retrieve the object by id
 				System.out.println("Ready to update State"+Globalvariable.guiderid);
-				query.whereEqualTo("GuiderID", Globalvariable.guiderid);
+				query.whereEqualTo("GuiderID", Globalvariable.BuildSERIAL);
 				
 				query.findInBackground(new FindCallback<ParseObject>() {
 					
@@ -552,7 +588,7 @@ public class GuiderRecorder extends Thread
 					}
 				});
 				
-				//開始清註冊的資訊摟
+			/*	//開始清註冊的資訊摟
 				
 				
 				
@@ -576,7 +612,7 @@ public class GuiderRecorder extends Thread
 						 
 				    }
 				    }
-				});
+				});*/
 				
 				
 				
