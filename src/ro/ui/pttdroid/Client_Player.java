@@ -249,14 +249,14 @@ public class Client_Player extends Service
 						while(isPlaying()) 
 						{
 							System.out.println("isPlayingInPlayer!!!!");
-							new Thread(){
-								@Override
-								public void run(){ 
-							if(if_interrupt==false && just_one==1){           //if 遇到沒有data時就測有沒有IP
-								just_one=2;
-								for(int i=1;i<=255;i++){
-									getIP="192.168.2."+i;
-				        		System.out.println("getIP2"+getIP);
+							//new Thread(){
+							//	@Override
+							//	public void run(){ 
+							if(if_interrupt==false){           //if 遇到沒有data時就測有沒有IP
+								//just_one=2;
+								//for(int i=1;i<=255;i++){
+									//getIP="192.168.2."+i;
+				        		//System.out.println("getIP2"+getIP);
 								try {
 									addr50_51=InetAddress.getByName(getIP);
 								} catch (UnknownHostException e1) {
@@ -308,8 +308,8 @@ public class Client_Player extends Service
 								break;
 							}
 								}
-							}
-							}}.start();
+							//}
+							//}}.start();
 
 							
 							try 
