@@ -28,11 +28,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -41,6 +41,7 @@ import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
@@ -50,10 +51,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.wifidirect.DeviceDetailFragment;
 import com.example.android.wifidirect.DeviceListFragment;
@@ -128,6 +128,9 @@ private TextView title;
 private TextView content;
 private ParseImageView imageView;
 ProgressDialog dialog;
+WifiManager wifi;
+String mssid;
+Boolean if_loading_final=false;
 
 
 
@@ -425,10 +428,12 @@ case R.id.btn_change_mode:
 	if(if_Global_local==1){
 		System.out.println("local");
 		if (if_clientL_offline_mode) {
+			if(userName!=null && title!=null && content!=null && imageView!=null && imageView!=null){
 			userName.setVisibility(View.GONE);
 			title.setVisibility(View.GONE);
 			content.setVisibility(View.GONE);
 	        imageView.setVisibility(View.GONE);
+			}
 			if_clientL_offline_mode = false;
 			change_to_client_online_fragment();
 			playerIntent = new Intent(this, Client_Player.class);
@@ -480,11 +485,63 @@ default:
 
 private void init() {  //init=> OnResume
 
-	ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
+	final ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
 	System.out.println("latitiude"+Globalvariable.latitude+" "+Globalvariable.longitude);
 	
     dialog = ProgressDialog.show(Client_Main.this,
             "讀取資料中", "請 稍 等 . . . . ",true);
+
+    
+	new Thread() {
+		@Override
+		public void run() {
+			
+			for(int i=10;i>0;i--){     //for 網路沒連好的人
+			try {
+				    System.out.println("i"+i);
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+		    if(if_loading_final==false){       //圖load進去才算final
+		    	dialog.dismiss();
+		    	if(if_Global_local==0){
+                    Looper.prepare();  
+
+	                Toast.makeText(
+	                        Client_Main.this,
+	                        "您必須要跳到設定可連上網路的WIFI",
+	                        Toast.LENGTH_LONG).show();
+	                Looper.loop();  
+		    		
+		    	}else{
+                    Looper.prepare();  
+                Toast.makeText(
+                        Client_Main.this,
+                        "您必須要跳到設定的WIFI，選擇WIFI名稱"+Globalvariable.client_Main_SSID,
+                        Toast.LENGTH_LONG).show();
+                Looper.loop();  
+
+		    	}
+                
+             }
+			
+		}
+	}.start();
+
+	new Thread() {
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(3000);             ///因為網路不一定那麼快連好
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 	// Retrieve the object by id	
 	query.whereEqualTo("latitude", Globalvariable.latitude);    //柏傳給我經緯度，我做經緯度限制
 	query.whereEqualTo("longitude", Globalvariable.longitude);  	
@@ -526,6 +583,7 @@ private void init() {  //init=> OnResume
 			        // ImageView
 			        imageView.setParseFile(image);
 			        imageView.setImageBitmap(bmp);
+			        if_loading_final=true;
                     dialog.dismiss();
 
 			       /* imageView.loadInBackground(new GetDataCallback() {
@@ -567,6 +625,7 @@ private void init() {  //init=> OnResume
 			
 		
 	});
+		}}.start();
 	
 
 	

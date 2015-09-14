@@ -19,6 +19,7 @@ public class Globalvariable {
 	public static String register_uuid="";
 	public static double guider_latitudeString;
 	public static double guider_longitudeString;
+	public static String client_Main_SSID;
  
 	
 
