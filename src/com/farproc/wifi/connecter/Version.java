@@ -2,7 +2,7 @@ package com.farproc.wifi.connecter;
 
 import java.lang.reflect.Field;
 
-import android.os.Build.VERSION;;
+import android.os.Build.VERSION;
 
 /**
  * Get Android version in different Android versions. :)

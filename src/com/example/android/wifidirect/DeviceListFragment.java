@@ -19,6 +19,8 @@ package com.example.android.wifidirect;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.mclab1.nccu_story.R;
+
 import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -35,7 +37,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import edu.mclab1.nccu_story.R;
+
 /**
  * A ListFragment that displays available peers on discovery and requests the
  * parent activity to handle user interaction events

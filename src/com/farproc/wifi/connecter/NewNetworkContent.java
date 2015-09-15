@@ -25,18 +25,17 @@
 
 package com.farproc.wifi.connecter;
 
-import edu.mclab1.nccu_story.R;
-
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import edu.mclab1.nccu_story.R;
 
 public class NewNetworkContent extends BaseContent {
 	
@@ -79,16 +78,19 @@ public class NewNetworkContent extends BaseContent {
 	
 	private OnClickListener mOnClickListeners[] = {mConnectOnClick, mCancelOnClick};
 
+
 	@Override
 	public int getButtonCount() {
 		return 2;
 	}
+
 
 	@Override
 	public OnClickListener getButtonOnClickListener(int index) {
 		return mOnClickListeners[index];
 	}
 	
+
 
 	@Override
 	public CharSequence getButtonText(int index) {
@@ -101,6 +103,7 @@ public class NewNetworkContent extends BaseContent {
 			return null;
 		}
 	}
+
 
 	@Override
 	public CharSequence getTitle() {

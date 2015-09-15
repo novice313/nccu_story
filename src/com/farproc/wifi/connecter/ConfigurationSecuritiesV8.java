@@ -172,6 +172,7 @@ public class ConfigurationSecuritiesV8 extends ConfigurationSecurities {
 		return "?";
 	}
 
+
 	@Override
 	public boolean isOpenNetwork(String security) {
 		return String.valueOf(SECURITY_NONE).equals(security);

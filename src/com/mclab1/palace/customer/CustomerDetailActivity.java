@@ -1,5 +1,4 @@
 package com.mclab1.palace.customer;
-//
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,7 +23,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -174,6 +172,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 		        	
 		        }
 				}
+
 				
 				
 			
@@ -263,7 +262,6 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 							System.out.println("outout");
 							while(true){
 								//if(mpintro!=null){
-
 								try{
 									
 									if(mpintro.isPlaying()){
@@ -312,7 +310,6 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 				}
 				
 
-			
 		});
 		}
 		loaddata();

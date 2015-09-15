@@ -60,9 +60,6 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		super.onCreate(savedInstanceState);
 		Log.d(tag, "onCreate.");
 
-		// set recorder icon at action bar
-		setHasOptionsMenu(true);
-
 	}
 
 	@Override
@@ -83,6 +80,10 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		// retrieve list view
 		songView = (ListView) view.findViewById(R.id.song_list);
 		// controller.show();
+
+		// set recorder icon at action bar
+		setHasOptionsMenu(true);
+		
 		startService();
 		return view;
 
@@ -94,7 +95,7 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		super.onActivityCreated(savedInstanceState);
 
 		// instantiate list
-		if (!(songList==null)) {
+		if (!(songList == null)) {
 			songList.clear();
 		}
 		songList = new ArrayList<Song>();
@@ -122,16 +123,17 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 	public void onStart() {
 		Log.d(tag, "onstart");
 		super.onStart();
-		
+
 	}
-	
-	public void startService(){
+
+	public void startService() {
 		if (MediaPlayerFragment.playIntent == null) {
-			/*MediaPlayerFragment.playIntent = new Intent(getActivity(),
+			MediaPlayerFragment.playIntent = new Intent(getActivity(),
 					MusicService.class);
 			getActivity().bindService(MediaPlayerFragment.playIntent,
-					MediaPlayerFragment.musicConnection, Context.BIND_AUTO_CREATE);
-			getActivity().startService(MediaPlayerFragment.playIntent);*/
+					MediaPlayerFragment.musicConnection,
+					Context.BIND_AUTO_CREATE);
+			getActivity().startService(MediaPlayerFragment.playIntent);
 		}
 	}
 
@@ -144,12 +146,9 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		// iterate over results if valid
 		if (musicCursor != null && musicCursor.moveToFirst()) {
 			// get columns
-			int titleColumn = musicCursor
-					.getColumnIndex(MediaColumns.TITLE);
-			int idColumn = musicCursor
-					.getColumnIndex(BaseColumns._ID);
-			int artistColumn = musicCursor
-					.getColumnIndex(AudioColumns.ARTIST);
+			int titleColumn = musicCursor.getColumnIndex(MediaColumns.TITLE);
+			int idColumn = musicCursor.getColumnIndex(BaseColumns._ID);
+			int artistColumn = musicCursor.getColumnIndex(AudioColumns.ARTIST);
 			// add songs to list
 			do {
 				long thisId = musicCursor.getLong(idColumn);
@@ -200,29 +199,29 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 	}
 
 	// mediaplayer
-		// connect to the service
-		public static ServiceConnection musicConnection = new ServiceConnection() {
+	// connect to the service
+	public static ServiceConnection musicConnection = new ServiceConnection() {
 
-			@Override
-			public void onServiceConnected(ComponentName name, IBinder service) {
-				MusicBinder binder = (MusicBinder) service;
-				// get service
-				MediaPlayerFragment.musicSrv = binder.getService();
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			MusicBinder binder = (MusicBinder) service;
+			// get service
+			MediaPlayerFragment.musicSrv = binder.getService();
 
-				// if(musicSrv!=null){
-				Log.d(tag, MediaPlayerFragment.musicSrv.toString());
-				// }
-				// pass list
-				MediaPlayerFragment.musicSrv.setList(MediaPlayerFragment.songList);
-				MediaPlayerFragment.musicBound = true;
-			}
+			// if(musicSrv!=null){
+			Log.d(tag, MediaPlayerFragment.musicSrv.toString());
+			// }
+			// pass list
+			MediaPlayerFragment.musicSrv.setList(MediaPlayerFragment.songList);
+			MediaPlayerFragment.musicBound = true;
+		}
 
-			@Override
-			public void onServiceDisconnected(ComponentName name) {
-				MediaPlayerFragment.musicBound = false;
-			}
-		};
-	
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			MediaPlayerFragment.musicBound = false;
+		}
+	};
+
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -247,15 +246,17 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 	@Override
 	public void onDestroyView() {
 		// TODO Auto-generated method stub
-		Log.d(tag, "height = "+controller.getHeight());
+		Log.d(tag, "height = " + controller.getHeight());
 		controller.removeAllViews();
-		stopService();
+		// if (MediaPlayerFragment.playIntent != null) {
+		// stopService();
+		// }
 		super.onDestroyView();
 	}
-	
-	public void stopService(){
-		getActivity().unbindService(musicConnection);
+
+	public void stopService() {
 		getActivity().stopService(playIntent);
+		getActivity().unbindService(musicConnection);
 	}
 
 	@Override

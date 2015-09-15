@@ -11,8 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import edu.mclab1.nccu_story.R;
-import android.util.Log;
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -20,6 +18,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -35,6 +34,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import de.greenrobot.event.EventBus;
+import edu.mclab1.nccu_story.R;
 
 public class CustomerActivityGlobal extends Activity {
 	public static final String SOCKET_TAG_STRING = "wifi-socket-test";
@@ -411,7 +411,6 @@ public class CustomerActivityGlobal extends Activity {
 
 	
 	// listen to events
-
 	private void add_log(final String todisplay) {        ////抓出時間
 		
 		CustomerActivityGlobal.this.runOnUiThread(new Runnable() {

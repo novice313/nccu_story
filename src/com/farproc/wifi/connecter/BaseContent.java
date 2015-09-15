@@ -25,8 +25,6 @@
 
 package com.farproc.wifi.connecter;
 
-import edu.mclab1.nccu_story.R;
-
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
@@ -35,9 +33,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.CompoundButton.OnCheckedChangeListener;
+import edu.mclab1.nccu_story.R;
 
 public abstract class BaseContent implements Floating.Content, OnCheckedChangeListener {
 
@@ -86,6 +85,7 @@ public abstract class BaseContent implements Floating.Content, OnCheckedChangeLi
 	}
 	
 	
+
 	@Override
 	public View getView() {
 		return mView;

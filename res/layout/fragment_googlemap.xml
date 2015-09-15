@@ -23,6 +23,42 @@
     <RelativeLayout
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
+
+    <com.wunderlist.slidinglayer.SlidingLayer
+        android:id="@+id/slidingLayer1"
+        android:layout_width="@dimen/layer_size"
+        android:layout_height="match_parent"
+        android:elevation="2dip" >
+
+        <!--
+        slidingLayer:shadowDrawable="@drawable/sidebar_shadow"
+        slidingLayer:shadowSize="@dimen/shadow_size"
+        slidingLayer:offsetDistance="@dimen/offset_distance"
+        slidingLayer:previewOffsetDistance="@dimen/preview_offset_distance"
+        slidingLayer:stickTo="top|bottom|right|left"
+        slidingLayer:changeStateOnTap="true">
+        -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/primary_light" >
+
+            <ListView
+                android:id="@+id/query_list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+            </ListView>
+
+            <Button
+                android:id="@+id/buttonClose"
+                style="@style/ButtonRed"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:text="@string/close_button_container" />
+        </RelativeLayout>
+    </com.wunderlist.slidinglayer.SlidingLayer>
 
 </RelativeLayout>

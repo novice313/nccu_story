@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import edu.mclab1.nccu_story.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import de.greenrobot.event.EventBus;
+import edu.mclab1.nccu_story.R;
 
 public class GuiderFragment extends Fragment {
 	public static final String TAG = "GuiderFragment";

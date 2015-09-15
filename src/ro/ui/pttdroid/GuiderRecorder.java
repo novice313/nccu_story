@@ -28,16 +28,12 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.util.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
-import com.mclab1.palaca.parsehelper.RealtimeVoiceObject;
-import com.mclab1.palace.connection.VoiceData;
-import com.mclab1.palace.guider.DisplayEvent;
-
-import de.greenrobot.event.EventBus;
 import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
 import ro.ui.pttdroid.settings.CommSettings;
@@ -47,16 +43,19 @@ import ro.ui.pttdroid.util.Log;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder.AudioSource;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Environment;
 
+import com.mclab1.palaca.parsehelper.RealtimeVoiceObject;
+import com.mclab1.palace.connection.VoiceData;
+import com.mclab1.palace.guider.DisplayEvent;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.pocketdigi.utils.FLameUtils;
 
-import android.os.Environment;
+import de.greenrobot.event.EventBus;
 
 public class GuiderRecorder extends Thread
 {	
@@ -184,7 +183,7 @@ public class GuiderRecorder extends Thread
 						case CommSettings.MULTICAST:
 							/*EventBus.getDefault().postSticky(
 									new DisplayEvent("Selected"+Main.Selected));*/
-							addr=InetAddress.getByName(Main.commIP); //播出聲音的ip
+							addr=InetAddress.getByName("239.255.255.250"); //播出聲音的ip
 							//addr = CommSettings.getMulticastAddr();					
 						break;
 						case CommSettings.UNICAST:
@@ -616,10 +615,9 @@ public class GuiderRecorder extends Thread
 					}
 				});
 				
-			/*	//開始清註冊的資訊摟
 				
 				
-				
+				/*	//開始清註冊的資訊摟
 				ParseQuery<ParseObject> queryregidter = ParseQuery.getQuery("Register_SSID_ip");
 				queryregidter.whereEqualTo("Register_uuid",register_uuid);
 				queryregidter.findInBackground(new FindCallback<ParseObject>() {

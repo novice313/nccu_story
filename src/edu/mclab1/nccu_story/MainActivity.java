@@ -4,10 +4,26 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import mclab1.pages.MediaPlayerFragment;
+import mclab1.pages.NewsFragment;
+import mclab1.sugar.Owner;
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 
 import org.json.JSONObject;
+
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -21,30 +37,6 @@ import com.facebook.login.LoginResult;
 import com.orm.SugarRecord;
 import com.parse.Parse;
 
-import mclab1.pages.MediaPlayerFragment;
-import mclab1.service.music.MusicService;
-import mclab1.service.music.MusicService.MusicBinder;
-import mclab1.sugar.Owner;
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.FragmentTransaction;
-//import android.bluetooth.le.ScanResult;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.net.wifi.WifiManager;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.IBinder;
-import android.provider.MediaStore;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
-
 public class MainActivity extends FragmentActivity implements
 		ActionBar.TabListener {
 
@@ -54,7 +46,7 @@ public class MainActivity extends FragmentActivity implements
 	private ViewPager viewPager;
 	private ActionBar actionBar;
 	private TabsPagerAdapter mAdapter;
-	private String[] tabs = { "News", "Googlemap", "Owner", "Mediaplayer" };
+	private String[] tabs = { "News", "Googlemap", "Mediaplayer", "Owner" };
 	public static int tabsize = 0;
 	
 
@@ -74,13 +66,13 @@ public class MainActivity extends FragmentActivity implements
 		// Parse.enableLocalDatastore(this);
 		Parse.initialize(this, "wtSFcggR896xMJQUGblYuphkF6EVw4ChcLcpSowP",
 				"IwJ3gTRBe8cARlxMf3xh97eai2a7MNLP68vdL3IY");
-		
-		WifiManager mWifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-		
-		if(!mWifiManager.isWifiEnabled()){
-			mWifiManager.setWifiEnabled(true);
-			Toast.makeText(MainActivity.this, "Wi-Fi開啟中....", Toast.LENGTH_LONG).show();
-		}
+
+//		WifiManager mWifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+//		
+//		if(!mWifiManager.isWifiEnabled()){
+//			mWifiManager.setWifiEnabled(true);
+//			Toast.makeText(MainActivity.this, "Wi-Fi開啟中....", Toast.LENGTH_LONG).show();
+//		}
 
 		// ParseObject testObject = new ParseObject("TestObject");
 		// testObject.put("foo", "bar");
@@ -324,6 +316,7 @@ public class MainActivity extends FragmentActivity implements
 		getMenuInflater().inflate(R.menu.main, menu);
 		menu.findItem(R.id.action_recorder).setVisible(false);
 		menu.findItem(R.id.action_test).setVisible(false);
+		menu.findItem(R.id.action_refresh).setVisible(false);
 		return true;
 	}
 
@@ -367,6 +360,12 @@ public class MainActivity extends FragmentActivity implements
 			// intent_recorder.setClass(MainActivity.this,
 			// FileexplorerActivity.class);
 			// startActivity(intent_recorder);
+			break;
+		case R.id.action_refresh:
+			Log.d(tag, "refresh onclick");
+			
+			NewsFragment.newsList.clear();
+			NewsFragment.getNewsList();
 			break;
 		}
 		return super.onOptionsItemSelected(item);

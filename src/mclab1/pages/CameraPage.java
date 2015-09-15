@@ -9,7 +9,6 @@ import java.util.Date;
 
 import mclab1.service.camera.CameraPreview;
 import mclab1.service.camera.GalleryActivity;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

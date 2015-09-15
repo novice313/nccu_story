@@ -6,8 +6,6 @@
     android:background="@drawable/rounded_corner"
     android:descendantFocusability="blocksDescendants" >
 
-
-
     <TextView
         android:id="@+id/voice_row_guidername"
         android:layout_width="100dp"

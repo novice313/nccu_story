@@ -17,7 +17,6 @@ along with pttdroid.  If not, see <http://www.gnu.org/licenses/>. */
 
 package ro.ui.pttdroid.settings;
 
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;

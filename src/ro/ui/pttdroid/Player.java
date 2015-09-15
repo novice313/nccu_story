@@ -24,7 +24,6 @@ import java.net.MulticastSocket;
 import java.net.SocketException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import edu.mclab1.nccu_story.R;
 import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
 import ro.ui.pttdroid.settings.CommSettings;
@@ -46,6 +45,7 @@ import android.telephony.TelephonyManager;
 import com.mclab1.palace.guider.DisplayEvent;
 
 import de.greenrobot.event.EventBus;
+import edu.mclab1.nccu_story.R;
 
 public class Player extends Service
 {
@@ -76,26 +76,16 @@ public class Player extends Service
 		phoneCallListener = new PhoneCallListener();
 		telephonyManager.listen(phoneCallListener, PhoneStateListener.LISTEN_CALL_STATE);
 				
-		/*Notification notification = new Notification(R.drawable.notif_icon, 
-				getText(R.string.app_name),
-		        System.currentTimeMillis());
+
 		Intent notificationIntent = new Intent(this, Main.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		notification.setLatestEventInfo(this, getText(R.string.app_name),
-		        getText(R.string.app_running), pendingIntent);
-		startForeground(1, notification);
-		*/
 		
-		
-		/*Intent notificationIntent = new Intent(this, Main.class);
-		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-
 		Notification noti = new Notification.Builder(this)
-		.setContentTitle(getText(R.string.app_name))
-		.setContentText(getText(R.string.app_running))
-		.setContentIntent(pendingIntent)
-		.build();
-		*/
+        .setContentTitle(getText(R.string.app_name))
+        .setContentText(getText(R.string.app_running))
+        .setContentIntent(pendingIntent)
+        .build();
+		startForeground(1, noti);
     }
 	
 	@Override

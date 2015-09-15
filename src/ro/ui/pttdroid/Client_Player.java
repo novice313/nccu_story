@@ -16,9 +16,6 @@ You should have received a copy of the GNU General Public License
 along with pttdroid.  If not, see <http://www.gnu.org/licenses/>. */
 
 package ro.ui.pttdroid;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -29,6 +26,7 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.text.SimpleDateFormat;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
@@ -487,7 +485,6 @@ public class Client_Player extends Service
 			try 
 			{
 				System.out.println("count-"+count);
-				
 				addr50_51=InetAddress.getByName(getIP);   //can give 239.255.255.250 or etc 
 
 				switch(CommSettings.getCastType()) 

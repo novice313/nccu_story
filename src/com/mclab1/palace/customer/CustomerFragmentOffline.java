@@ -3,11 +3,9 @@ package com.mclab1.palace.customer;
 import java.util.ArrayList;
 
 import ro.ui.pttdroid.Globalvariable;
-
-import edu.mclab1.nccu_story.R;
-import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +19,8 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
+import edu.mclab1.nccu_story.R;
 
 public class CustomerFragmentOffline extends Fragment {
 	private SampleAdapter mAdapter;

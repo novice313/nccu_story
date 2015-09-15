@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <com.parse.ParseImageView
         android:id="@+id/customer_activity_image"
         android:layout_width="200dp"

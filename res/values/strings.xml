@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">nccu_story</string>
+    <string name="app_name">GuidING</string>
     <string name="app_running">pttdroid is running</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -11,6 +11,7 @@
     <string name="action_showShadow">Show shadow</string>
     <string name="action_camera">Open camera</string>
     <string name="action_gallery">Open galley</string>
+    <string name="action_refresh">Refresh</string>
     <string name="action_media">Open media list</string>
     <string name="action_recorder">Open recorder</string>
     <string name="action_showHeaderAndFooter">Show Header &amp; Footer</string>
@@ -121,5 +122,8 @@
     <string name="label_peers">PEERS</string>
     <string name="empty_message">No devices found. Turn on P2P and perform discovery from the Action Bar</string>
     
+    <!-- slide layer -->
+    <string name="close_button_container">Close</string>
+    <!-- END slide layer -->
 
 </resources>

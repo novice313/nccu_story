@@ -1,7 +1,7 @@
 package mclab1.service.camera;
 
-import mclab1.pages.UploadPage;
 import edu.mclab1.nccu_story.R;
+import mclab1.pages.UploadPage;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,7 +11,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-//import android.support.v7.app.ActionBarActivity;
 import android.widget.ImageView;
 
 public class DetailsActivity extends Activity {

@@ -25,8 +25,6 @@
 
 package com.farproc.wifi.connecter;
 
-import edu.mclab1.nccu_story.R;
-
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
@@ -34,12 +32,13 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import edu.mclab1.nccu_story.R;
 
 public class CurrentNetworkContent extends BaseContent {
 
@@ -76,11 +75,13 @@ public class CurrentNetworkContent extends BaseContent {
 		}
 	}
 
+
 	@Override
 	public int getButtonCount() {
 		// No Modify button for open network.
 		return mIsOpenNetwork ? 2 : 3;
 	}
+
 
 	@Override
 	public OnClickListener getButtonOnClickListener(int index) {
@@ -91,6 +92,7 @@ public class CurrentNetworkContent extends BaseContent {
 		}
 		return mOnClickListeners[index];
 	}
+
 
 	@Override
 	public CharSequence getButtonText(int index) {
@@ -110,6 +112,7 @@ public class CurrentNetworkContent extends BaseContent {
 			return null;
 		}
 	}
+
 
 	@Override
 	public CharSequence getTitle() {

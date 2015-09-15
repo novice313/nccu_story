@@ -28,7 +28,6 @@ package com.farproc.wifi.connecter;
 import java.util.List;
 
 import ro.ui.pttdroid.Globalvariable;
-
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -55,10 +54,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 import android.widget.TwoLineListItem;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import edu.mclab1.nccu_story.R;
 
 public class TestWifiScan extends ListActivity {
 	

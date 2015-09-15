@@ -23,6 +23,14 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.mclab1.palaca.parsehelper.VoiceDataElement;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import edu.mclab1.nccu_story.R;
+
 //import com.squareup.picasso.Picasso;
 
 public class CustomerVoiceListAdapter extends ArrayAdapter<VoiceDataElement> {

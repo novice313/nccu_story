@@ -5,7 +5,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import edu.mclab1.nccu_story.R;
+
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,7 +23,9 @@ import android.widget.ListView;
 import com.mclab1.palace.guider.DisplayEvent;
 import com.mclab1.place.events.EraseServerConnectionEvent;
 import com.mclab1.place.events.NewServerConnectionEvent;
+
 import de.greenrobot.event.EventBus;
+import edu.mclab1.nccu_story.R;
 
 public class CustomerFragment extends Fragment {
 	public static final String SOCKET_TAG_STRING = "wifi-socket-test";

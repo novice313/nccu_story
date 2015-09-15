@@ -25,20 +25,19 @@
 
 package com.farproc.wifi.connecter;
 
-import edu.mclab1.nccu_story.R;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import edu.mclab1.nccu_story.R;
 
 /**
  * A dialog-like floating activity

@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
 
 import android.app.Service;
 import android.content.Intent;
@@ -18,16 +19,12 @@ import com.mclab1.palace.guider.DisplayEvent;
 import com.mclab1.palace.recorder.CustomRecorder;
 import com.mclab1.palace.recorder.EraseCustomRecorder;
 import com.mclab1.palace.recorder.Mp3Recorder;
-
-
 import com.mclab1.palace.socket.EraseSocketServerHelper;
 import com.mclab1.palace.socket.SocketServerHelper;
 import com.mclab1.place.events.EraseclientConnectionEvent;
 import com.mclab1.place.events.NewClientConnectionEvent;
 import com.mclab1.place.events.PauseAudioEvent;
 import com.mclab1.place.events.ResumeAudioEvent;
-
-import java.util.Enumeration;
 
 import de.greenrobot.event.EventBus;
 

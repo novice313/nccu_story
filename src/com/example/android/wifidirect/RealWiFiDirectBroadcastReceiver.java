@@ -16,6 +16,7 @@
 
 package com.example.android.wifidirect;
 
+import edu.mclab1.nccu_story.R;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +26,7 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.util.Log;
-import edu.mclab1.nccu_story.R;
+
 /**
  * A BroadcastReceiver that notifies of important wifi p2p events.
  */

@@ -5,7 +5,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.List;
 
-import com.mclab1.palace.recorder.Mp3Helper;
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -14,13 +21,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import edu.mclab1.nccu_story.R;
-import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaPlayer;
-import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 public class DetailPage extends Activity {
 
@@ -111,6 +111,7 @@ public class DetailPage extends Activity {
 					e.printStackTrace();
 				}
 			}
+
 		});
 	}
 
