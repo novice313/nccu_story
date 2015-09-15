@@ -2,33 +2,12 @@ package com.mclab1.palaca.parsehelper;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import ro.ui.pttdroid.util.Audio;
-import android.R.integer;
-import android.app.Service;
-import android.content.Intent;
 import android.net.wifi.WifiInfo;
-import android.os.Environment;
-import android.os.IBinder;
-import android.util.Log;
-
 import com.mclab1.palace.guider.DisplayEvent;
-import com.mclab1.place.events.NewClientConnectionEvent;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
-import com.pocketdigi.utils.FLameUtils;
-
 import de.greenrobot.event.EventBus;
 
 public class RealtimeVoiceObject {

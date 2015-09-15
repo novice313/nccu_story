@@ -20,8 +20,6 @@ package ro.ui.pttdroid;
 import java.io.BufferedOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.List;
-
 import ro.ui.pttdroid.Player.PlayerBinder;
 import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
@@ -36,8 +34,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
-import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -60,8 +56,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -71,17 +65,14 @@ import android.widget.Toast;
 import com.example.android.wifidirect.DeviceDetailFragment;
 import com.example.android.wifidirect.DeviceListFragment;
 import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
-import com.example.android.wifidirect.WiFiDirectActivity;
 import com.example.android.wifidirect.WiFiDirectBroadcastReceiver;
 import com.example.android.wifidirect.WifiReceiver;
-import com.farproc.wifi.connecter.TestWifiScan;
 import com.mclab1.palaca.parsehelper.ParseHelper;
 import com.mclab1.palace.connection.ClientConnectionService;
 import com.mclab1.palace.customer.CustomerFragment;
 import com.mclab1.palace.guider.DisplayEvent;
 import com.mclab1.palace.guider.GuiderFragment;
 import com.mclab1.palace.recorder.Mp3Helper;
-import com.mclab1.palace.recorder.Mp3Recorder;
 import com.mclab1.place.events.NewClientConnectionEvent;
 import com.mclab1.place.events.NewServerConnectionEvent;
 import com.mclab1.place.events.PauseAudioEvent;
@@ -152,7 +143,7 @@ public class Main extends FragmentActivity implements ChannelListener,
    ,{"4Chinese","239.255.255.251"},{"4English","239.255.255.252"},{"4Japanese","239.255.255.253"},{"4Korean","239.255.255.254"}};
 	public static String Selected="";
 	public static String Number="";
-	public static String commIP="239.255.255.250";
+	public static String commIP="239.255.255.251";
 
 
 
@@ -206,6 +197,7 @@ public class Main extends FragmentActivity implements ChannelListener,
 		setContentView(R.layout.main);
 
 		getActionBar().setBackgroundDrawable(null);
+		getActionBar().setBackgroundDrawable(getResources().getDrawable(android.R.color.darker_gray));
 		 System.out.println("startmain!!!!!!!!!!");
 		 
 		/* mContext = this.getApplicationContext();
@@ -245,7 +237,7 @@ public class Main extends FragmentActivity implements ChannelListener,
 		//	writing.setBackgroundResource(R.drawable.circle_green);
 		}
 
-		btn_test_mp3 = (Button) findViewById(R.id.btn_test_mp3);
+	/*	btn_test_mp3 = (Button) findViewById(R.id.btn_test_mp3);
 		btn_test_mp3.setOnClickListener(new OnClickListener() {
 
 			@Override 
@@ -264,7 +256,7 @@ public class Main extends FragmentActivity implements ChannelListener,
 				// TODO Auto-generated method stub
 				test_socket_server();
 			}
-		});
+		});*/
 
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);

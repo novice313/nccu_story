@@ -7,12 +7,11 @@ import ro.ui.pttdroid.Client_Main;
 import ro.ui.pttdroid.Globalvariable;
 
 import mclab1.custom.listview.News;
+import mclab1.sugar.Owner;
 
 import com.farproc.wifi.connecter.TestWifiScan;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
@@ -26,7 +25,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.plus.model.people.Person.ObjectType;
 import com.mclab1.palace.customer.CustomerDetailActivity;
+import com.orm.SugarRecord;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
@@ -35,39 +36,29 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import android.R.integer;
 import android.app.AlertDialog;
-import android.app.DownloadManager.Query;
-import android.app.Notification.Builder;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.NetworkInfo.DetailedState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import edu.mclab1.nccu_story.MainActivity;
 import edu.mclab1.nccu_story.R;
 
 public class GoogleMapFragment extends Fragment
 /* implements OnMapReadyCallback */implements OnMapReadyCallback {
 
-	public static ArrayList<News> storyList;
+	public ArrayList<News> storyList;
 	private final static String tag = "GoogleMapFragment";
 	private static final String MAP_FRAGMENT_TAG = "map";
 	final LatLng NCCU = new LatLng(24.986233, 121.575843);
@@ -75,6 +66,7 @@ public class GoogleMapFragment extends Fragment
 	SupportMapFragment mapFragment;
 
 	String[] list_uploadType = { "Broadcast", "Upload story" };
+	String[] list_uploadType_client = { "Upload story"};                   //修改給client
 
 	private final int TYPE_STORY = 1;
 	private final int TYPE_OFFLINE_STORY = 2;
@@ -82,7 +74,7 @@ public class GoogleMapFragment extends Fragment
 
 	GoogleMap map;
 	final int PARSE_LIMIT = 50;
-	
+
 	private WifiManager wiFiManager;
 	int if_Global_local = -1;
 	List<android.net.wifi.ScanResult> mWifiScanResultList;
@@ -173,7 +165,7 @@ public class GoogleMapFragment extends Fragment
 	public void onStart() {
 		super.onStart();
 		Log.d(tag, "onStart");
-		
+
 		getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -228,12 +220,19 @@ public class GoogleMapFragment extends Fragment
 
 			@Override
 			public void onMapLongClick(LatLng point) {
-				// longclick upload
-				ShowAlertDialogAndList(point);
+				// check login or not
+				//List<Owner> owner = SugarRecord.listAll(Owner.class);
+				//if (owner.isEmpty()) {
+
+				//	Toast.makeText(getActivity(),
+				//			"Sorry! You have to log in first.",
+				//			Toast.LENGTH_SHORT).show();
+				//} else {
+					// longclick upload
+					ShowAlertDialogAndList(point);
+				//}
 			}
 		});
-
-		
 
 		// set googlaMap infoWindow
 		setGoogleMapInfoWindow(map);
@@ -245,6 +244,7 @@ public class GoogleMapFragment extends Fragment
 		builder.setTitle("Upload");
 		// 建立選擇的事件
 		DialogInterface.OnClickListener ListClick = new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
 				case 0:// broadcast
@@ -282,10 +282,16 @@ public class GoogleMapFragment extends Fragment
 		};
 		// 建立按下取消什麼事情都不做的事件
 		DialogInterface.OnClickListener OkClick = new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 			}
 		};
+		//if(Globalvariable.if_Guider==true){
 		builder.setItems(list_uploadType, ListClick);
+		//}
+		//else{
+			//builder.setItems(list_uploadType_client, ListClick);
+		//}
 		builder.setNeutralButton("cancel", OkClick);
 		builder.show();
 
@@ -309,7 +315,7 @@ public class GoogleMapFragment extends Fragment
 			int type, String SSIDString) {
 
 		String snippet = objectIdString + "," + userNameString + "," + score
-				+ "," + type+","+SSIDString;
+				+ "," + type + "," + SSIDString;
 		this.map.addMarker(new MarkerOptions()
 				.position(point)
 				.snippet(snippet)
@@ -361,10 +367,15 @@ public class GoogleMapFragment extends Fragment
 												if (e == null) {
 													// Log.d(tag,
 													// "parseFile done");
+													BitmapFactory.Options opt = null;
+													opt = new BitmapFactory.Options();
+													opt.inSampleSize = 8;
 													Bitmap bmp = BitmapFactory
 															.decodeByteArray(
-																	data, 0,
-																	data.length);
+																	data,
+																	0,
+																	data.length,
+																	opt);
 													storyList
 															.add(new News(
 																	objectIdString,
@@ -376,6 +387,10 @@ public class GoogleMapFragment extends Fragment
 																	contentString,
 																	latitude,
 																	longitude));
+
+													if(bmp!=null){
+													bmp.recycle();
+													}
 
 													LatLng point = new LatLng(
 															latitude, longitude);
@@ -442,10 +457,16 @@ public class GoogleMapFragment extends Fragment
 												if (e == null) {
 													// Log.d(tag,
 													// "parseFile done");
+
+													BitmapFactory.Options opt = null;
+													opt = new BitmapFactory.Options();
+													opt.inSampleSize = 8;
 													Bitmap bmp = BitmapFactory
 															.decodeByteArray(
-																	data, 0,
-																	data.length);
+																	data,
+																	0,
+																	data.length,
+																	opt);
 													storyList
 															.add(new News(
 																	objectIdString,
@@ -457,6 +478,10 @@ public class GoogleMapFragment extends Fragment
 																	contentString,
 																	latitude,
 																	longitude));
+
+													if(bmp!=null){
+													bmp.recycle();
+													}
 
 													LatLng point = new LatLng(
 															latitude, longitude);
@@ -526,10 +551,15 @@ public class GoogleMapFragment extends Fragment
 												if (e == null) {
 													// Log.d(tag,
 													// "parseFile done");
+													BitmapFactory.Options opt = null;
+													opt = new BitmapFactory.Options();
+													opt.inSampleSize = 8;
 													Bitmap bmp = BitmapFactory
 															.decodeByteArray(
-																	data, 0,
-																	data.length);
+																	data,
+																	0,
+																	data.length,
+																	opt);
 													storyList
 															.add(new News(
 																	objectIdString,
@@ -542,14 +572,20 @@ public class GoogleMapFragment extends Fragment
 																	latitude,
 																	longitude));
 
+													if (bmp!=null) {
+														bmp.recycle();
+													}
+
 													LatLng point = new LatLng(
 															latitude, longitude);
 													addMarker_Broadcast(
 															objectIdString,
 															userNameString,
-															titleString, point,
+															titleString,
+															point,
 															score,
-															TYPE_ONLINE_BROADCAST,SSIDString);
+															TYPE_ONLINE_BROADCAST,
+															SSIDString);
 
 												}
 											}
@@ -586,7 +622,8 @@ public class GoogleMapFragment extends Fragment
 				// Getting the position from the marker
 				LatLng latLng = marker.getPosition();
 
-				TextView userNameTextView = (TextView) v.findViewById(R.id.userName);
+				TextView userNameTextView = (TextView) v
+						.findViewById(R.id.userName);
 				TextView titleTextView = (TextView) v.findViewById(R.id.title);
 				TextView scoreTextView = (TextView) v.findViewById(R.id.score);
 
@@ -596,7 +633,7 @@ public class GoogleMapFragment extends Fragment
 				String userName = temp[1];
 				String score = temp[2];
 				int type = Integer.parseInt(temp[3]);
-				
+
 				// Setting TextView
 				userNameTextView.setText(userName);
 				titleTextView.setText(marker.getTitle());
@@ -616,136 +653,273 @@ public class GoogleMapFragment extends Fragment
 				Log.d(tag, "onInfoWindowClick: " + marker.getTitle());
 
 				String snippet = marker.getSnippet();
-				String[] temp = snippet.split(",");
-				String objectId = temp[0];
+				final String[] temp = snippet.split(",");
+				final String objectId = temp[0];
 				LatLng point = marker.getPosition();
 				final double latitude = point.latitude;
 				final double longitude = point.longitude;
 				int type = Integer.parseInt(temp[3]);
-				if (type == TYPE_STORY) {
+				switch (type) {
+				case TYPE_STORY:
 					Log.d(tag, "Icon TYPE_STORY onclick.");
 					Intent intent_detail = new Intent();
 					intent_detail.putExtra("objectId", objectId);
 					intent_detail.setClass(getActivity(), DetailPage.class);
 					startActivity(intent_detail);
-				} else if (type == TYPE_OFFLINE_STORY) {
+					break;
+				case TYPE_OFFLINE_STORY:
+
 					Log.d(tag, "Icon TYPE_OFFLINE_STORY onclick.");
-					ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
+					ParseQuery<ParseObject> query = ParseQuery
+							.getQuery("offline");
 					// Retrieve the object by id
-					query.getInBackground(objectId, new GetCallback<ParseObject>() {  //以後博要給我object ID
-					    public void done(ParseObject offline, ParseException e) {
-					        if (e == null) {
-					       Globalvariable.titleString =	(String) offline.get("title");
-					       Globalvariable.contentString=(String) offline.get("content");
-					       Globalvariable.latitude =latitude;	
-					       Globalvariable.longitude=longitude;
-					       System.out.println("Globalvariable"+Globalvariable.titleString);
-					       System.out.println("Globalvariable"+Globalvariable.contentString);
-								Intent intent = new Intent(getActivity(),
-										CustomerDetailActivity.class);
-								getActivity().startActivity(intent);
+					query.getInBackground(objectId,
+							new GetCallback<ParseObject>() { // 以後博要給我object ID
+								@Override
+								public void done(ParseObject offline,
+										ParseException e) {
+									if (e == null) {
+										Globalvariable.titleString = (String) offline
+												.get("title");
+										Globalvariable.contentString = (String) offline
+												.get("content");
+										Globalvariable.latitude = latitude;
+										Globalvariable.longitude = longitude;
+										System.out.println("Globalvariable"
+												+ Globalvariable.titleString);
+										System.out.println("Globalvariable"
+												+ Globalvariable.contentString);
+										Intent intent = new Intent(
+												getActivity(),
+												CustomerDetailActivity.class);
+										getActivity().startActivity(intent);
 
-					        }
-					    }
-					});
-					
-				} else if (type == TYPE_ONLINE_BROADCAST) {
-					Log.d(tag, "Icon TYPE_ONLINE_BROADCAST onclick.");
-					
-					String SSIDstring = temp[4];
-					// parse broadcast
-					// 若wifi狀態為關閉則將它開啟
-					wiFiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
-					if (!wiFiManager.isWifiEnabled()) {
-						wiFiManager.setWifiEnabled(true);
-					}
-					wiFiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
-					System.out.println("wiFiManagergetConnectionInfo"
-							+ wiFiManager.getConnectionInfo() + "$"
-							+ wiFiManager.getWifiState() + " ");
-
-					if (!wiFiManager.isWifiEnabled()) { // 判斷是否有網路
-						Toast.makeText(getActivity(), "要開啟網路(Wifi/3G)!", Toast.LENGTH_SHORT)
-								.show();
-
-					} else {
-
-						// 重新掃描Wi-Fi資訊
-						wiFiManager.startScan();
-						// 偵測周圍的Wi-Fi環境(因為會有很多組Wi-Fi，所以型態為List)
-						mWifiScanResultList = wiFiManager.getScanResults();
-						for (int i = 0; i < mWifiScanResultList.size(); i++) {
-							// 手機目前周圍的Wi-Fi環境
-							SSID = mWifiScanResultList.get(i).SSID;
-							SSIDList.add(SSID);
-
-						}
-
-						String networkSSID = SSIDstring; // 以後柏要傳進來的變數 WIRELESS
-															// NCCU_Tsai
-															// TOTOLINK A2004NS 2.4G"
-															// NCCU_Wang WIRELESS
-						networkSSID=networkSSID.substring(1, networkSSID.length()-1);
-						System.out.println("GOGOGO"+networkSSID+" "+networkSSID.length()); // network module connect
-						String networkPass = "";
-						WifiConfiguration conf = new WifiConfiguration();
-						conf.SSID = "\"" + networkSSID + "\""; // Please note the
-																// quotes. String should
-																// contain ssid in
-																// quotes
-						conf.wepKeys[0] = "\"" + networkPass + "\"";
-						conf.wepTxKeyIndex = 0;
-						conf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-						System.out.println("GOGOGO2");
-						conf.allowedGroupCiphers
-								.set(WifiConfiguration.GroupCipher.WEP40);
-						conf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-						WifiManager wifiManager2 = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
-						wifiManager2.addNetwork(conf);
-
-						List<WifiConfiguration> list = wifiManager2
-								.getConfiguredNetworks();
-						if_Global_local = 0;
-						for (WifiConfiguration wificonfig : list) { // 解決ap遇到不在現場就會無法連線的問題
-							if (if_find_wificonnect == true) {
-								System.out.println("Main_configwifi");
-								if_find_wificonnect = false;
-								break;
-
-							}
-							for (int i = 0; i < SSIDList.size(); i++) {
-								System.out.println("Main_configwifi" + " "
-										+ SSIDList.get(i));
-
-								if (SSIDList.get(i) != null
-										&& SSIDList.get(i).equals(networkSSID)
-										&& wificonfig.SSID.equals("\"" + networkSSID
-												+ "\"")) { // 核心做連線的部分
-									System.out.println("Main_configwifi2"
-											+ SSIDList.get(i) + " " + networkSSID);
-
-									wifiManager2.disconnect();
-									wifiManager2.enableNetwork(wificonfig.networkId,
-											true);
-									wifiManager2.reconnect();
-									if_find_wificonnect = true;
-									if_Global_local = 1;
-									break;
+									}
 								}
-							}
+							});
 
-						}
-						System.out.println("GOGOGO4" + if_Global_local);
-						Intent intent = new Intent(getActivity(), Client_Main.class); // 改寫成TestWifiScan.this
-						intent.putExtra("if_Global_local", if_Global_local);// 可放所有基本類別
-						startActivity(intent);
-					}
-					// END parse broadcast
-				}
-				else{
+					break;
+				case TYPE_ONLINE_BROADCAST:
+
+					Log.d(tag, "Icon TYPE_ONLINE_BROADCAST onclick.");
+
+					// check is still online or not
+					ParseQuery<ParseObject> checkQuery = new ParseQuery<ParseObject>(
+							"offline");
+					checkQuery.whereEqualTo("objectId", objectId);
+					checkQuery
+							.findInBackground(new FindCallback<ParseObject>() {
+
+								@Override
+								public void done(List<ParseObject> objects,
+										ParseException e) {
+									// TODO Auto-generated method stub
+									if (e == null) {
+										ParseObject parseObject = objects
+												.get(0);
+
+										if (parseObject.getString("State")
+												.compareTo("online") == 0) {// still
+																			// online
+											String SSIDstring = temp[4];
+											// parse broadcast
+											// 若wifi狀態為關閉則將它開啟
+											wiFiManager = (WifiManager) getActivity()
+													.getSystemService(
+															Context.WIFI_SERVICE);
+											if (!wiFiManager.isWifiEnabled()) {
+												wiFiManager
+														.setWifiEnabled(true);
+											}
+											wiFiManager = (WifiManager) getActivity()
+													.getSystemService(
+															Context.WIFI_SERVICE);
+											System.out.println("wiFiManagergetConnectionInfo"
+													+ wiFiManager
+															.getConnectionInfo()
+													+ "$"
+													+ wiFiManager
+															.getWifiState()
+													+ " ");
+
+											if (!wiFiManager.isWifiEnabled()) { // 判斷是否有網路
+												Toast.makeText(getActivity(),
+														"要開啟網路(Wifi/3G)!",
+														Toast.LENGTH_SHORT)
+														.show();
+
+											} else {
+
+												// 重新掃描Wi-Fi資訊
+												wiFiManager.startScan();
+												// 偵測周圍的Wi-Fi環境(因為會有很多組Wi-Fi，所以型態為List)
+												mWifiScanResultList = wiFiManager
+														.getScanResults();
+												for (int i = 0; i < mWifiScanResultList
+														.size(); i++) {
+													// 手機目前周圍的Wi-Fi環境
+													SSID = mWifiScanResultList
+															.get(i).SSID;
+													SSIDList.add(SSID);
+
+												}
+
+												String networkSSID = SSIDstring; // 以後柏要傳進來的變數
+																					// WIRELESS
+																					// NCCU_Tsai
+																					// TOTOLINK
+																					// A2004NS
+																					// 2.4G"
+																					// NCCU_Wang
+																					// WIRELESS
+												networkSSID = networkSSID
+														.substring(
+																1,
+																networkSSID
+																		.length() - 1);
+												Globalvariable.client_Main_SSID=networkSSID;    // Toclient
+												System.out.println("GOGOGO"
+														+ networkSSID + " "
+														+ networkSSID.length()); // network
+																					// module
+																					// connect
+												String networkPass = "";
+												WifiConfiguration conf = new WifiConfiguration();
+												conf.SSID = "\"" + networkSSID
+														+ "\""; // Please note
+																// the
+																// quotes.
+																// String should
+																// contain ssid
+																// in
+																// quotes
+												conf.wepKeys[0] = "\""
+														+ networkPass + "\"";
+												conf.wepTxKeyIndex = 0;
+												conf.allowedKeyManagement
+														.set(WifiConfiguration.KeyMgmt.NONE);
+												System.out.println("GOGOGO2");
+												conf.allowedGroupCiphers
+														.set(WifiConfiguration.GroupCipher.WEP40);
+												conf.allowedKeyManagement
+														.set(WifiConfiguration.KeyMgmt.NONE);
+												WifiManager wifiManager2 = (WifiManager) getActivity()
+														.getSystemService(
+																Context.WIFI_SERVICE);
+												wifiManager2.addNetwork(conf);
+
+												List<WifiConfiguration> list = wifiManager2
+														.getConfiguredNetworks();
+												if_Global_local = 0;
+												for (WifiConfiguration wificonfig : list) { // 解決ap遇到不在現場就會無法連線的問題
+													if (if_find_wificonnect == true) {
+														System.out
+																.println("Main_configwifi1");
+														if_find_wificonnect = false;
+														break;
+
+													}
+													for (int i = 0; i < SSIDList
+															.size(); i++) {
+														System.out.println("Main_configwifi1.5"
+																+ " "
+																+ SSIDList
+																		.get(i));
+
+														if (SSIDList.get(i) != null
+																&& SSIDList
+																		.get(i)
+																		.equals(networkSSID)
+																&& wificonfig.SSID
+																		.equals("\""
+																				+ networkSSID
+																				+ "\"")) { // 核心做連線的部分
+															System.out.println("Main_configwifi2"
+																	+ SSIDList
+																			.get(i)
+																	+ " "
+																	+ networkSSID);
+
+															wifiManager2
+																	.disconnect();
+															wifiManager2
+																	.enableNetwork(
+																			wificonfig.networkId,
+																			true);
+															wifiManager2
+																	.reconnect();
+															if_find_wificonnect = true;
+															if_Global_local = 1;
+															break;
+														}
+													}
+
+												}
+												Globalvariable.latitude = latitude;   // 等等比對是否要250 or 251
+												Globalvariable.longitude = longitude;
+												System.out.println("GOGOGO4"
+														+ if_Global_local);
+												Intent intent = new Intent(
+														getActivity(),
+														Client_Main.class); // 改寫成TestWifiScan.this
+												intent.putExtra(
+														"if_Global_local",
+														if_Global_local);// 可放所有基本類別
+												startActivity(intent);
+											}
+										} else {// no longer exists
+											Log.d(tag,
+													"Broadcast is over change to offline.");
+											Toast.makeText(getActivity(),
+													"Broadcast is offline",
+													Toast.LENGTH_SHORT).show();
+
+											ParseQuery<ParseObject> query = ParseQuery
+													.getQuery("offline");
+											// Retrieve the object by id
+											query.getInBackground(
+													objectId,
+													new GetCallback<ParseObject>() { // 以後博要給我object
+																						// ID
+														@Override
+														public void done(
+																ParseObject offline,
+																ParseException e) {
+															if (e == null) {
+																Globalvariable.titleString = (String) offline
+																		.get("title");
+																Globalvariable.contentString = (String) offline
+																		.get("content");
+																Globalvariable.latitude = latitude;
+																Globalvariable.longitude = longitude;
+																System.out
+																		.println("Globalvariable"
+																				+ Globalvariable.titleString);
+																System.out
+																		.println("Globalvariable"
+																				+ Globalvariable.contentString);
+																Intent intent = new Intent(
+																		getActivity(),
+																		CustomerDetailActivity.class);
+																getActivity()
+																		.startActivity(
+																				intent);
+
+															}
+														}
+													});
+										}
+									}
+
+								}
+							});
+
+					break;
+
+				default:
 					Log.d(tag, "Icon NO_TYPE onclick.");
+					break;
 				}
-
 			}
 		});
 	}

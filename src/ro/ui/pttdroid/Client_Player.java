@@ -25,6 +25,8 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.text.SimpleDateFormat;
 
@@ -32,6 +34,8 @@ import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
 import ro.ui.pttdroid.settings.CommSettings;
 import ro.ui.pttdroid.util.Audio;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -40,12 +44,18 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
 import com.mclab1.palace.guider.DisplayEvent;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import de.greenrobot.event.EventBus;
+import edu.mclab1.nccu_story.R;
 
 public class Client_Player extends Service
 {
@@ -73,6 +83,9 @@ public class Client_Player extends Service
 	private volatile boolean playing = true;
 	Thread loopthread;
 	volatile boolean terminate = false;
+	String getIP="";
+	int just_one=1;
+	//PowerManager.WakeLock mWakeLock; 
 
 	//private MultiRecorder multiRecorder;
 	public class PlayerBinder extends Binder 
@@ -134,17 +147,56 @@ public class Client_Player extends Service
 		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		phoneCallListener = new PhoneCallListener();
 		telephonyManager.listen(phoneCallListener, PhoneStateListener.LISTEN_CALL_STATE);
+		
+		//acquireWakeLock();
 				
 		/*Notification notification = new Notification(R.drawable.notif_icon, 
 				getText(R.string.app_name),
 		        System.currentTimeMillis());
-		Intent notificationIntent = new Intent(this, Main.class);
+		Intent notificationIntent = new Intent(this, Client_Main.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 		notification.setLatestEventInfo(this, getText(R.string.app_name),
-		        getText(R.string.app_running), pendingIntent);
-		        
-		        
-		startForeground(1, notification);	*/
+		        getText(R.string.app_running), pendingIntent);       		        
+		startForeground(1, notification);
+		*/
+		
+		
+		/*Intent notificationIntent = new Intent(this, Main.class);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+		Notification noti = new Notification.Builder(this)
+		.setContentTitle(getText(R.string.app_name))
+		.setContentText(getText(R.string.app_running))
+		.setContentIntent(pendingIntent)
+		.build();
+		startForeground(1, noti);
+		*/
+		
+		
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Register_SSID_ip");
+		System.out.println("latitiude"+Globalvariable.latitude+" "+Globalvariable.longitude);
+		// Retrieve the object by id	
+		query.whereEqualTo("latitude", Globalvariable.latitude);    //柏傳給我經緯度，我做經緯度限制
+		query.whereEqualTo("longitude", Globalvariable.longitude);  	
+		query.findInBackground(new FindCallback<ParseObject>() {	
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+		        if (e == null) {
+		        	for(int i=0;i<objects.size();i++){
+		        		getIP=(String)objects.get(i).get("ip");
+		        		System.out.println("getIP"+getIP);
+		        	}
+		        }
+		        else{
+		        	System.out.println("getSSIDerror");
+		        	
+		        }
+			}
+		});
+					
+		
+		
 		
     }
 
@@ -165,6 +217,7 @@ public class Client_Player extends Service
 	public void onDestroy() 
 	{
 	    //stopForeground(true);
+		//releaseWakeLock();
 		
 		System.out.println("goodtime"+loopthread);		
 		//notify();
@@ -188,6 +241,32 @@ public class Client_Player extends Service
 		return playerThread.getProgress();
 	}
 	
+	
+	/*//申請設備電源鎖
+	private void acquireWakeLock()
+	{
+	    System.out.println("MyGPS正在申請電源鎖"); if (null == mWakeLock)
+	    {
+	        PowerManager pm = (PowerManager) this.getSystemService(Context.POWER_SERVICE); 
+	        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK |PowerManager.ON_AFTER_RELEASE, ""); 
+	        if (null != mWakeLock)
+	        { 
+	            mWakeLock.acquire();
+	            System.out.println("電源鎖申請成功");
+	        }
+	    }
+	} 
+	
+	private void releaseWakeLock()
+	{
+		System.out.println("正在釋放電源鎖");
+	    if (null != mWakeLock)
+	    { 
+	        mWakeLock.release(); mWakeLock = null;
+	        System.out.println("電源鎖釋放成功");
+	    }
+	}*/
+	
 	private class PlayerThread extends Thread
 	{
 		private AudioTrack 	player;
@@ -206,112 +285,162 @@ public class Client_Player extends Service
 		public void run() 
 		{
 			android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);	
-            //try {
-				try {
-					FileWriter fw =new FileWriter("/sdcard/output.txt",false);
-					BufferedWriter bw =new BufferedWriter(fw);
+            while(isRunning())
+				{				
+					init();
+					System.out.println("isRunning!!!!");
 
-
-
-
-			while(isRunning())
-			{				
-				init();
-				System.out.println("isRunning!!!!");
-
-				try {
-					while(isPlaying()) 
-					{
-						System.out.println("isPlayingInPlayer!!!!");
-						try 
+					try {
+						while(isPlaying()) 
 						{
-							System.out.println("Ready to receive!"); 
-                             try{
-  							    socket.setSoTimeout(1000);
-
-                              }catch(Exception e){
-                            	  e.printStackTrace();
-  					         	//System.out.println("i am in catch !");
-                              }
-                             
-								socket.receive(packet);
-					         	//System.out.println("good!+ addr50_51_3"+addr50_51);
-						        count=count+1;
-
-								if(count_three%20==0){
-									socket.receive(dp);												
-						        String msg=new String(buffer,0,dp.getLength());
-						       
-						       
-						       int index=msg.indexOf("Tim");                                             //濾掉聲音的封包字串
-						       String submsg=msg.substring(index+3,msg.length());
-						       System.out.println("socket_receive"+msg);
-						       if(index!=-1){
-									if_guide_interrupt=true;
-									System.out.println("if_guide_interrupt=true");
-						       }
-							    //bw.write(msg+"\n");
-						       }
-								count_three=count_three+1;
+							System.out.println("isPlayingInPlayer!!!!");
+							//new Thread(){
+							//	@Override
+							//	public void run(){ 
+							if(if_interrupt==false){           //if 遇到沒有data時就測有沒有IP
+								//just_one=2;
+								//for(int i=1;i<=255;i++){
+									//getIP="192.168.2."+i;
+				        		//System.out.println("getIP2"+getIP);
+								try {
+									addr50_51=InetAddress.getByName(getIP);
+								} catch (UnknownHostException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}   //can give 239.255.255.250 or etc (兩個MULTICAST)
+								try {
+									Thread.sleep(1500);
+								} catch (InterruptedException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
 
 								
-								if_interrupt=true;
-								//System.out.println("if_interrupt"+if_interrupt);
-								System.out.println("addrInPlayer2.java:"+addr50_51);
-								
-								
 
+							switch(CommSettings.getCastType()) 
+							{
+								case CommSettings.BROADCAST:
+									try{
+										
+								    System.out.println("ReadytoBROADCAST");
+									android.util.Log.i("pttdroid", "Broadcast!");
+									socket = new DatagramSocket(CommSettings.getPort());
+									socket.setBroadcast(true);
+									}
+									catch (Exception e) {
+										// TODO: handle exception
+									}
+								break;
+								case CommSettings.MULTICAST:
+									try{
+										System.out.println("Readytomulticast");
+									socket = new MulticastSocket(CommSettings.getPort());
+									((MulticastSocket) socket).joinGroup(addr50_51);
+									
+									}
+									catch (Exception e) {
+										// TODO: handle exception
+									}
 
+								break;
+								case CommSettings.UNICAST:
+									try{
+									socket = new DatagramSocket(CommSettings.getPort());
+									}
+									catch (Exception e) {
+										// TODO: handle exception
+									}
+								break;
+							}
+								}
+							//}
+							//}}.start();
 
+							
+							try 
+							{
+								System.out.println("Ready to receive!"); 
+				                 try{
+								    socket.setSoTimeout(1000);
 
-								
-						}
-						catch(SocketException e) //Due to socket.close() 
-						{
-							break;
-						}
-						catch(Exception e) 
-						{
-							count_three=0;
-							if_guide_interrupt=false;
-							System.out.println("if_guide_interrupt=false");
+				                  }catch(Exception e){
+				                	  e.printStackTrace();
+						         	//System.out.println("i am in catch !");
+				                  }
+				                 
+									socket.receive(packet);
+						         	//System.out.println("good!+ addr50_51_3"+addr50_51);
+							        count=count+1;
 
+									if(count_three%20==0){
+										socket.receive(dp);												
+							        String msg=new String(buffer,0,dp.getLength());
+							       
+							       
+							       int index=msg.indexOf("Tim");                                             //濾掉聲音的封包字串
+							       String submsg=msg.substring(index+3,msg.length());
+							       System.out.println("socket_receive"+msg+getIP);
+							       if(index!=-1){
+										if_guide_interrupt=true;
+										System.out.println("if_guide_interrupttrue");
+							       }
+								    //bw.write(msg+"\n");
+							       }
+									count_three=count_three+1;
 
-							continue;
-						}
+									
+									if_interrupt=true;
+									//System.out.println("if_interrupt"+if_interrupt);
+									System.out.println("addrInPlayer2.java:"+addr50_51);
+									
 									
 
-						if(AudioSettings.useSpeex()==AudioSettings.USE_SPEEX) 
-						{
-							Speex.decode(encodedFrame, encodedFrame.length, pcmFrame);
-							//System.out.println("pcmFrame:"+encodedFrame);
-							player.write(pcmFrame, 0, Audio.FRAME_SIZE);
 
+
+
+									
+							}
+							catch(SocketException e) //Due to socket.close() 
+							{
+								break;
+							}
+							catch(Exception e) 
+							{
+								count_three=0;
+								if_guide_interrupt=false;
+								System.out.println("if_guide_interrupt=false");
+
+
+								continue;
+							}
+										
+
+							if(AudioSettings.useSpeex()==AudioSettings.USE_SPEEX) 
+							{
+								Speex.decode(encodedFrame, encodedFrame.length, pcmFrame);
+								//System.out.println("pcmFrame:"+encodedFrame);
+								player.write(pcmFrame, 0, Audio.FRAME_SIZE);
+
+							}
+							else 
+							{			
+								player.write(encodedFrame, 0, Audio.FRAME_SIZE_IN_BYTES);
+							}
+							//progress.incrementAndGet();
 						}
-						else 
-						{			
-							player.write(encodedFrame, 0, Audio.FRAME_SIZE_IN_BYTES);
-						}
-						//progress.incrementAndGet();
+						//bw.close();
+						System.out.println("done");
+							
+						player.stop();
+						player.release();
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-					bw.close();
-					System.out.println("done");
-						
-					player.stop();
-					player.release();
-				} catch (Exception e) {
-					e.printStackTrace();
+					
+					
+					
+					
 				}
-				
-				
-				
-				
-			}
-
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 
 		
 			//recorder_socket.close();
@@ -359,7 +488,7 @@ public class Client_Player extends Service
 			{
 				System.out.println("count-"+count);
 				
-				addr50_51=InetAddress.getByName("239.255.255.250");
+				addr50_51=InetAddress.getByName(getIP);   //can give 239.255.255.250 or etc 
 
 				switch(CommSettings.getCastType()) 
 				{

@@ -19,14 +19,9 @@ import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PictureCallback;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -133,6 +128,7 @@ public class CameraPage extends Activity {
 		return cameraId;
 	}
 
+	@Override
 	public void onResume() {
 		super.onResume();
 		if (!hasCamera(myContext)) {

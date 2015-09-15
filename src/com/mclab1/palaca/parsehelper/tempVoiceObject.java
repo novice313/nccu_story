@@ -3,13 +3,10 @@ package com.mclab1.palaca.parsehelper;
 import java.io.File;
 import java.io.FileInputStream;
 
-import android.R.integer;
-
 import com.mclab1.palace.guider.DisplayEvent;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 

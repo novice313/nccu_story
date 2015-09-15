@@ -26,9 +26,16 @@
 package com.farproc.wifi.connecter;
 
 import java.util.List;
+
 import ro.ui.pttdroid.Globalvariable;
-import ro.ui.pttdroid.Main;
-import ro.ui.pttdroid.UploadPage;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+
+
 //import ro.ui.pttdroid.Main.MicrophoneSwitcher;
 import edu.mclab1.nccu_story.R;
 import android.annotation.SuppressLint;
@@ -43,7 +50,6 @@ import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,6 +78,9 @@ public class TestWifiScan extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	
+		Toast.makeText(getApplicationContext(), "您要和身上的無線AP做連接!",
+				Toast.LENGTH_LONG).show();
+    	
     	mWifiManager = (WifiManager)getSystemService(WIFI_SERVICE);
     	
     	setListAdapter(mListAdapter);
@@ -87,11 +96,76 @@ public class TestWifiScan extends ListActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Toast.makeText(getApplicationContext(), "您要和身上的無線AP做連接!",
-				Toast.LENGTH_LONG).show();
 		final IntentFilter filter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 		registerReceiver(mReceiver, filter);
 		mWifiManager.startScan();
+		
+		//開始清註冊的資訊摟
+		ParseQuery<ParseObject> queryregidter = ParseQuery.getQuery("Register_SSID_ip");   
+	    System.out.println("BuildSERIAL_wifiscan"+Globalvariable.BuildSERIAL);	
+		queryregidter.whereEqualTo("BuildSERIAL",Globalvariable.BuildSERIAL);
+		queryregidter.findInBackground(new FindCallback<ParseObject>() {
+		    public void done(List<ParseObject> registerList, ParseException e) {
+	        	System.out.println("開始清註冊的資訊摟");
+		        if (e == null){
+		        	if(registerList.size()>0){
+		        	registerList.get(0).deleteInBackground();
+		        	}
+		        
+		        	
+		        } else {
+		        	System.out.println("Errorin開始清註冊的資訊摟");
+		        	
+		        }
+				
+				
+				 
+		    
+		    }
+		});
+		
+		
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
+		// Retrieve the object by id
+		System.out.println("Ready to update State"+Globalvariable.BuildSERIAL);
+		query.whereEqualTo("GuiderID", Globalvariable.BuildSERIAL);
+		
+		query.findInBackground(new FindCallback<ParseObject>() {
+			
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+		        	System.out.println("State_offline");
+		        	if(objects!=null){
+
+					for(int i=0;i<objects.size();i++){
+						if (e == null) {
+		        	System.out.println("State_offline2");
+		            // Now let's update it with some new data. In this case, only cheatMode and score
+		            // will get sent to the Parse Cloud. playerName hasn't changed.
+					final ParseObject State = objects.get(i);
+		        	State.put("State", "offline");     // offline
+		        	State.saveInBackground();
+		        	System.out.println("offlineSuccess");
+					
+		        	//State.put("numberTag", numberTag);     // offline 
+		        	
+		        	}
+			        else {
+			        	System.out.println("offlineerror");
+		        	}
+		        }
+
+		        	
+		        }
+				}
+				
+				
+			
+		});
+		
+		
+		
 	}
 	
 	@Override
@@ -136,6 +210,7 @@ public class TestWifiScan extends ListActivity {
 			Bundle bundle_broadcast = new Bundle();
 			bundle_broadcast.putDouble("longitude", longitude);
 			bundle_broadcast.putDouble("latitude", latitude);
+			
 			// 將Bundle物件assign給intent
 			intent.putExtras(bundle_broadcast);
 
@@ -169,9 +244,17 @@ public class TestWifiScan extends ListActivity {
 			if(Currentlevel < result.level &&Currentlevel!=0){
 				Currentlevel=result.level;
 				CurrentSSID=result.SSID;
-				System.out.println("Currentlevel"+Currentlevel+CurrentSSID+result.SSID);
+				System.out.println("Testwifiscan"+Currentlevel+CurrentSSID+result.SSID);
 			}
-			if(count!=0&&result.SSID.contains("NCCU")){   //NCCU都抓出來
+			if(count%100==0){
+				Currentlevel=result.level;
+				CurrentSSID=result.SSID;
+				System.out.println("Refresh:"+Currentlevel+CurrentSSID+result.SSID+" "+count);
+				
+			}
+			//System.out.println("Testwifiscan"+result.level+result.SSID);
+			
+			if(count!=0&&result.SSID.contains("NCCU")){   //附近有NCCU都抓出來
 			System.out.println("Currentlevel2"+Currentlevel+CurrentSSID+result.SSID);
 			((TwoLineListItem) convertView).getText1().setText(result.SSID);
 			((TwoLineListItem)convertView).getText1().setTextColor(0xFF008080);
@@ -179,6 +262,17 @@ public class TestWifiScan extends ListActivity {
 					String.format("%s  %d", result.BSSID, result.level)
 					);
 			}
+			else if(count!=0&& !CurrentSSID.contains("NCCU")){  //最靠近的點不是NCCU即全部顯示
+				
+				System.out.println("Currentlevel3"+Currentlevel+CurrentSSID+result.SSID);
+				((TwoLineListItem) convertView).getText1().setText(result.SSID);
+				((TwoLineListItem)convertView).getText1().setTextColor(0xFF008080);
+				((TwoLineListItem)convertView).getText2().setText(
+						String.format("%s  %d", result.BSSID, result.level)
+						);
+				
+			}
+			
 			count=count+1;
 			//((TwoLineListItem)convertView).getText2().setTextColor(0xCD0000);
 			return convertView;
@@ -209,6 +303,9 @@ public class TestWifiScan extends ListActivity {
 			final ScanResult result = mScanResults.get(position);
 			if(result.SSID.contains("NCCU")){
 			launchWifiConnecter(TestWifiScan.this, result);
+			}
+			else if(!CurrentSSID.contains("NCCU")){
+				launchWifiConnecter(TestWifiScan.this, result);
 			}
 			
 		}

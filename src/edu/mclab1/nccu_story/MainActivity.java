@@ -1,28 +1,14 @@
 package edu.mclab1.nccu_story;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-import junit.framework.Test;
+import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.UpdateManager;
 
 import org.json.JSONObject;
 
-import ro.ui.pttdroid.Client_Main;
-import ro.ui.pttdroid.Client_Player;
-import ro.ui.pttdroid.Main;
-
-import com.example.fileexplorer.FileexplorerActivity;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -32,16 +18,11 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.orm.SugarRecord;
 import com.parse.Parse;
-import com.parse.ParseAnalytics;
-import com.parse.ParseAnonymousUtils;
-import com.parse.ParseObject;
 
 import mclab1.pages.MediaPlayerFragment;
-import mclab1.pages.UploadPage;
-import mclab1.service.music.MusicController;
 import mclab1.service.music.MusicService;
-import mclab1.service.music.Song;
 import mclab1.service.music.MusicService.MusicBinder;
 import mclab1.sugar.Owner;
 import android.app.ActionBar;
@@ -49,27 +30,20 @@ import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 //import android.bluetooth.le.ScanResult;
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.database.Cursor;
-import android.net.Uri;
-import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Files;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
-import android.widget.MediaController.MediaPlayerControl;
 
 public class MainActivity extends FragmentActivity implements
 		ActionBar.TabListener {
@@ -80,7 +54,7 @@ public class MainActivity extends FragmentActivity implements
 	private ViewPager viewPager;
 	private ActionBar actionBar;
 	private TabsPagerAdapter mAdapter;
-	private String[] tabs = { "News", "Googlemap", "Mediaplayer", "Owner" };
+	private String[] tabs = { "News", "Googlemap", "Owner", "Mediaplayer" };
 	public static int tabsize = 0;
 	
 
@@ -100,6 +74,14 @@ public class MainActivity extends FragmentActivity implements
 		// Parse.enableLocalDatastore(this);
 		Parse.initialize(this, "wtSFcggR896xMJQUGblYuphkF6EVw4ChcLcpSowP",
 				"IwJ3gTRBe8cARlxMf3xh97eai2a7MNLP68vdL3IY");
+		
+		WifiManager mWifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		
+		if(!mWifiManager.isWifiEnabled()){
+			mWifiManager.setWifiEnabled(true);
+			Toast.makeText(MainActivity.this, "Wi-Fi開啟中....", Toast.LENGTH_LONG).show();
+		}
+
 		// ParseObject testObject = new ParseObject("TestObject");
 		// testObject.put("foo", "bar");
 		// testObject.saveInBackground();
@@ -193,10 +175,10 @@ public class MainActivity extends FragmentActivity implements
 												"link= "
 														+ object.optString("link"));
 
-										List<Owner> owner = Owner
+										List<Owner> owner = SugarRecord
 												.listAll(Owner.class);
 										if (!owner.isEmpty()) {
-											Owner.deleteAll(Owner.class);
+											SugarRecord.deleteAll(Owner.class);
 										}
 										Log.d(tag, "Verify owner." + " owner= "
 												+ owner.size());
@@ -208,7 +190,7 @@ public class MainActivity extends FragmentActivity implements
 												.optString("link"));
 										// newOwner.setId((long) 1);
 										newOwner.save();
-										List<Owner> NewOwner = Owner
+										List<Owner> NewOwner = SugarRecord
 												.listAll(Owner.class);
 										Log.d(tag, "owner= " + NewOwner.size());
 
@@ -242,7 +224,24 @@ public class MainActivity extends FragmentActivity implements
 		
 
 	}
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		checkForCrashes();
+	    checkForUpdates();
+	}
 
+	private void checkForCrashes() {
+	    CrashManager.register(this, "ea6bdfe747bdf04686a0354461adc757");
+	  }
+
+	  private void checkForUpdates() {
+	    // Remove this for store builds!
+	    UpdateManager.register(this, "ea6bdfe747bdf04686a0354461adc757");
+	  }
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -286,44 +285,45 @@ public class MainActivity extends FragmentActivity implements
 	protected void onStart() {
 		super.onStart();
 		Log.d(tag, "onStart");
-		if (MediaPlayerFragment.playIntent == null) {
-			MediaPlayerFragment.playIntent = new Intent(this,
-					MusicService.class);
-			bindService(MediaPlayerFragment.playIntent,
-					MainActivity.musicConnection, Context.BIND_AUTO_CREATE);
-			startService(MediaPlayerFragment.playIntent);
-		}
+//		if (MediaPlayerFragment.playIntent == null) {
+//			MediaPlayerFragment.playIntent = new Intent(this,
+//					MusicService.class);
+//			bindService(MediaPlayerFragment.playIntent,
+//					MainActivity.musicConnection, Context.BIND_AUTO_CREATE);
+//			startService(MediaPlayerFragment.playIntent);
+//		}
 	}
 
-	// mediaplayer
-	// connect to the service
-	public static ServiceConnection musicConnection = new ServiceConnection() {
-
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder service) {
-			MusicBinder binder = (MusicBinder) service;
-			// get service
-			MediaPlayerFragment.musicSrv = binder.getService();
-
-			// if(musicSrv!=null){
-			Log.d(tag, MediaPlayerFragment.musicSrv.toString());
-			// }
-			// pass list
-			MediaPlayerFragment.musicSrv.setList(MediaPlayerFragment.songList);
-			MediaPlayerFragment.musicBound = true;
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName name) {
-			MediaPlayerFragment.musicBound = false;
-		}
-	};
+//	// mediaplayer
+//	// connect to the service
+//	public static ServiceConnection musicConnection = new ServiceConnection() {
+//
+//		@Override
+//		public void onServiceConnected(ComponentName name, IBinder service) {
+//			MusicBinder binder = (MusicBinder) service;
+//			// get service
+//			MediaPlayerFragment.musicSrv = binder.getService();
+//
+//			// if(musicSrv!=null){
+//			Log.d(tag, MediaPlayerFragment.musicSrv.toString());
+//			// }
+//			// pass list
+//			MediaPlayerFragment.musicSrv.setList(MediaPlayerFragment.songList);
+//			MediaPlayerFragment.musicBound = true;
+//		}
+//
+//		@Override
+//		public void onServiceDisconnected(ComponentName name) {
+//			MediaPlayerFragment.musicBound = false;
+//		}
+//	};
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		menu.findItem(R.id.action_recorder).setVisible(false);
+		menu.findItem(R.id.action_test).setVisible(false);
 		return true;
 	}
 
@@ -348,7 +348,8 @@ public class MainActivity extends FragmentActivity implements
 		case R.id.action_test:
 			Log.d(tag, "Test onClick");
         	    
-
+			//mediaplayer stop
+			MediaPlayerFragment.musicSrv.pausePlayer();
 
 			// Intent intent = new Intent();
 			// intent.setClass(MainActivity.this, FileexplorerActivity.class);

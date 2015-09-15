@@ -29,7 +29,6 @@ import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
 import ro.ui.pttdroid.settings.CommSettings;
 import ro.ui.pttdroid.util.Audio;
-import ro.ui.pttdroid.util.IP;
 import ro.ui.pttdroid.util.Log;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -77,14 +76,26 @@ public class Player extends Service
 		phoneCallListener = new PhoneCallListener();
 		telephonyManager.listen(phoneCallListener, PhoneStateListener.LISTEN_CALL_STATE);
 				
-		Notification notification = new Notification(R.drawable.notif_icon, 
+		/*Notification notification = new Notification(R.drawable.notif_icon, 
 				getText(R.string.app_name),
 		        System.currentTimeMillis());
 		Intent notificationIntent = new Intent(this, Main.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 		notification.setLatestEventInfo(this, getText(R.string.app_name),
 		        getText(R.string.app_running), pendingIntent);
-		startForeground(1, notification);		
+		startForeground(1, notification);
+		*/
+		
+		
+		/*Intent notificationIntent = new Intent(this, Main.class);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+		Notification noti = new Notification.Builder(this)
+		.setContentTitle(getText(R.string.app_name))
+		.setContentText(getText(R.string.app_running))
+		.setContentIntent(pendingIntent)
+		.build();
+		*/
     }
 	
 	@Override
@@ -243,7 +254,7 @@ public class Player extends Service
 					case CommSettings.MULTICAST:
 						socket = new MulticastSocket(CommSettings.getPort());
 						//System.out.println("PlayerInetAddress"+InetAddress.getByName(Premain.Selected));
-						((MulticastSocket) socket).joinGroup(InetAddress.getByName("239.255.255.250"));	 //接收到聲音的ip									
+						((MulticastSocket) socket).joinGroup(InetAddress.getByName(Main.commIP));	 //接收到聲音的ip									
 					break;
 					case CommSettings.UNICAST:
 						socket = new DatagramSocket(CommSettings.getPort());

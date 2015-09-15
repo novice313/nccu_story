@@ -5,13 +5,13 @@
     android:orientation="vertical" >
 
 
-      <EditText
+      <TextView
           android:id="@+id/username"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_weight="0.5"
           android:ems="10"
-          android:hint="您的的小名~" />
+          />
 
       <Spinner
           android:id="@+id/language_spinner"

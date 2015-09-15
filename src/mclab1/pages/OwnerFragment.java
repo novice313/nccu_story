@@ -8,7 +8,6 @@ import mclab1.custom.listview.NewsAdapter;
 import mclab1.sugar.Owner;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -16,16 +15,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.farproc.wifi.connecter.TestWifiScan;
-import com.google.android.gms.maps.model.LatLng;
+import com.orm.SugarRecord;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -58,11 +57,11 @@ public class OwnerFragment extends Fragment {
 		Log.d(tag, "onCreateView");
 		View view = inflater.inflate(R.layout.fragment_news, container, false);
 		newsView = (ListView) view.findViewById(R.id.news_list);
-		
+
 		// instantiate list
 		newsList = new ArrayList<News>();
 
-		List<Owner> owner = Owner.listAll(Owner.class);
+		List<Owner> owner = SugarRecord.listAll(Owner.class);
 		if (owner.isEmpty()) {
 
 			Toast.makeText(getActivity(), "You didn't log in before.",
@@ -87,6 +86,7 @@ public class OwnerFragment extends Fragment {
 		newsView.setAdapter(newsAdt);
 		newsView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
+			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					int pos, long id) {
 				String objectString = newsList.get(pos).getobjectId();
@@ -108,12 +108,34 @@ public class OwnerFragment extends Fragment {
 
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		switch (item.getItemId()) {
+		case R.id.action_loginFacebook:
+			List<Owner> owner = SugarRecord.listAll(Owner.class);
+			if (!owner.isEmpty()) {
+				final String userName = owner.get(owner.size() - 1).userName;
+				getActivity().runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						getNewsList(userName);
+					}
+				});
+			}
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
 	private void ShowAlertDialogAndList(final String objectIdString) {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle("Delete");
 		// 建立選擇的事件
 		DialogInterface.OnClickListener ListClick = new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
 				case 0:// broadcast
@@ -156,6 +178,7 @@ public class OwnerFragment extends Fragment {
 		};
 		// 建立按下取消什麼事情都不做的事件
 		DialogInterface.OnClickListener OkClick = new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 			}
 		};
@@ -237,6 +260,7 @@ public class OwnerFragment extends Fragment {
 		Log.d(tag, "onStart");
 	}
 
+	@Override
 	public void onResume() {
 		super.onResume();
 		// textView.setText(tag);
