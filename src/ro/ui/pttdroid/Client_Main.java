@@ -33,6 +33,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -41,6 +42,7 @@ import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
@@ -54,6 +56,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.wifidirect.DeviceDetailFragment;
 import com.example.android.wifidirect.DeviceListFragment;
@@ -476,7 +479,7 @@ default:
 
 private void init() {  //init=> OnResume
 
-	ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
+	final ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
 	System.out.println("latitiude"+Globalvariable.latitude+" "+Globalvariable.longitude);
 	
     dialog = ProgressDialog.show(Client_Main.this,
@@ -563,6 +566,7 @@ private void init() {  //init=> OnResume
 			
 		
 	});
+		}}.start();
 	
 
 	

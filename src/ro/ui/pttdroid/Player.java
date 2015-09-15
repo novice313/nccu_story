@@ -76,6 +76,7 @@ public class Player extends Service
 		phoneCallListener = new PhoneCallListener();
 		telephonyManager.listen(phoneCallListener, PhoneStateListener.LISTEN_CALL_STATE);
 				
+
 		Intent notificationIntent = new Intent(this, Main.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 		

@@ -58,7 +58,7 @@ public class CustomPlayer extends Service {
 		telephonyManager.listen(phoneCallListener,
 				PhoneStateListener.LISTEN_CALL_STATE);
 
-		
+
 		Intent notificationIntent = new Intent(this, Main.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
 				notificationIntent, 0);
