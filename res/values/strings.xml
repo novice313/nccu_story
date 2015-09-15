@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">nccu_story</string>
+    <string name="app_name">GuidING</string>
     <string name="app_running">pttdroid is running</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -122,5 +122,8 @@
     <string name="label_peers">PEERS</string>
     <string name="empty_message">No devices found. Turn on P2P and perform discovery from the Action Bar</string>
     
+    <!-- slide layer -->
+    <string name="close_button_container">Close</string>
+    <!-- END slide layer -->
 
 </resources>

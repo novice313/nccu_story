@@ -5,5 +5,12 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="tablet_list_width">300dp</dimen>
     <dimen name="phone_list_height">200dp</dimen>
+    
+    <!-- slide layer -->
+    <dimen name="shadow_size">8dp</dimen>
+    <dimen name="layer_size">300dp</dimen>
+    <dimen name="preview_offset_distance">150dp</dimen>
+    <dimen name="offset_distance">48dp</dimen>
+    <!-- END slide layer -->
 
 </resources>

@@ -35,6 +35,7 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ZoomButton;
@@ -66,6 +67,9 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.wunderlist.slidinglayer.LayerTransformer;
+import com.wunderlist.slidinglayer.SlidingLayer;
+import com.wunderlist.slidinglayer.transformer.RotationTransformer;
 
 import edu.mclab1.nccu_story.R;
 import mclab1.service.googlemap.GoogleMapHelper;
@@ -98,6 +102,10 @@ public class GoogleMapFragment extends Fragment
 	MenuItem locateMe;
 	private LatLng current_position;
 	private double current_zoom;
+	
+	//slide layer
+	private SlidingLayer mSlidingLayer;
+	private Button buttonClose;
 
 	private WifiManager wiFiManager;
 	int if_Global_local = -1;
@@ -151,6 +159,7 @@ public class GoogleMapFragment extends Fragment
 				return false;
 			}
 		});
+		
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
@@ -160,9 +169,44 @@ public class GoogleMapFragment extends Fragment
 		View view = inflater.inflate(R.layout.fragment_googlemap, container,
 				false);
 		Log.d(tag, "onCreateView");
+		
+		//slide layer
+		
+		mSlidingLayer = (SlidingLayer) view.findViewById(R.id.slidingLayer1);
+        buttonClose = (Button) view.findViewById(R.id.buttonClose);
+        buttonClose.setOnClickListener(new Button.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				mSlidingLayer.closeLayer(true);
+			}
+		});
+        
+		bindViews();
+		initState();
 
 		return view;
 	}
+	
+	private void bindViews() {
+        
+        
+//        swipeText = (TextView) findViewById(R.id.swipeText);
+    }
+	
+	private void initState() {
+		mSlidingLayer.setShadowDrawable(R.drawable.sidebar_shadow);
+		mSlidingLayer.setShadowSizeRes(R.dimen.shadow_size);
+		mSlidingLayer.setOffsetDistanceRes(R.dimen.offset_distance);
+		mSlidingLayer.setPreviewOffsetDistanceRes(R.dimen.preview_offset_distance);
+		mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_RIGHT);
+		mSlidingLayer.setLayerTransformer(new RotationTransformer());
+        mSlidingLayer.setChangeStateOnTap(true);
+
+//        mSlidingLayer.addView(new Button(this));
+	}
+	
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -170,14 +214,7 @@ public class GoogleMapFragment extends Fragment
 		Log.d(tag, "onActivityCreated");
 
 		MapsInitializer.initialize(mActivity);
-		mActivity.runOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		
 		switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(mActivity)) {
 		case ConnectionResult.SUCCESS:
 			Toast.makeText(mActivity, "SUCCESS", Toast.LENGTH_SHORT).show();
@@ -293,7 +330,7 @@ public class GoogleMapFragment extends Fragment
 								+ GoogleMapHelper.getGPSLongitudeDistance(
 										mActivity, position.target,
 										position.zoom));
-				new Thread() {
+				new Thread("MapIsStillQuery") {
 					@Override
 					public void run() {
 						LatLng temp_position = current_position;
@@ -306,6 +343,7 @@ public class GoogleMapFragment extends Fragment
 						}
 						Log.d(tag, "temp_position = " + current_position);
 						if (temp_position == current_position) {
+							Log.d(tag, "start query");
 
 							double LatitudeDistance = GoogleMapHelper
 									.getGPSLatitudeDistance(mActivity,
@@ -470,17 +508,11 @@ public class GoogleMapFragment extends Fragment
 			switch (event) {
 			case GpsStatus.GPS_EVENT_STARTED:
 				Log.d(tag, "GPS_EVENT_STARTED");
-				if (mActivity == null) {
-					Log.d(tag, "mActivity==null");
-				}
 				Toast.makeText(mActivity, "GPS_EVENT_STARTED",
 						Toast.LENGTH_SHORT).show();
 				break;
 			case GpsStatus.GPS_EVENT_STOPPED:
 				Log.d(tag, "GPS_EVENT_STOPPED");
-				if (mActivity == null) {
-					Log.d(tag, "mActivity==null");
-				}
 				Toast.makeText(mActivity, "GPS_EVENT_STOPPED",
 						Toast.LENGTH_SHORT).show();
 				break;
