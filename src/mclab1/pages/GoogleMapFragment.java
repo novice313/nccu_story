@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import mclab1.custom.listview.GoogleMapSearch;
+import mclab1.custom.listview.GoogleMapSearchAdapter;
 import mclab1.custom.listview.News;
+import mclab1.custom.listview.NewsAdapter;
 import mclab1.sugar.Owner;
 import ro.ui.pttdroid.Client_Main;
 import ro.ui.pttdroid.Globalvariable;
+import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -35,7 +39,13 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ZoomButton;
@@ -73,11 +83,12 @@ import com.wunderlist.slidinglayer.transformer.RotationTransformer;
 
 import edu.mclab1.nccu_story.R;
 import mclab1.service.googlemap.GoogleMapHelper;
+import mclab1.service.googlemap.GoogleMapParseHelper;
 
 public class GoogleMapFragment extends Fragment
 /* implements OnMapReadyCallback */implements OnMapReadyCallback {
 
-	public ArrayList<News> storyList;
+	public static ArrayList<News> storyList;
 	private final static String tag = "GoogleMapFragment";
 	private static final String MAP_FRAGMENT_TAG = "map";
 	final LatLng NCCU = new LatLng(24.986233, 121.575843);
@@ -85,15 +96,16 @@ public class GoogleMapFragment extends Fragment
 	SupportMapFragment mapFragment;
 
 	String[] list_uploadType = { "Broadcast", "Upload story" };
-	String[] list_uploadType_client = { "Upload story"};                   //修改給client
+	String[] list_uploadType_client = { "Upload story" }; // 修改給client
 
-	private final int TYPE_STORY = 1;
-	private final int TYPE_OFFLINE_STORY = 2;
-	private final int TYPE_ONLINE_BROADCAST = 3;
-	private final int TYPE_READY = 4;
+	public static final int TYPE_STORY = 1;
+	public static final int TYPE_OFFLINE_STORY = 2;
+	public static final int TYPE_ONLINE_BROADCAST = 3;
+	public static final int TYPE_READY = 4;
+	public static String[] TYPE = { "", "story", "offline", "online", "Ready" };
 
 	GoogleMap map;
-	final int PARSE_LIMIT = 10;
+	public static final int PARSE_LIMIT = 10;
 
 	/** GPS */
 	private LocationManager locationMgr;
@@ -102,9 +114,13 @@ public class GoogleMapFragment extends Fragment
 	MenuItem locateMe;
 	private LatLng current_position;
 	private double current_zoom;
-	
-	//slide layer
+
+	// slide layer
 	private SlidingLayer mSlidingLayer;
+	private SearchView searchView;
+	public static ArrayList<GoogleMapSearch> searchList;
+	public ListView searchListView;
+	public static GoogleMapSearchAdapter googleMapSearchAdt;
 	private Button buttonClose;
 
 	private WifiManager wiFiManager;
@@ -159,7 +175,7 @@ public class GoogleMapFragment extends Fragment
 				return false;
 			}
 		});
-		
+
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
@@ -169,44 +185,140 @@ public class GoogleMapFragment extends Fragment
 		View view = inflater.inflate(R.layout.fragment_googlemap, container,
 				false);
 		Log.d(tag, "onCreateView");
-		
-		//slide layer
-		
+
+		// slide layer
 		mSlidingLayer = (SlidingLayer) view.findViewById(R.id.slidingLayer1);
-        buttonClose = (Button) view.findViewById(R.id.buttonClose);
-        buttonClose.setOnClickListener(new Button.OnClickListener() {
-			
+		searchView = (SearchView) view.findViewById(R.id.searchView);
+		searchListView = (ListView) view.findViewById(R.id.search_list);
+		buttonClose = (Button) view.findViewById(R.id.buttonClose);
+
+		bindViews();
+		initState();
+
+		return view;
+	}
+
+	private void bindViews() {
+
+		searchView.setIconifiedByDefault(false);
+		// 为该SearchView组件设置事件监听器
+		searchView.setOnQueryTextListener(new OnQueryTextListener() {
+
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				// TODO Auto-generated method stub
+				Log.d(query, "string = " + query);
+				GoogleMapParseHelper.search_ready(query);
+				return false;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
+		// 设置该SearchView显示搜索按钮
+		searchView.setSubmitButtonEnabled(true);
+
+		// 设置该SearchView内默认显示的提示文本
+		searchView.setQueryHint("Name or Title");
+		// END searchView
+
+		// ListView
+		// create and set adapter
+		searchList = new ArrayList<GoogleMapSearch>();
+
+		googleMapSearchAdt = new GoogleMapSearchAdapter(
+				mActivity.getApplicationContext(), searchList);
+		searchListView.setAdapter(googleMapSearchAdt);
+		searchListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int pos,
+					long id) {
+				// TODO Auto-generated method stub
+				Log.d(tag, "item " + searchList.get(pos).getTitle()
+						+ " onclick");
+
+				GoogleMapSearch googleMapSearch = searchList.get(pos);
+				cameraFocusOnMe(googleMapSearch.getlatitude(),
+						googleMapSearch.getlongitude());
+				String objectId = googleMapSearch.getobjectId();
+				boolean isNew = true;
+				for (int i = 0; i < storyList.size(); i++) {
+					if (objectId.compareTo(storyList.get(i).getobjectId()) == 0) {
+						isNew = false;
+						break;
+					}
+				}
+				if (isNew) {
+					LatLng position = new LatLng(googleMapSearch.getlatitude(),
+							googleMapSearch.getlongitude());
+					switch (googleMapSearch.getState()) {
+					case TYPE_STORY:
+						addMarker_Story(objectId,
+								googleMapSearch.getuserName(),
+								googleMapSearch.getTitle(), position,
+								googleMapSearch.getScore(),
+								googleMapSearch.getState());
+						break;
+					case TYPE_READY:
+						addMarker_Ready(objectId,
+								googleMapSearch.getuserName(),
+								googleMapSearch.getTitle(), position,
+								googleMapSearch.getScore(),
+								googleMapSearch.getState(),
+								googleMapSearch.getSSID());
+						break;
+					case TYPE_OFFLINE_STORY:
+						addMarker_Story(objectId,
+								googleMapSearch.getuserName(),
+								googleMapSearch.getTitle(), position,
+								googleMapSearch.getScore(),
+								googleMapSearch.getState());
+						break;
+					case TYPE_ONLINE_BROADCAST:
+						addMarker_Broadcast(objectId,
+								googleMapSearch.getuserName(),
+								googleMapSearch.getTitle(), position,
+								googleMapSearch.getScore(),
+								googleMapSearch.getState(),
+								googleMapSearch.getSSID());
+						break;
+
+					default:
+						Log.d(tag, "wrong type");
+						break;
+					}
+				}
+			}
+		});
+		// END ListView
+
+		// close button
+		buttonClose.setOnClickListener(new Button.OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				mSlidingLayer.closeLayer(true);
 			}
 		});
-        
-		bindViews();
-		initState();
-
-		return view;
 	}
-	
-	private void bindViews() {
-        
-        
-//        swipeText = (TextView) findViewById(R.id.swipeText);
-    }
-	
+
 	private void initState() {
 		mSlidingLayer.setShadowDrawable(R.drawable.sidebar_shadow);
 		mSlidingLayer.setShadowSizeRes(R.dimen.shadow_size);
 		mSlidingLayer.setOffsetDistanceRes(R.dimen.offset_distance);
-		mSlidingLayer.setPreviewOffsetDistanceRes(R.dimen.preview_offset_distance);
+		mSlidingLayer
+				.setPreviewOffsetDistanceRes(R.dimen.preview_offset_distance);
 		mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_RIGHT);
 		mSlidingLayer.setLayerTransformer(new RotationTransformer());
-        mSlidingLayer.setChangeStateOnTap(true);
+		mSlidingLayer.setChangeStateOnTap(true);
 
-//        mSlidingLayer.addView(new Button(this));
+		// mSlidingLayer.addView(new Button(this));
 	}
-	
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -214,7 +326,7 @@ public class GoogleMapFragment extends Fragment
 		Log.d(tag, "onActivityCreated");
 
 		MapsInitializer.initialize(mActivity);
-		
+
 		switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(mActivity)) {
 		case ConnectionResult.SUCCESS:
 			Toast.makeText(mActivity, "SUCCESS", Toast.LENGTH_SHORT).show();
@@ -417,12 +529,12 @@ public class GoogleMapFragment extends Fragment
 			public void onClick(DialogInterface dialog, int which) {
 			}
 		};
-		//if(Globalvariable.if_Guider==true){
+		// if(Globalvariable.if_Guider==true){
 		builder.setItems(list_uploadType, ListClick);
-		//}
-		//else{
-			//builder.setItems(list_uploadType_client, ListClick);
-		//}
+		// }
+		// else{
+		// builder.setItems(list_uploadType_client, ListClick);
+		// }
 		builder.setNeutralButton("cancel", OkClick);
 		builder.show();
 
@@ -617,7 +729,7 @@ public class GoogleMapFragment extends Fragment
 						.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 	}
 
-	private void addMarker_Ready(String objectIdString, String userNameString,
+	public void addMarker_Ready(String objectIdString, String userNameString,
 			String title, LatLng point, int score, int type, String SSIDString) {
 		// TODO Auto-generated method stub
 		String snippet = objectIdString + "," + userNameString + "," + score
@@ -675,8 +787,8 @@ public class GoogleMapFragment extends Fragment
 
 							for (int listCounter = 0; listCounter < storyList
 									.size(); listCounter++) {
-								if (objectIdString.compareTo(storyList.get(listCounter)
-										.getobjectId()) == 0) {
+								if (objectIdString.compareTo(storyList.get(
+										listCounter).getobjectId()) == 0) {
 									isNew = false;
 									break;
 								}
@@ -788,8 +900,8 @@ public class GoogleMapFragment extends Fragment
 
 							for (int listCounter = 0; listCounter < storyList
 									.size(); listCounter++) {
-								if (objectIdString.compareTo(storyList.get(listCounter)
-										.getobjectId()) == 0) {
+								if (objectIdString.compareTo(storyList.get(
+										listCounter).getobjectId()) == 0) {
 									isNew = false;
 									break;
 								}
@@ -906,8 +1018,8 @@ public class GoogleMapFragment extends Fragment
 
 							for (int listCounter = 0; listCounter < storyList
 									.size(); listCounter++) {
-								if (objectIdString.compareTo(storyList.get(listCounter)
-										.getobjectId()) == 0) {
+								if (objectIdString.compareTo(storyList.get(
+										listCounter).getobjectId()) == 0) {
 									isNew = false;
 									break;
 								}
@@ -1021,8 +1133,8 @@ public class GoogleMapFragment extends Fragment
 
 							for (int listCounter = 0; listCounter < storyList
 									.size(); listCounter++) {
-								if (objectIdString.compareTo(storyList.get(listCounter)
-										.getobjectId()) == 0) {
+								if (objectIdString.compareTo(storyList.get(
+										listCounter).getobjectId()) == 0) {
 									isNew = false;
 									break;
 								}
@@ -1367,7 +1479,9 @@ public class GoogleMapFragment extends Fragment
 													}
 
 												}
-												Globalvariable.latitude = latitude;   // 等等比對是否要250 or 251
+												Globalvariable.latitude = latitude; // 等等比對是否要250
+																					// or
+																					// 251
 												Globalvariable.longitude = longitude;
 												System.out.println("GOGOGO4"
 														+ if_Global_local);
