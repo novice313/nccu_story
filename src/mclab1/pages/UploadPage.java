@@ -220,6 +220,7 @@ public class UploadPage extends Activity {
 		uploadObject.put("score", INITIAL_SCORE);
 		uploadObject.put("latitude", latitude);
 		uploadObject.put("longitude", longitude);
+		uploadObject.put("State", "story");
 
 		uploadObject.saveInBackground(new SaveCallback() {
 

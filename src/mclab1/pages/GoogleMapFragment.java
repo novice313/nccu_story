@@ -288,7 +288,11 @@ public class GoogleMapFragment extends Fragment
 						break;
 
 					default:
-						Log.d(tag, "wrong type");
+						addMarker_Story(objectId,
+								googleMapSearch.getuserName(),
+								googleMapSearch.getTitle(), position,
+								googleMapSearch.getScore(),
+								1);
 						break;
 					}
 				}
