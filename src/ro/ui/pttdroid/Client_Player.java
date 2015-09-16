@@ -290,7 +290,8 @@ public class Client_Player extends Service
 					init();
 					System.out.println("isRunning!!!!");
 
-					try {
+					try {   
+						
 						while(isPlaying()) 
 						{
 							System.out.println("isPlayingInPlayer!!!!");
