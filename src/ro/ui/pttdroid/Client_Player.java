@@ -32,6 +32,8 @@ import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
 import ro.ui.pttdroid.settings.CommSettings;
 import ro.ui.pttdroid.util.Audio;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -40,6 +42,7 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
@@ -50,6 +53,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import de.greenrobot.event.EventBus;
+import edu.mclab1.nccu_story.R;
 
 public class Client_Player extends Service
 {
@@ -79,6 +83,7 @@ public class Client_Player extends Service
 	volatile boolean terminate = false;
 	String getIP="";
 	int just_one=1;
+	//PowerManager.WakeLock mWakeLock; 
 
 	//private MultiRecorder multiRecorder;
 	public class PlayerBinder extends Binder 
@@ -140,17 +145,30 @@ public class Client_Player extends Service
 		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		phoneCallListener = new PhoneCallListener();
 		telephonyManager.listen(phoneCallListener, PhoneStateListener.LISTEN_CALL_STATE);
+		
+		//acquireWakeLock();
 				
 		/*Notification notification = new Notification(R.drawable.notif_icon, 
 				getText(R.string.app_name),
 		        System.currentTimeMillis());
-		Intent notificationIntent = new Intent(this, Main.class);
+		Intent notificationIntent = new Intent(this, Client_Main.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 		notification.setLatestEventInfo(this, getText(R.string.app_name),
-		        getText(R.string.app_running), pendingIntent);
-		        
-		        
-		startForeground(1, notification);	*/
+		        getText(R.string.app_running), pendingIntent);       		        
+		startForeground(1, notification);
+		*/
+		
+		
+		/*Intent notificationIntent = new Intent(this, Main.class);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+		Notification noti = new Notification.Builder(this)
+		.setContentTitle(getText(R.string.app_name))
+		.setContentText(getText(R.string.app_running))
+		.setContentIntent(pendingIntent)
+		.build();
+		startForeground(1, noti);
+		*/
 		
 		
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Register_SSID_ip");
@@ -197,6 +215,7 @@ public class Client_Player extends Service
 	public void onDestroy() 
 	{
 	    //stopForeground(true);
+		//releaseWakeLock();
 		
 		System.out.println("goodtime"+loopthread);		
 		//notify();
@@ -219,6 +238,32 @@ public class Client_Player extends Service
 	{
 		return playerThread.getProgress();
 	}
+	
+	
+	/*//申請設備電源鎖
+	private void acquireWakeLock()
+	{
+	    System.out.println("MyGPS正在申請電源鎖"); if (null == mWakeLock)
+	    {
+	        PowerManager pm = (PowerManager) this.getSystemService(Context.POWER_SERVICE); 
+	        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK |PowerManager.ON_AFTER_RELEASE, ""); 
+	        if (null != mWakeLock)
+	        { 
+	            mWakeLock.acquire();
+	            System.out.println("電源鎖申請成功");
+	        }
+	    }
+	} 
+	
+	private void releaseWakeLock()
+	{
+		System.out.println("正在釋放電源鎖");
+	    if (null != mWakeLock)
+	    { 
+	        mWakeLock.release(); mWakeLock = null;
+	        System.out.println("電源鎖釋放成功");
+	    }
+	}*/
 	
 	private class PlayerThread extends Thread
 	{
@@ -243,18 +288,19 @@ public class Client_Player extends Service
 					init();
 					System.out.println("isRunning!!!!");
 
-					try {
+					try {   
+						
 						while(isPlaying()) 
 						{
 							System.out.println("isPlayingInPlayer!!!!");
-							new Thread(){
-								@Override
-								public void run(){ 
-							if(if_interrupt==false && just_one==1){           //if 遇到沒有data時就測有沒有IP
-								just_one=2;
-								for(int i=1;i<=255;i++){
-									getIP="192.168.2."+i;
-				        		System.out.println("getIP2"+getIP);
+							//new Thread(){
+							//	@Override
+							//	public void run(){ 
+							if(if_interrupt==false){           //if 遇到沒有data時就測有沒有IP
+								//just_one=2;
+								//for(int i=1;i<=255;i++){
+									//getIP="192.168.2."+i;
+				        		//System.out.println("getIP2"+getIP);
 								try {
 									addr50_51=InetAddress.getByName(getIP);
 								} catch (UnknownHostException e1) {
@@ -306,8 +352,8 @@ public class Client_Player extends Service
 								break;
 							}
 								}
-							}
-							}}.start();
+							//}
+							//}}.start();
 
 							
 							try 

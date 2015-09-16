@@ -75,16 +75,27 @@ public class Player extends Service
 		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		phoneCallListener = new PhoneCallListener();
 		telephonyManager.listen(phoneCallListener, PhoneStateListener.LISTEN_CALL_STATE);
-				
+
+		/*Notification notification = new Notification(R.drawable.notif_icon, 
+				getText(R.string.app_name),
+		        System.currentTimeMillis());
 		Intent notificationIntent = new Intent(this, Main.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+		notification.setLatestEventInfo(this, getText(R.string.app_name),
+		        getText(R.string.app_running), pendingIntent);
+		startForeground(1, notification);
+		*/
 		
+		
+		/*Intent notificationIntent = new Intent(this, Main.class);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
 		Notification noti = new Notification.Builder(this)
-        .setContentTitle(getText(R.string.app_name))
-        .setContentText(getText(R.string.app_running))
-        .setContentIntent(pendingIntent)
-        .build();
-		startForeground(1, noti);
+		.setContentTitle(getText(R.string.app_name))
+		.setContentText(getText(R.string.app_running))
+		.setContentIntent(pendingIntent)
+		.build();
+		*/
     }
 	
 	@Override

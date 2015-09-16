@@ -39,6 +39,7 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -148,6 +149,9 @@ public class GoogleMapFragment extends Fragment
 		// instantiate list
 		storyList = new ArrayList<News>();
 		setHasOptionsMenu(true);
+		
+		
+		mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 	}
 
 	@Override
@@ -208,7 +212,12 @@ public class GoogleMapFragment extends Fragment
 			public boolean onQueryTextSubmit(String query) {
 				// TODO Auto-generated method stub
 				Log.d(query, "string = " + query);
-				GoogleMapParseHelper.search_ready(query);
+
+				//clear list 
+				searchList.clear();
+				googleMapSearchAdt.notifyDataSetChanged();
+				
+				GoogleMapParseHelper.search_offline(query);
 				return false;
 			}
 
@@ -1407,6 +1416,7 @@ public class GoogleMapFragment extends Fragment
 																1,
 																networkSSID
 																		.length() - 1);
+												Globalvariable.client_Main_SSID=networkSSID;    // Toclient
 												System.out.println("GOGOGO"
 														+ networkSSID + " "
 														+ networkSSID.length()); // network

@@ -97,7 +97,7 @@ public class GuiderRecorder extends Thread
 	Boolean if_60=true;
 	Boolean if_cleanQueue=true;
 	public static final String Offline = "offline";
-	String tempFile2 = Environment.getExternalStorageDirectory()
+	String tempFile2 = Environment.getExternalStorageDirectory().getPath()
 			+ "/NPM2.raw";
 	WifiManager wifi_service;
 	
@@ -118,6 +118,7 @@ public class GuiderRecorder extends Thread
 	//在Guider的時候判斷是否ip有重複到239.255.255.250 ;239.255.255.251 ;239.255.255.252...etc
 	String Selection[]={"239.255.255.250","239.255.255.251","239.255.255.252","239.255.255.253","239.255.255.254"};
 	Boolean Selection_boolean[]={false,false,false,false,false};
+	Boolean if_have_ip=false;
 	
 	@Override
 	public void run() 
@@ -317,7 +318,9 @@ public class GuiderRecorder extends Thread
 			ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");   // add offline table to Online
 			// Retrieve the object by id
 			System.out.println("Ready to update State"+Globalvariable.guiderid);
-			query.whereEqualTo("GuiderID", Globalvariable.BuildSERIAL);
+			//query.whereEqualTo("GuiderID", Globalvariable.BuildSERIAL);
+			query.whereEqualTo("latitude", Globalvariable.guider_latitudeString);
+			query.whereEqualTo("longitude", Globalvariable.guider_longitudeString);
 			
 			query.findInBackground(new FindCallback<ParseObject>() {
 				
@@ -345,7 +348,29 @@ public class GuiderRecorder extends Thread
 			});
 			
 			
-		    ParseQuery<ParseObject> queryregidter = ParseQuery.getQuery("Register_SSID_ip");
+			ParseQuery<ParseObject> queryif_have_ip = ParseQuery.getQuery("Register_SSID_ip"); //判斷是否device有ip
+			queryif_have_ip.whereEqualTo("BuildSERIAL",Globalvariable.BuildSERIAL);
+			queryif_have_ip.findInBackground(new FindCallback<ParseObject>() {
+			    public void done(List<ParseObject> registerList, ParseException e) {
+			    	if(e==null && registerList!=null){
+			        	for(int i=0;i<registerList.size();i++){
+			    		Main.commIP=(String)registerList.get(i).get("ip");
+			        	}
+
+					    if_have_ip=true;
+			    	    System.out.println("if_have_ip"+if_have_ip+" "+Main.commIP);
+			    	}
+			    	else{
+			    		System.out.println("BuildSERIAL_GuiderRecoder_error");
+			    		
+			    	}
+			    	
+			    	
+			    }
+			});
+			
+		if(!if_have_ip){
+		    ParseQuery<ParseObject> queryregidter = ParseQuery.getQuery("Register_SSID_ip");      //在parse上面去找有空的ip
 			queryregidter.whereEqualTo("SSID",Globalvariable.getGlobalSSID);
 			queryregidter.findInBackground(new FindCallback<ParseObject>() {
 			    public void done(List<ParseObject> registerList, ParseException e) {
@@ -391,8 +416,7 @@ public class GuiderRecorder extends Thread
 					 }
 					 
 			    }
-			});
-			
+			});}
 			IP.load();
 			
 			recorder_socket = new DatagramSocket();		
@@ -451,7 +475,9 @@ public class GuiderRecorder extends Thread
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");   // add offline table to Online
 		// Retrieve the object by id
 		System.out.println("Ready to update State"+Globalvariable.guiderid);
-		query.whereEqualTo("GuiderID", Globalvariable.BuildSERIAL);
+		//query.whereEqualTo("GuiderID", Globalvariable.BuildSERIAL);
+		query.whereEqualTo("latitude", Globalvariable.guider_latitudeString);
+		query.whereEqualTo("longitude", Globalvariable.guider_longitudeString);
 		
 		query.findInBackground(new FindCallback<ParseObject>() {
 			
@@ -493,8 +519,8 @@ public class GuiderRecorder extends Thread
 		SimpleDateFormat sdf = new SimpleDateFormat("HH_mm_ss");
 		Date dte = new Date();
 		String dts = sdf.format(dte);
-		final String tempFile = Environment.getExternalStorageDirectory()
-				+ "/A"+dts+".raw";
+		final String tempFile = Environment.getExternalStorageDirectory().getPath()
+				+ "/"+dts+".raw";
 		try {
 			output = new DataOutputStream(new BufferedOutputStream(
 					new FileOutputStream(new File(tempFile))));
@@ -534,8 +560,8 @@ public class GuiderRecorder extends Thread
 				SimpleDateFormat sdf = new SimpleDateFormat("HH_mm_ss");
 				Date dte = new Date();
 				String dts = sdf.format(dte);
-				String mp3File = Environment.getExternalStorageDirectory()
-						+"/A"+dts+"Realtime"+".mp3";
+				String mp3File = Environment.getExternalStorageDirectory().getPath()
+						+"/"+dts+"Realtime"+".mp3";
 				System.out.println("Initsavingmp3file"+mp3File);
 				EventBus.getDefault().postSticky(
 						new DisplayEvent("Initsavingmp3file!"));
@@ -559,7 +585,9 @@ public class GuiderRecorder extends Thread
 				ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
 				// Retrieve the object by id
 				System.out.println("Ready to update State"+Globalvariable.guiderid);
-				query.whereEqualTo("GuiderID", Globalvariable.BuildSERIAL);
+				//query.whereEqualTo("GuiderID", Globalvariable.BuildSERIAL);
+				query.whereEqualTo("latitude", Globalvariable.guider_latitudeString);
+				query.whereEqualTo("longitude", Globalvariable.guider_longitudeString);
 				
 				query.findInBackground(new FindCallback<ParseObject>() {
 					
@@ -653,8 +681,8 @@ public class GuiderRecorder extends Thread
 		SimpleDateFormat sdf = new SimpleDateFormat("HH_mm_ss");
 		Date dte = new Date();
 		String dts = sdf.format(dte);
-		final String tempFile = Environment.getExternalStorageDirectory()
-				+ "/A"+dts+".raw";
+		final String tempFile = Environment.getExternalStorageDirectory().getPath()
+				+"/"+dts+".raw";
 		try {
 			output = new DataOutputStream(new BufferedOutputStream(
 					new FileOutputStream(new File(tempFile))));
@@ -693,8 +721,8 @@ public class GuiderRecorder extends Thread
 				SimpleDateFormat sdf = new SimpleDateFormat("HH_mm_ss");
 				Date dte = new Date();
 				String dts = sdf.format(dte);
-				String mp3File = Environment.getExternalStorageDirectory()
-						+"/A"+dts+"Realtime"+".mp3";
+				String mp3File = Environment.getExternalStorageDirectory().getPath()
+						+"/"+dts+"Realtime"+".mp3";
 				System.out.println("Initsavingmp3file"+mp3File);
 				EventBus.getDefault().postSticky(
 						new DisplayEvent("Initsavingmp3file!"+mp3File));

@@ -34,6 +34,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 
+
 //import ro.ui.pttdroid.Main.MicrophoneSwitcher;
 import edu.mclab1.nccu_story.R;
 import android.annotation.SuppressLint;
@@ -141,20 +142,25 @@ public class TestWifiScan extends ListActivity {
 			public void done(List<ParseObject> objects, ParseException e) {
 				// TODO Auto-generated method stub
 		        	System.out.println("State_offline");
-		        if (e == null) {
-		        	if(objects.size()>0){
+		        	if(objects!=null){
+
+					for(int i=0;i<objects.size();i++){
+						if (e == null) {
 		        	System.out.println("State_offline2");
 		            // Now let's update it with some new data. In this case, only cheatMode and score
 		            // will get sent to the Parse Cloud. playerName hasn't changed.
-					final ParseObject State = objects.get(0);
-		        	State.put("State", "offline");     // offline 
+					final ParseObject State = objects.get(i);
+		        	State.put("State", "offline");     // offline
+		        	State.saveInBackground();
+		        	System.out.println("offlineSuccess");
+					
 		        	//State.put("numberTag", numberTag);     // offline 
 		        	
-		        	State.saveInBackground();
+		        	}
+			        else {
+			        	System.out.println("offlineerror");
 		        	}
 		        }
-		        else {
-		        	System.out.println("offlineerror");
 
 		        	
 		        }
