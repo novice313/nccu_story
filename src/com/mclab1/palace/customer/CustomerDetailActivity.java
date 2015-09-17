@@ -13,6 +13,7 @@ import java.util.List;
 
 import ro.ui.pttdroid.Globalvariable;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
@@ -24,8 +25,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.MediaController;
+import android.widget.MediaController.MediaPlayerControl;
 import android.widget.TextView;
 
 import com.mclab1.palaca.parsehelper.VoiceDataElement;
@@ -54,8 +56,10 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 	private ArrayList<ArrayList> v=new ArrayList<ArrayList>();
 	private ArrayList<String> uniq_ids = new ArrayList<String>();
 	private ArrayList<String> Storefilepath =new ArrayList<String>();
+    private Button StopButton;
 	private MediaPlayer mpintro;
 	String[][] test=new String[500][500];
+	String[][] temp=new String[500][500];
 	FileInputStream tempfis=null;
 	SequenceInputStream sistream=null;
 	Boolean if_run_one=true;
@@ -63,6 +67,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 	Boolean if_init=true;
 	Boolean if_add_content=false;
 	Boolean if_inmpintro=false;
+	Boolean if_first_play=true;
 	String  string_numberTAg=null;
 	String  subnumberTag=null;
 	String  Prestring_numberTAg=null;
@@ -70,6 +75,9 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 	int M=0;
 	Boolean play_one=true;
 	ParseImageView imageView ;
+	ProgressDialog dialog;
+	int current_pos;
+	//MediaController mediaController;
 
 
 	int i;
@@ -83,6 +91,8 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 
 		setContentView(R.layout.customer_activity_detail);
 		//final RelativeLayout background = (RelativeLayout)findViewById(R.id.back);
+		//StopButton = (Button)findViewById(R.id.StopButton);
+		
 		
 		Log.d(msg, "The onCreate() event");
 		if(mTitle!=null && mContent!=null){
@@ -90,6 +100,40 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 		mContent=Globalvariable.contentString;
 		initViews();
 		}
+		
+		/*StopButton.setOnClickListener(new Button.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+				
+		        if (mpintro!= null) {		
+		        	
+		    		for(int i=0;test[L][i]!=null;i++){
+		    			temp[L][i]=test[L][i];
+		    			test[L][i]=null;    		
+		    		}
+		    		System.out.println("StopButton"+mpintro);
+		    		play_one=true;
+		        	mpintro.stop();
+		        	mpintro.release();
+		        	
+		    		for(int i=0;temp[L][i]!=null;i++){     //StartRecovery
+			    		System.out.println("StartRecovery");
+		    			test[L][i]=temp[L][i];		    		
+		    		}
+		        	
+		        	
+		        	
+		        	//mpintro = null;
+		       }
+			}
+			
+			
+		});
+		*/
+		
 		/*Bundle extras = getIntent().getExtras();
 		if (extras != null) {               //之後柏會傳一個objectID給我
 			mTitle=Globalvariable.titleString ;
@@ -100,7 +144,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 			initViews();
 		}*/
 	}
-
+	
 	private void initViews() {
 		
 	    imageView = (ParseImageView) findViewById(R.id.customer_activity_image);
@@ -202,15 +246,50 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 		customerVoiceListAdapter = new CustomerVoiceListAdapter(this, mp3unuiques);
 		listView.setAdapter(customerVoiceListAdapter);
 		
-		if(play_one==true){
-			play_one=false;
+		
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
 					long arg3) {	
 				
+				if(if_first_play==true){
+					current_pos=pos;
+					if_first_play=false;
+				}
+				if(current_pos!=pos){     //要換首摟
+					play_one=true;
+					current_pos=pos;
+					
+		    		for(int i=0;test[L][i]!=null;i++){
+		    			temp[L][i]=test[L][i];
+		    			test[L][i]=null;  
+		    			}
+		    		System.out.println("changesong"+mpintro);
+		        	mpintro.stop();
+		        	mpintro.release();
+		        	
+		    		for(int i=0;temp[L][i]!=null;i++){     //StartRecovery2
+			    		System.out.println("StartRecovery2");
+		    			test[L][i]=temp[L][i];		    		
+		    		}
+					
+				}
+				
+				if(play_one==true && current_pos==pos){					
+					play_one=false;
+					current_pos=pos;
+					System.out.println("play_onetrue"+pos);
+
+				
 				try {
+					
+					
+					//mediaController.setMediaPlayer(CustomerDetailActivity.class);
+					/*mediaController.setAnchorView(CustomerDetailActivity.this.findViewById(R.id.customer_mp3_listview)); 
+					mediaController.setEnabled(true);
+					mediaController.show();
+					*/
 					
 					String mp3Unique=mp3unuiques.get(pos).mp3Unique;
 					System.out.println("mp3Unique  "+mp3Unique+" "+test[1][0]);
@@ -308,13 +387,14 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 				} catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
-				}
+				}}
+				
 				}
 				
 
 			
 		});
-		}
+		
 		loaddata();
 
 	}
@@ -330,6 +410,60 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 	@Override
 	protected void onResume() {
 		super.onResume();
+		/*
+		mediaController = new MediaController(this); 
+		mediaController.setMediaPlayer(new MediaPlayerControl() {
+
+		   public boolean canPause() { 
+		     return true; 
+		   }
+
+		   public boolean canSeekBackward() { 
+		     return true; 
+		   }
+
+		   public boolean canSeekForward() { 
+		     return true; 
+		   }
+
+		   public int getBufferPercentage() { 
+		     return 0; 
+		   }
+
+		   public int getCurrentPosition() { 
+		     return mpintro.getCurrentPosition(); 
+		   }
+
+		   public int getDuration() { 
+		     return mpintro.getDuration(); 
+		   }
+
+		   public boolean isPlaying() { 
+		     return mpintro.isPlaying(); 
+		   }
+
+		   public void pause() { 
+			   mpintro.pause(); 
+		   }
+
+		  public void seekTo(int pos) { 
+			  mpintro.seekTo(pos); 
+		  }
+
+		  public void start() { 
+			  mpintro.start(); 
+		  }
+		  
+
+		@Override
+		public int getAudioSessionId() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		});
+		
+		*/
 		Log.d(msg, "The onResume() event");
 	}
 
@@ -391,7 +525,8 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 	@SuppressWarnings("null")
 	private void loaddata() { 
 		mp3unuiques.clear();
-		//final String [][]test = null;
+	    dialog = ProgressDialog.show(CustomerDetailActivity.this,
+	            "讀取資料中", "請 稍 等 . . . . ",true);  //final String [][]test = null;
 		  ParseQuery<ParseObject> query = ParseQuery
 				.getQuery(VoiceObject.table_name);
 		//query.orderByAscending("numberTag");
@@ -602,6 +737,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 
 				//}
 					System.out.println("Out");
+					dialog.dismiss();
 					/*try{
 					AudioInputStream clip1 = AudioSystem.getAudioInputStream(new File(tempFile+"Tim.mp3"));
 				    AudioInputStream clip2 = AudioSystem.getAudioInputStream(new File(tempFile+"Tim2.mp3"));
