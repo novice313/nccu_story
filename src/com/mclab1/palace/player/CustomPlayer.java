@@ -57,7 +57,6 @@ public class CustomPlayer extends Service {
 		phoneCallListener = new PhoneCallListener();
 		telephonyManager.listen(phoneCallListener,
 				PhoneStateListener.LISTEN_CALL_STATE);
-
 		
 
 		/* Notification notification = new Notification(R.drawable.notif_icon,

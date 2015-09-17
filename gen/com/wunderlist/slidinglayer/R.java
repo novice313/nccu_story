@@ -16,10 +16,10 @@ public final class R {
 		public static final int stickTo = 0x7f010005;
 	}
 	public static final class id {
-		public static final int bottom = 0x7f0a000a;
-		public static final int left = 0x7f0a000b;
-		public static final int right = 0x7f0a000c;
-		public static final int top = 0x7f0a000d;
+		public static final int bottom = 0x7f0b000a;
+		public static final int left = 0x7f0b000b;
+		public static final int right = 0x7f0b000c;
+		public static final int top = 0x7f0b000d;
 	}
 	public static final class styleable {
 		public static final int[] SlidingLayer = { 0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003, 0x7f010004, 0x7f010005 };

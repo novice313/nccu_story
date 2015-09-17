@@ -1416,7 +1416,6 @@ public class GoogleMapFragment extends Fragment
 																1,
 																networkSSID
 																		.length() - 1);
-												Globalvariable.client_Main_SSID=networkSSID;    // Toclient
 												System.out.println("GOGOGO"
 														+ networkSSID + " "
 														+ networkSSID.length()); // network
