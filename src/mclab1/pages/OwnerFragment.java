@@ -54,8 +54,8 @@ public class OwnerFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		Log.d(tag, "onCreateView");
-		View view = inflater.inflate(R.layout.fragment_news, container, false);
-		newsView = (ListView) view.findViewById(R.id.news_list);
+		
+		View view;
 
 		// instantiate list
 		newsList = new ArrayList<News>();
@@ -63,9 +63,17 @@ public class OwnerFragment extends Fragment {
 		List<Owner> owner = SugarRecord.listAll(Owner.class);
 		if (owner.isEmpty()) {
 
+			view = inflater.inflate(R.layout.fragment_owner_not_login,
+					container, false);
+
 			Toast.makeText(getActivity(), "You didn't log in before.",
 					Toast.LENGTH_SHORT).show();
 		} else {
+
+			view = inflater.inflate(R.layout.fragment_news, container,
+					false);
+			newsView = (ListView) view.findViewById(R.id.news_list);
+
 			final String userName = owner.get(owner.size() - 1).userName;
 			// get songs from device
 			getActivity().runOnUiThread(new Runnable() {
@@ -76,27 +84,26 @@ public class OwnerFragment extends Fragment {
 					getNewsList(userName);
 				}
 			});
+			
+			// create and set adapter
+			newsAdt = new NewsAdapter(getActivity().getApplicationContext(),
+					newsList);
+
+			newsView.setAdapter(newsAdt);
+			newsView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+				@Override
+				public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+						int pos, long id) {
+					String objectString = newsList.get(pos).getobjectId();
+
+					// alert window
+					ShowAlertDialogAndList(objectString);
+
+					return true;
+				}
+			});
 		}
-
-		// create and set adapter
-		newsAdt = new NewsAdapter(getActivity().getApplicationContext(),
-				newsList);
-
-		newsView.setAdapter(newsAdt);
-		newsView.setOnItemLongClickListener(new OnItemLongClickListener() {
-
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-					int pos, long id) {
-				String objectString = newsList.get(pos).getobjectId();
-
-				// alert window
-				ShowAlertDialogAndList(objectString);
-
-				return true;
-			}
-		});
-
 		return view;
 	}
 

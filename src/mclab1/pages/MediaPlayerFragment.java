@@ -9,6 +9,7 @@ import mclab1.service.music.MusicService;
 import mclab1.service.music.MusicService.MusicBinder;
 import mclab1.service.music.Song;
 import mclab1.service.music.SongAdapter;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -16,6 +17,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.BaseColumns;
@@ -55,6 +57,15 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 
 	public static boolean playbackPaused = false;
 
+	private Context mContext;
+
+	@Override
+	public void onAttach(Context context) {
+		// TODO Auto-generated method stub
+		mContext = context;
+		super.onAttach(context);
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -83,7 +94,7 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 
 		// set recorder icon at action bar
 		setHasOptionsMenu(true);
-		
+
 		startService();
 		return view;
 
@@ -109,8 +120,8 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 			}
 		});
 		// create and set adapter
-		SongAdapter songAdt = new SongAdapter(getActivity()
-				.getApplicationContext(), songList);
+		SongAdapter songAdt = new SongAdapter(mContext.getApplicationContext(),
+				songList);
 		songView.setAdapter(songAdt);
 
 		// setup controller
@@ -128,40 +139,22 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 
 	public void startService() {
 		if (MediaPlayerFragment.playIntent == null) {
-			MediaPlayerFragment.playIntent = new Intent(getActivity(),
+			MediaPlayerFragment.playIntent = new Intent(mContext,
 					MusicService.class);
-			getActivity().bindService(MediaPlayerFragment.playIntent,
+			mContext.bindService(MediaPlayerFragment.playIntent,
 					MediaPlayerFragment.musicConnection,
 					Context.BIND_AUTO_CREATE);
-			getActivity().startService(MediaPlayerFragment.playIntent);
+			mContext.startService(MediaPlayerFragment.playIntent);
 		}
 	}
 
 	public void getSongList() {
-		// query external audio
-		ContentResolver musicResolver = getActivity().getContentResolver();
-		Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-		Cursor musicCursor = musicResolver.query(musicUri, null, null, null,
-				null);
-		// iterate over results if valid
-		if (musicCursor != null && musicCursor.moveToFirst()) {
-			// get columns
-			int titleColumn = musicCursor.getColumnIndex(MediaColumns.TITLE);
-			int idColumn = musicCursor.getColumnIndex(BaseColumns._ID);
-			int artistColumn = musicCursor.getColumnIndex(AudioColumns.ARTIST);
-			// add songs to list
-			do {
-				long thisId = musicCursor.getLong(idColumn);
-				String thisTitle = musicCursor.getString(titleColumn);
-				String thisArtist = musicCursor.getString(artistColumn);
-				songList.add(new Song(thisId, thisTitle, thisArtist));
-			} while (musicCursor.moveToNext());
-		}
+		new MediaPlayerAsyncTask(mContext).execute();
 	}
 
 	// set the controller up
 	private void setController() {
-		controller = new MusicController(getActivity());
+		controller = new MusicController(mContext);
 		// set previous and next button listeners
 		controller.setPrevNextListeners(new View.OnClickListener() {
 			@Override
@@ -176,7 +169,8 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		});
 		// set and show
 		controller.setMediaPlayer(this);
-		controller.setAnchorView(getActivity().findViewById(R.id.song_list));
+		controller.setAnchorView(((Activity) mContext)
+				.findViewById(R.id.song_list));
 		controller.setEnabled(true);
 	}
 
@@ -255,8 +249,8 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 	}
 
 	public void stopService() {
-		getActivity().stopService(playIntent);
-		getActivity().unbindService(musicConnection);
+		mContext.stopService(playIntent);
+		mContext.unbindService(musicConnection);
 	}
 
 	@Override
@@ -328,6 +322,43 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 	@Override
 	public void start() {
 		musicSrv.go();
+	}
+
+}
+
+class MediaPlayerAsyncTask extends AsyncTask<Void, Void, Void> {
+	
+	private Context mContext;
+	
+	public MediaPlayerAsyncTask(Context mContext) {
+		// TODO Auto-generated constructor stub
+		this.mContext = mContext;
+	}
+
+	@Override
+	protected Void doInBackground(Void... params) {
+		// TODO Auto-generated method stub
+
+		// query external audio
+		ContentResolver musicResolver = mContext.getContentResolver();
+		Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+		Cursor musicCursor = musicResolver.query(musicUri, null, null, null,
+				null);
+		// iterate over results if valid
+		if (musicCursor != null && musicCursor.moveToFirst()) {
+			// get columns
+			int titleColumn = musicCursor.getColumnIndex(MediaColumns.TITLE);
+			int idColumn = musicCursor.getColumnIndex(BaseColumns._ID);
+			int artistColumn = musicCursor.getColumnIndex(AudioColumns.ARTIST);
+			// add songs to list
+			do {
+				long thisId = musicCursor.getLong(idColumn);
+				String thisTitle = musicCursor.getString(titleColumn);
+				String thisArtist = musicCursor.getString(artistColumn);
+				MediaPlayerFragment.songList.add(new Song(thisId, thisTitle, thisArtist));
+			} while (musicCursor.moveToNext());
+		}
+		return null;
 	}
 
 }

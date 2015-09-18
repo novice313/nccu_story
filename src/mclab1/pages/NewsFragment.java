@@ -8,6 +8,7 @@ import mclab1.custom.listview.NewsAdapter;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -109,6 +110,66 @@ public class NewsFragment extends Fragment {
 	}
 
 	public static void getNewsList() {
+		
+		new NewsAsyncTask(LIMIT).execute();
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		Log.d(tag, "onStart");
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		Log.d(tag, "onStop.");
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		Log.d(tag, "onDestroyView.");
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		Log.d(tag, "onDestroy.");
+	}
+
+}
+
+class NewsAsyncTask extends AsyncTask<Void, Void, Void>{
+	
+	private int LIMIT;
+
+	public NewsAsyncTask(int limit) {
+		// TODO Auto-generated constructor stub
+		this.LIMIT = limit;
+	}
+
+	@Override
+	protected void onPreExecute() {
+		// TODO Auto-generated method stub
+		super.onPreExecute();
+	}
+	
+	@Override
+	protected void onCancelled() {
+		// TODO Auto-generated method stub
+		super.onCancelled();
+	}
+
+	@Override
+	protected Void doInBackground(Void... params) {
+		// TODO Auto-generated method stub
+		
 		ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
 				"story");
 		// parseQuery.whereEqualTo("userName", "Jeny Zheng Lan");
@@ -155,7 +216,7 @@ public class NewsFragment extends Fragment {
 															.decodeByteArray(
 																	data, 0,
 																	data.length);
-													newsList.add(new News(
+													NewsFragment.newsList.add(new News(
 															objectIdString,
 															userNameString,
 															userUuidString,
@@ -163,7 +224,7 @@ public class NewsFragment extends Fragment {
 															bmp, contentString,
 															latitude, longitude));
 
-													newsAdt.notifyDataSetChanged();
+													NewsFragment.newsAdt.notifyDataSetChanged();
 												}
 											}
 										});
@@ -174,35 +235,13 @@ public class NewsFragment extends Fragment {
 			}
 
 		});
-	}
-
+		
+		return null;
+	};
+	
 	@Override
-	public void onStart() {
-		super.onStart();
-		Log.d(tag, "onStart");
+	protected void onPostExecute(Void result) {
+		// TODO Auto-generated method stub
+		super.onPostExecute(result);
 	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	public void onStop() {
-		super.onStop();
-		Log.d(tag, "onStop.");
-	}
-
-	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		Log.d(tag, "onDestroyView.");
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		Log.d(tag, "onDestroy.");
-	}
-
 }

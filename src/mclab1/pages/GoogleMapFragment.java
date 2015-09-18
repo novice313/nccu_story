@@ -9,12 +9,13 @@ import mclab1.custom.listview.GoogleMapSearch;
 import mclab1.custom.listview.GoogleMapSearchAdapter;
 import mclab1.custom.listview.News;
 import mclab1.custom.listview.NewsAdapter;
+import mclab1.sugar.GoogleMapData;
 import mclab1.sugar.Owner;
 import ro.ui.pttdroid.Client_Main;
 import ro.ui.pttdroid.Globalvariable;
-import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -85,6 +86,7 @@ import com.wunderlist.slidinglayer.transformer.RotationTransformer;
 import edu.mclab1.nccu_story.R;
 import mclab1.service.googlemap.GoogleMapHelper;
 import mclab1.service.googlemap.GoogleMapParseHelper;
+import mclab1.service.googlemap.GoogleMapQueryParseHelper;
 
 public class GoogleMapFragment extends Fragment
 /* implements OnMapReadyCallback */implements OnMapReadyCallback {
@@ -105,6 +107,9 @@ public class GoogleMapFragment extends Fragment
 	public static final int TYPE_READY = 4;
 	public static String[] TYPE = { "", "story", "offline", "online", "Ready" };
 
+	public static final int TYPE_NCCU = 98;
+	public static final int TYPE_USER = 99;
+
 	GoogleMap map;
 	public static final int PARSE_LIMIT = 10;
 
@@ -112,13 +117,14 @@ public class GoogleMapFragment extends Fragment
 	private LocationManager locationMgr;
 	private String provider;
 	private Marker markerMe;
-	MenuItem locateMe;
+	MenuItem locateMe, openSearch;
 	private LatLng current_position;
 	private double current_zoom;
 
 	// slide layer
 	private SlidingLayer mSlidingLayer;
 	private SearchView searchView;
+	private ProgressDialog dialog;
 	public static ArrayList<GoogleMapSearch> searchList;
 	public ListView searchListView;
 	public static GoogleMapSearchAdapter googleMapSearchAdt;
@@ -149,9 +155,9 @@ public class GoogleMapFragment extends Fragment
 		// instantiate list
 		storyList = new ArrayList<News>();
 		setHasOptionsMenu(true);
-		
-		
-		mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+		mActivity.getWindow().setSoftInputMode(
+				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 	}
 
 	@Override
@@ -175,6 +181,22 @@ public class GoogleMapFragment extends Fragment
 					Toast.makeText(mActivity, "請開啟定位！", Toast.LENGTH_SHORT)
 							.show();
 				}
+
+				return false;
+			}
+		});
+		
+		openSearch = menu.add("openSearch");
+		openSearch.setIcon(R.drawable.ic_action_search).setShowAsAction(
+				MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		openSearch.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				// TODO Auto-generated method stub
+				Log.d(tag, "item " + item.getItemId() + " onclick");
+
+				mSlidingLayer.openLayer(true);
 
 				return false;
 			}
@@ -213,10 +235,25 @@ public class GoogleMapFragment extends Fragment
 				// TODO Auto-generated method stub
 				Log.d(query, "string = " + query);
 
-				//clear list 
+				// clear list
 				searchList.clear();
 				googleMapSearchAdt.notifyDataSetChanged();
-				
+				dialog = ProgressDialog.show(mActivity, "讀取中", "如等待過久請確認網路...",
+						true);
+				dialog.setCanceledOnTouchOutside(true);
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							Thread.sleep(3000);
+						} catch (Exception e) {
+							e.printStackTrace();
+						} finally {
+							dialog.dismiss();
+						}
+					}
+				}).start();
+
 				GoogleMapParseHelper.search_offline(query);
 				return false;
 			}
@@ -300,8 +337,7 @@ public class GoogleMapFragment extends Fragment
 						addMarker_Story(objectId,
 								googleMapSearch.getuserName(),
 								googleMapSearch.getTitle(), position,
-								googleMapSearch.getScore(),
-								1);
+								googleMapSearch.getScore(), 1);
 						break;
 					}
 				}
@@ -402,6 +438,7 @@ public class GoogleMapFragment extends Fragment
 		map.addMarker(new MarkerOptions()
 				.position(NCCU)
 				.title("NCCU")
+				.snippet(",,," + TYPE_NCCU)
 				.icon(BitmapDescriptorFactory
 						.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(NCCU,
@@ -476,6 +513,14 @@ public class GoogleMapFragment extends Fragment
 							double LongitudeDistance = GoogleMapHelper
 									.getGPSLongitudeDistance(mActivity,
 											current_position, current_zoom);
+
+							// new GoogleMapQueryParseHelper(
+							// current_position, LatitudeDistance,
+							// LongitudeDistance).execute();
+							//
+							// List<GoogleMapData> googleMapData = SugarRecord
+							// .listAll(GoogleMapData.class);
+							// googleMapData.
 
 							// start query parse
 							query_Story(current_position, LatitudeDistance,
@@ -662,8 +707,8 @@ public class GoogleMapFragment extends Fragment
 					count++;
 				}
 				System.out.println("搜索到：" + count + "颗衛星");
-				Toast.makeText(mActivity, "搜索到：" + count + "颗衛星",
-						Toast.LENGTH_SHORT).show();
+				// Toast.makeText(mActivity, "搜索到：" + count + "颗衛星",
+				// Toast.LENGTH_SHORT).show();
 				break;
 			}
 		}
@@ -676,6 +721,7 @@ public class GoogleMapFragment extends Fragment
 
 		MarkerOptions markerOpt = new MarkerOptions();
 		markerOpt.position(new LatLng(lat, lng));
+		markerOpt.snippet(",,," + TYPE_USER);
 		markerOpt.title("我在這裡");
 		if (map == null) {
 			Log.d(tag, "map == null");
@@ -1299,6 +1345,24 @@ public class GoogleMapFragment extends Fragment
 				switch (type) {
 				case TYPE_STORY:
 					Log.d(tag, "Icon TYPE_STORY onclick.");
+					
+					//dialog
+					dialog = ProgressDialog.show(mActivity, "讀取中", "如等待過久請確認網路...",
+							true);
+					dialog.setCanceledOnTouchOutside(true);
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								Thread.sleep(3000);
+							} catch (Exception e) {
+								e.printStackTrace();
+							} finally {
+								dialog.dismiss();
+							}
+						}
+					}).start();
+					
 					Intent intent_detail = new Intent();
 					intent_detail.putExtra("objectId", objectId);
 					intent_detail.setClass(mActivity, DetailPage.class);
@@ -1307,6 +1371,23 @@ public class GoogleMapFragment extends Fragment
 				case TYPE_OFFLINE_STORY:
 					Log.d(tag, "Icon TYPE_OFFLINE_STORY onclick.");
 
+					//dialog
+					dialog = ProgressDialog.show(mActivity, "讀取中", "如等待過久請確認網路...",
+							true);
+					dialog.setCanceledOnTouchOutside(true);
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								Thread.sleep(3000);
+							} catch (Exception e) {
+								e.printStackTrace();
+							} finally {
+								dialog.dismiss();
+							}
+						}
+					}).start();
+					
 					ParseQuery<ParseObject> query = ParseQuery
 							.getQuery("offline");
 					// Retrieve the object by id
@@ -1331,6 +1412,9 @@ public class GoogleMapFragment extends Fragment
 										mActivity.startActivity(intent);
 
 									}
+									else{
+										e.printStackTrace();
+									}
 								}
 							});
 
@@ -1341,6 +1425,23 @@ public class GoogleMapFragment extends Fragment
 				case TYPE_READY:
 					Log.d(tag, "Icon TYPE_READY onclick.");
 
+					//dialog
+					dialog = ProgressDialog.show(mActivity, "讀取中", "如等待過久請確認網路...",
+							true);
+					dialog.setCanceledOnTouchOutside(true);
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								Thread.sleep(3000);
+							} catch (Exception e) {
+								e.printStackTrace();
+							} finally {
+								dialog.dismiss();
+							}
+						}
+					}).start();
+					
 					// check is still online or not
 					ParseQuery<ParseObject> checkQuery = new ParseQuery<ParseObject>(
 							"offline");
@@ -1552,6 +1653,9 @@ public class GoogleMapFragment extends Fragment
 														}
 													});
 										}
+									}
+									else{
+										e.printStackTrace();
 									}
 
 								}

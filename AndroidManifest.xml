@@ -75,7 +75,7 @@
         <!-- Sugar ORM -->
         <meta-data
             android:name="DATABASE"
-            android:value="sugar.db" />
+            android:value="sugar_test.db" />
         <meta-data
             android:name="VERSION"
             android:value="2" />

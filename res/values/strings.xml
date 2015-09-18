@@ -125,5 +125,9 @@
     <!-- slide layer -->
     <string name="close_button_container">Close</string>
     <!-- END slide layer -->
+    
+    <!-- Owner fregment -->
+    <string name="remind_login">Login Facebook to unlock!</string>
+    <!-- END Owner fregment -->
 
 </resources>

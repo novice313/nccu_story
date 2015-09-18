@@ -48,7 +48,6 @@ public class MainActivity extends FragmentActivity implements
 	private TabsPagerAdapter mAdapter;
 	private String[] tabs = { "News", "Googlemap", "Mediaplayer", "Owner" };
 	public static int tabsize = 0;
-	
 
 	// Result codes
 	private static final int REQUEST_CODE_RECORD = 1539;
@@ -67,12 +66,14 @@ public class MainActivity extends FragmentActivity implements
 		Parse.initialize(this, "wtSFcggR896xMJQUGblYuphkF6EVw4ChcLcpSowP",
 				"IwJ3gTRBe8cARlxMf3xh97eai2a7MNLP68vdL3IY");
 
-//		WifiManager mWifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-//		
-//		if(!mWifiManager.isWifiEnabled()){
-//			mWifiManager.setWifiEnabled(true);
-//			Toast.makeText(MainActivity.this, "Wi-Fi開啟中....", Toast.LENGTH_LONG).show();
-//		}
+		// WifiManager mWifiManager = (WifiManager)
+		// getSystemService(Context.WIFI_SERVICE);
+		//
+		// if(!mWifiManager.isWifiEnabled()){
+		// mWifiManager.setWifiEnabled(true);
+		// Toast.makeText(MainActivity.this, "Wi-Fi開啟中....",
+		// Toast.LENGTH_LONG).show();
+		// }
 
 		// ParseObject testObject = new ParseObject("TestObject");
 		// testObject.put("foo", "bar");
@@ -213,27 +214,27 @@ public class MainActivity extends FragmentActivity implements
 				});
 		// END set facebook
 
-		
-
 	}
-	
+
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		
+		//hockey app
 		checkForCrashes();
-	    checkForUpdates();
+		checkForUpdates();
 	}
 
 	private void checkForCrashes() {
-	    CrashManager.register(this, "ea6bdfe747bdf04686a0354461adc757");
-	  }
+		CrashManager.register(this, "ea6bdfe747bdf04686a0354461adc757");
+	}
 
-	  private void checkForUpdates() {
-	    // Remove this for store builds!
-	    UpdateManager.register(this, "ea6bdfe747bdf04686a0354461adc757");
-	  }
-	
+	private void checkForUpdates() {
+		// Remove this for store builds!
+		UpdateManager.register(this, "ea6bdfe747bdf04686a0354461adc757");
+	}
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -277,38 +278,39 @@ public class MainActivity extends FragmentActivity implements
 	protected void onStart() {
 		super.onStart();
 		Log.d(tag, "onStart");
-//		if (MediaPlayerFragment.playIntent == null) {
-//			MediaPlayerFragment.playIntent = new Intent(this,
-//					MusicService.class);
-//			bindService(MediaPlayerFragment.playIntent,
-//					MainActivity.musicConnection, Context.BIND_AUTO_CREATE);
-//			startService(MediaPlayerFragment.playIntent);
-//		}
+		// if (MediaPlayerFragment.playIntent == null) {
+		// MediaPlayerFragment.playIntent = new Intent(this,
+		// MusicService.class);
+		// bindService(MediaPlayerFragment.playIntent,
+		// MainActivity.musicConnection, Context.BIND_AUTO_CREATE);
+		// startService(MediaPlayerFragment.playIntent);
+		// }
 	}
 
-//	// mediaplayer
-//	// connect to the service
-//	public static ServiceConnection musicConnection = new ServiceConnection() {
-//
-//		@Override
-//		public void onServiceConnected(ComponentName name, IBinder service) {
-//			MusicBinder binder = (MusicBinder) service;
-//			// get service
-//			MediaPlayerFragment.musicSrv = binder.getService();
-//
-//			// if(musicSrv!=null){
-//			Log.d(tag, MediaPlayerFragment.musicSrv.toString());
-//			// }
-//			// pass list
-//			MediaPlayerFragment.musicSrv.setList(MediaPlayerFragment.songList);
-//			MediaPlayerFragment.musicBound = true;
-//		}
-//
-//		@Override
-//		public void onServiceDisconnected(ComponentName name) {
-//			MediaPlayerFragment.musicBound = false;
-//		}
-//	};
+	// // mediaplayer
+	// // connect to the service
+	// public static ServiceConnection musicConnection = new ServiceConnection()
+	// {
+	//
+	// @Override
+	// public void onServiceConnected(ComponentName name, IBinder service) {
+	// MusicBinder binder = (MusicBinder) service;
+	// // get service
+	// MediaPlayerFragment.musicSrv = binder.getService();
+	//
+	// // if(musicSrv!=null){
+	// Log.d(tag, MediaPlayerFragment.musicSrv.toString());
+	// // }
+	// // pass list
+	// MediaPlayerFragment.musicSrv.setList(MediaPlayerFragment.songList);
+	// MediaPlayerFragment.musicBound = true;
+	// }
+	//
+	// @Override
+	// public void onServiceDisconnected(ComponentName name) {
+	// MediaPlayerFragment.musicBound = false;
+	// }
+	// };
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -340,8 +342,8 @@ public class MainActivity extends FragmentActivity implements
 			break;
 		case R.id.action_test:
 			Log.d(tag, "Test onClick");
-        	    
-			//mediaplayer stop
+
+			// mediaplayer stop
 			MediaPlayerFragment.musicSrv.pausePlayer();
 
 			// Intent intent = new Intent();
@@ -363,7 +365,7 @@ public class MainActivity extends FragmentActivity implements
 			break;
 		case R.id.action_refresh:
 			Log.d(tag, "refresh onclick");
-			
+
 			NewsFragment.newsList.clear();
 			NewsFragment.getNewsList();
 			break;

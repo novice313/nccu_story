@@ -1,17 +1,21 @@
 package mclab1.service.googlemap;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import mclab1.custom.listview.GoogleMapSearch;
 import mclab1.custom.listview.News;
 import mclab1.pages.GoogleMapFragment;
+import mclab1.sugar.GoogleMapData;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.orm.SugarRecord;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -22,7 +26,7 @@ import com.parse.ParseQuery;
 public class GoogleMapParseHelper {
 
 	public static final String TAG = "GoogleMapParseHelper";
-	final private static int HELPER_PARSE_LIMIT = 10;
+	final public static int HELPER_PARSE_LIMIT = 100;
 
 	public GoogleMapParseHelper() {
 		// TODO Auto-generated constructor stub
@@ -38,7 +42,7 @@ public class GoogleMapParseHelper {
 		queries.add(temp2);
 		ParseQuery<ParseObject> parseQuery = ParseQuery.or(queries);
 
-//		parseQuery.whereEqualTo("State", "Ready");
+		// parseQuery.whereEqualTo("State", "Ready");
 		parseQuery.setLimit(HELPER_PARSE_LIMIT);
 		parseQuery.addDescendingOrder("createAt");
 		parseQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -145,12 +149,12 @@ public class GoogleMapParseHelper {
 				}// END e ==null
 			}
 		});
-		
-		//query story
+
+		// query story
 		search_story(condition);
 
 	}
-	
+
 	public static void search_story(String condition) {
 		ParseQuery<ParseObject> temp1 = new ParseQuery<ParseObject>("story");
 		temp1.whereEqualTo("userName", condition);
@@ -161,7 +165,7 @@ public class GoogleMapParseHelper {
 		queries.add(temp2);
 		ParseQuery<ParseObject> parseQuery = ParseQuery.or(queries);
 
-//		parseQuery.whereEqualTo("State", "Ready");
+		// parseQuery.whereEqualTo("State", "Ready");
 		parseQuery.setLimit(HELPER_PARSE_LIMIT);
 		parseQuery.addDescendingOrder("createAt");
 		parseQuery.findInBackground(new FindCallback<ParseObject>() {
