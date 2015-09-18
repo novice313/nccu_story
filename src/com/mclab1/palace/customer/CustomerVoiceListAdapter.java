@@ -15,6 +15,7 @@ import com.parse.ParseQuery;
 import edu.mclab1.nccu_story.R;
 import android.app.Activity;
 import android.content.Context;
+import android.text.StaticLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,8 +65,8 @@ public class CustomerVoiceListAdapter extends ArrayAdapter<VoiceDataElement> {
 
 			viewHolder.image = (ImageView) rowView
 					.findViewById(R.id.voice_row_image);
-			viewHolder.ratingBar = (RatingBar) rowView
-					.findViewById(R.id.voice_row_bar);
+			//viewHolder.ratingBar = (RatingBar) rowView
+			//		.findViewById(R.id.voice_row_bar);
 			viewHolder.title = (TextView) rowView
 					.findViewById(R.id.voice_row_guidername);
 			viewHolder.datdate = (TextView) rowView
@@ -77,7 +78,7 @@ public class CustomerVoiceListAdapter extends ArrayAdapter<VoiceDataElement> {
 		final ViewHolder holder = (ViewHolder) rowView.getTag();
 		Random ran = new Random();
 		holder.datdate.setText(mp3Path.get(position).createdTime);
-		holder.ratingBar.setRating(ran.nextInt(5)+1);                   //////柏要給我分數
+		//holder.ratingBar.setRating(ran.nextInt(5)+1);                   //////柏要給我分數
 		
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");
 		System.out.println("latitiude"+Globalvariable.latitude+" "+Globalvariable.longitude);

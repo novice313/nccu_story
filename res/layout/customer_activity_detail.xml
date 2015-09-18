@@ -19,6 +19,15 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+   <!--  <Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10sp"
+    android:text="音樂暫停"
+    android:id="@+id/StopButton"
+    />
+     -->
 
     <ListView
         android:id="@+id/customer_mp3_listview"
