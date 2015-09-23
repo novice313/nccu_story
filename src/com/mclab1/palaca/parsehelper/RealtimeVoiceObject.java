@@ -85,7 +85,7 @@ public class RealtimeVoiceObject {
 					file = new ParseFile("Realtime.mp3", data);//change
 
 						EventBus.getDefault().postSticky(
-							new DisplayEvent("Saving voice file to parse..."));
+							new DisplayEvent("準備上傳到parse....."));
 					file.saveInBackground(new SaveCallback() {
 
 						@Override
@@ -93,8 +93,8 @@ public class RealtimeVoiceObject {
 							//while(if_retransmit){
 								if_retransmit=false;
 							if(e == null) {
-								EventBus.getDefault().postSticky(
-										new DisplayEvent("Saving1"));
+								//EventBus.getDefault().postSticky(
+								//		new DisplayEvent("Saving1"));
 								final ParseObject parseObject = new ParseObject(
 										table_name);
 								
@@ -119,7 +119,7 @@ public class RealtimeVoiceObject {
 								EventBus.getDefault()
 								.postSticky(
 										new DisplayEvent(
-												"Saving Realtimevoice file to parse done!!"));
+												"這一段上傳parse成功!"));
 								//String path = Environment.getExternalStorageDirectory().getPath();
 								//檔案路徑，記得要加斜線(這樣/sdcard/filename)
 			//String mp3File = Environment.getExternalStorageDirectory()+"/A"+dts+"Realtime"+".mp3";
@@ -167,8 +167,8 @@ public class RealtimeVoiceObject {
 										new DisplayEvent(
 												"Failed to Saving voice file to parse1..."+Tagi+" "+SubTagi+" "+e));
 								if_retransmit=true;
-								EventBus.getDefault().postSticky(
-										new DisplayEvent("Saving2"+if_retransmit));
+								//EventBus.getDefault().postSticky(
+								//		new DisplayEvent("Saving2"+if_retransmit));
 							/*	while(e!=null){
 									try {
 									Thread.sleep(2000);
@@ -281,8 +281,8 @@ public class RealtimeVoiceObject {
 							new DisplayEvent(
 									"Failed to Saving voice file to parse3..."));
 				}
-				EventBus.getDefault().postSticky(
-						new DisplayEvent("Saving3"));
+				//EventBus.getDefault().postSticky(
+				//		new DisplayEvent("Saving3"));
 
 			//}
 			

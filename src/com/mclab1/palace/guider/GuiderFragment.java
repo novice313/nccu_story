@@ -77,7 +77,7 @@ public class GuiderFragment extends Fragment {
 		try {
 			EventBus.getDefault().register(this);
 			EventBus.getDefault().post(new DisplayEvent("Guider init!"));
-			EventBus.getDefault().postSticky(new DisplayEvent("Guider test sticky  for PRO GUIDER !"));
+			//EventBus.getDefault().postSticky(new DisplayEvent("Guider test sticky  for PRO GUIDER !"));
 			/*EventBus.getDefault().postSticky(new DisplayEvent("CommSettings.getMulticastAddr() !"+CommSettings.getMulticastAddr()));*/
 		} catch (Exception e) {
 			// TODO: handle exception

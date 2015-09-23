@@ -831,15 +831,16 @@ containing a value of this type.
         public static final int notif_icon=0x7f02005c;
         public static final int placeholder=0x7f02005d;
         public static final int play=0x7f02005e;
-        public static final int powered_by_google_dark=0x7f02005f;
-        public static final int powered_by_google_light=0x7f020060;
-        public static final int quit_icon=0x7f020061;
-        public static final int rand=0x7f020062;
-        public static final int rounded_corner=0x7f020063;
-        public static final int star=0x7f020064;
-        public static final int star_off=0x7f020065;
-        public static final int touchscreen=0x7f020066;
-        public static final int wi_fi_direct=0x7f020067;
+        public static final int player_stop=0x7f02005f;
+        public static final int powered_by_google_dark=0x7f020060;
+        public static final int powered_by_google_light=0x7f020061;
+        public static final int quit_icon=0x7f020062;
+        public static final int rand=0x7f020063;
+        public static final int rounded_corner=0x7f020064;
+        public static final int star=0x7f020065;
+        public static final int star_off=0x7f020066;
+        public static final int touchscreen=0x7f020067;
+        public static final int wi_fi_direct=0x7f020068;
     }
     public static final class id {
         public static final int AbsoluteLayout1=0x7f0a0048;

@@ -428,11 +428,13 @@ case R.id.btn_change_mode:
 	if(if_Global_local==1){
 		System.out.println("local");
 		if (if_clientL_offline_mode) {
-			if(userName!=null && title!=null && content!=null && imageView!=null && imageView!=null){
+			if(userName!=null && title!=null && content!=null){
 			userName.setVisibility(View.GONE);
 			title.setVisibility(View.GONE);
 			content.setVisibility(View.GONE);
-	        imageView.setVisibility(View.GONE);
+			}
+		    if(imageView!=null){
+		        imageView.setVisibility(View.GONE);
 			}
 			if_clientL_offline_mode = false;
 			change_to_client_online_fragment();
@@ -444,10 +446,15 @@ case R.id.btn_change_mode:
 	if(if_Global_local==0){
 		System.out.println("global");
 			if(if_clientL_offline_mode){
-				userName.setVisibility(View.GONE);
-				title.setVisibility(View.GONE);
-				content.setVisibility(View.GONE);
-		        imageView.setVisibility(View.GONE);
+				
+				if(userName!=null && title!=null && content!=null){
+					userName.setVisibility(View.GONE);
+					title.setVisibility(View.GONE);
+					content.setVisibility(View.GONE);
+					}
+				    if(imageView!=null){
+				        imageView.setVisibility(View.GONE);
+					}
 				
 				if_clientL_offline_mode=false;
 				change_to_client_Global_online_fragment();
@@ -514,7 +521,7 @@ private void init() {  //init=> OnResume
 
 	                Toast.makeText(
 	                        Client_Main.this,
-	                        "您必須要跳到設定可連上網路的WIFI",
+	                        "您必須要跳到設定 =>WIFI =>選可用的wifi",
 	                        Toast.LENGTH_LONG).show();
 	                Looper.loop();  
 		    		

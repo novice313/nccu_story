@@ -14,18 +14,23 @@ import java.util.Date;
 
 import edu.mclab1.nccu_story.R;
 import android.support.v4.app.Fragment;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.mclab1.palaca.parsehelper.VoiceObject;
 import com.mclab1.palace.guider.DisplayEvent;
@@ -40,6 +45,7 @@ import com.parse.ParseQuery;
 
 import de.greenrobot.event.EventBus;
 
+@SuppressLint("ShowToast")
 public class CustomerFragmentGlobal extends Fragment {
 	public static final String SOCKET_TAG_STRING = "wifi-socket-test";
 	public static final String TAG = "CustomerFragment";
@@ -72,6 +78,7 @@ public class CustomerFragmentGlobal extends Fragment {
 	Thread onThread;
 	volatile boolean terminate = false;
 	volatile boolean terminate2 = false;
+	private Activity activity;
  
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,7 +91,23 @@ public class CustomerFragmentGlobal extends Fragment {
 
 		return view;
 	}
-	//@O
+	
+	@Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = activity;
+    }
+	
+	private void showToastByRunnable(final Context context, final CharSequence text, final int duration)     {  
+        Handler handler = new Handler(Looper.getMainLooper());  
+        handler.post(new Runnable() {  
+            @Override  
+            public void run() {  
+                Toast.makeText(context, text, duration).show();  
+            }  
+        });  
+    }
+	
 	@Override
 	public void onDestroy(){
 		super.onDestroy();    		
@@ -268,8 +291,8 @@ public class CustomerFragmentGlobal extends Fragment {
 								int mincre=Integer.valueOf(creatStri.substring(14,16));
 								int seccre=Integer.valueOf(creatStri.substring(17,19));
 								final int crevalue=ddcre*86400+hurcre*60*60+mincre*60+seccre;
-								EventBus.getDefault().post(new DisplayEvent("mp3CreTime："+ddcre+" "+seccre+"localtime:"+daytemp+" "+sectemp+" "+
-								crevalue+" "+intValue)) ;
+								//EventBus.getDefault().post(new DisplayEvent("mp3CreTime："+ddcre+" "+seccre+"localtime:"+daytemp+" "+sectemp+" "+
+								//crevalue+" "+intValue)) ;
 								System.out.println("yycre"+yycre+mmcre+' '+yertemp+montemp);
 								if(yycre<=yertemp){     //parse year時間會小於yertemp year的時間
 									if(ddcre<=daytemp+1){    //daytemp都會少一
@@ -294,7 +317,7 @@ public class CustomerFragmentGlobal extends Fragment {
 								}
 								//EventBus.getDefault().post(new DisplayEvent("indexvalue.intValue()"+indexvalue.intValue()));
 								realtimearray[(indexvalue.intValue()-1)]=filePath;
-								EventBus.getDefault().post(new DisplayEvent("Download mp3 completed"+filePath));
+								//EventBus.getDefault().post(new DisplayEvent("Download mp3 completed"+filePath));
 								//System.out.println("Download mp3 completed"+filePath+" "+realtimedatas.isEmpty());
 								if(if_notplay&&realtimearray[(indexvalue.intValue()-1)]!=null){       //剛開始聽才會值行到
 									if_notplay=false;
@@ -302,16 +325,21 @@ public class CustomerFragmentGlobal extends Fragment {
 										@Override
 										public void run(){
 											if(!terminate2){
-											EventBus.getDefault().post(new DisplayEvent("i am comming"));
+											//EventBus.getDefault().post(new DisplayEvent("i am comming"));
 											i=(indexvalue.intValue()-1);
 											while(true){
 											if(if_for){
-												EventBus.getDefault().post(new DisplayEvent("find realtimearray2!!!"
-														+realtimearray[i]+"i: "+i));
+												//EventBus.getDefault().post(new DisplayEvent("find realtimearray2!!!"
+												//		+realtimearray[i]+"i: "+i));
 											for(;realtimearray[i]!=null;i++){
 												if(if_wait){
 													 try {
-														 EventBus.getDefault().post(new DisplayEvent("Wait.30...."));
+														 
+													        //Context context = getActivity().getApplicationContext();
+													        //Looper.prepare();
+													        
+													        showToastByRunnable(activity,"要等 30秒 ...耐心等候",30000);
+														 //EventBus.getDefault().post(new DisplayEvent("Wait.30...."));
 														Thread.sleep(30000);
 													} catch (InterruptedException e) {
 														// TODO Auto-generated catch block
@@ -323,8 +351,10 @@ public class CustomerFragmentGlobal extends Fragment {
 												if(realtimearray[i]!=null){
 												mpintro = MediaPlayer.create(getActivity(), Uri.parse(realtimearray[i]));
 												mpintro.start();
-												EventBus.getDefault().post(new DisplayEvent("IsPlaying"
-														+"i: "+i+"indexvalue: "+indexvalue.intValue()));
+										        //Context context = getActivity().getApplicationContext();
+										        showToastByRunnable(activity, "播放第"+i+"段",Toast.LENGTH_LONG);
+												//EventBus.getDefault().post(new DisplayEvent("IsPlaying"
+												//		+"i: "+i+"indexvalue: "+indexvalue.intValue()));
 												}
 												
 												while(true){
@@ -352,16 +382,17 @@ public class CustomerFragmentGlobal extends Fragment {
 											int sectemp2  = tempdDate2.getSeconds();
 											intvalue2=hurtemp2*60*60+mintemp2*60+sectemp2;  //沒有加上天數
 											//System.out.println("intValue2"+mintemp2+" "+sectemp2+" "+intvalue2);
-											EventBus.getDefault().post(new DisplayEvent("wait and find realtimearray_i"
-													+"i: "+i+" "+realtimearray[i]));
+											//EventBus.getDefault().post(new DisplayEvent("wait and find realtimearray_i"
+											//		+"i: "+i+" "+realtimearray[i]));
 											if_for=false;
 											}   //if if_for
 											System.out.println(realtimearray[i]+"i: "+i);
 											for(int j=i;realtimearray[j]!=null;j++){
 												i=j;    //一找到播放i 繼續
-												if_for=true;		
-												EventBus.getDefault().post(new DisplayEvent("find realtimearray!!!"
-														+realtimearray[i]+"i: "+i+"j: "+j));
+												if_for=true;	
+												
+												//EventBus.getDefault().post(new DisplayEvent("find realtimearray!!!"
+												//		+realtimearray[i]+"i: "+i+"j: "+j));
 												
 											}
 											/*if(realtimearray[i]!=null){ //目前或是下一個有直就往下走
@@ -382,8 +413,10 @@ public class CustomerFragmentGlobal extends Fragment {
 											intvalue3=hurtemp3*60*60+mintemp3*60+sectemp3;
 											System.out.println("intValue3"+mintemp3+" "+sectemp3+" "+realtimearray[i]);
 											if((intvalue2+20)<intvalue3){  //小一點，因為前面是20s看有沒有最新的，要下載
-												EventBus.getDefault().post(new DisplayEvent("maximum to wait 180s!!!"
-														+realtimearray[i]+" "+i));
+										        //showToastByRunnable(activity, "要等3分鐘!...",Toast.LENGTH_LONG);
+								                
+												//EventBus.getDefault().post(new DisplayEvent("maximum to wait 180s!!!"
+												//		+realtimearray[i]+" "+i));
 												break;
 											}
 											
@@ -393,7 +426,8 @@ public class CustomerFragmentGlobal extends Fragment {
 											for(int j=0;j<arr_size;j++){
 												realtimearray[j]=null;     //做完清空
 											}
-											EventBus.getDefault().post(new DisplayEvent("mpintro_out"));
+									        showToastByRunnable(activity, "Live 結束 !",Toast.LENGTH_LONG);
+											//EventBus.getDefault().post(new DisplayEvent("mpintro_out"));
 											//realtimedatas.clear();
 											System.out.println("completedtoplaymp3"+filePath);
 											if_notplay=true;
@@ -558,9 +592,9 @@ public class CustomerFragmentGlobal extends Fragment {
 		super.onResume();
 		try {
 			EventBus.getDefault().register(this);
-			EventBus.getDefault().post(new DisplayEvent("Customer init!"));
-			EventBus.getDefault().postSticky(
-					new DisplayEvent("Customer test sticky!"));
+			 //EventBus.getDefault().post(new DisplayEvent("Customer init!"));
+			//EventBus.getDefault().postSticky(
+			//		new DisplayEvent("Customer test sticky!"));
 			//EventBus.getDefault().postSticky(
 			//		new DisplayEvent("CommSettings.getMulticastAddr!"+CommSettings.getMulticastAddr()));
 		} catch (Exception e) {

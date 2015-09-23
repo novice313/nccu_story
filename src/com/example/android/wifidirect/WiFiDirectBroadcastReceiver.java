@@ -133,7 +133,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 										Log.i(TAG, "2Wifi" + ssid + "," + passphrase);
 									
 									EventBus.getDefault().postSticky(new WifiP2PGroupInfoEvent(ssid, passphrase));
-									EventBus.getDefault().postSticky(new DisplayEvent("SSID:"+ssid+"  "+"passwd:"+passphrase));
+									//EventBus.getDefault().postSticky(new DisplayEvent("SSID:"+ssid+"  "+"passwd:"+passphrase));
 									
 								} catch (Exception e) {
 									e.printStackTrace();

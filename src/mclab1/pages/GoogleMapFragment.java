@@ -849,7 +849,7 @@ public class GoogleMapFragment extends Fragment
 															wifiManager2
 																	.reconnect();
 															if_find_wificonnect = true;
-															if_Global_local = 1;
+															if_Global_local = 1;       //判斷是給 Local
 															break;
 														}
 													}
