@@ -16,6 +16,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -311,26 +312,28 @@ public class GoogleMapParseHelper {
 							}
 						}
 					}
-					// new Thread(){
-					// public void run() {
-					// try {
-					// Thread.sleep(SEARCH_WAIT_FOR_RESULT*1000);
-					// } catch (InterruptedException e) {
-					// // TODO Auto-generated catch block
-					// e.printStackTrace();
-					// }
-					if (GoogleMapFragment.searchList.isEmpty()) {
-						if (dialog.isShowing()) {
-							dialog.dismiss();
-						}
-						Toast.makeText(mContext, "No match element.",
-								Toast.LENGTH_SHORT).show();
-					} else {
-						Toast.makeText(mContext, "Click the result you want.",
-								Toast.LENGTH_SHORT).show();
-					}
-					// };
-					// }.start();
+					new Thread() {
+						public void run() {
+							try {
+								Thread.sleep(SEARCH_WAIT_FOR_RESULT * 1000);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							Looper.prepare();
+							if (GoogleMapFragment.searchList.isEmpty()) {
+								if (dialog.isShowing()) {
+									dialog.dismiss();
+								}
+								Toast.makeText(mContext, "No match element.",
+										Toast.LENGTH_SHORT).show();
+							} else {
+								Toast.makeText(mContext,
+										"Click the result you want.",
+										Toast.LENGTH_SHORT).show();
+							}
+						};
+					}.start();
 
 					// END search onlineStory task
 				}// END e ==null
