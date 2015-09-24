@@ -3,6 +3,7 @@ package mclab1.custom.listview;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,7 +64,10 @@ public class NewsAdapter extends BaseAdapter{
 		// get title and artist strings
 		userName.setText(currNews.getuserName());
 		title.setText(currNews.getTitle());
-		image.setImageBitmap(currNews.getImage());
+		Bitmap bmp = currNews.getImage();
+		if(bmp!=null){
+			image.setImageBitmap(bmp);
+		}
 		
 		content.setText(currNews.getContent());
 		// set position as tag

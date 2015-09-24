@@ -58,16 +58,19 @@ public class SongAdapter extends BaseAdapter {
 		// set position as tag
 		songLay.setTag(position);
 		songLay.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				//songPick
-				Log.d(tag, v.toString()+" onClick");
-				if(MediaPlayerFragment.musicSrv==null){Log.d(tag, "musicSrv==null");}
-				MediaPlayerFragment.musicSrv.setSong(Integer.parseInt(v.getTag().toString()));
+				// songPick
+				Log.d(tag, v.toString() + " onClick");
+				if (MediaPlayerFragment.musicSrv == null) {
+					Log.d(tag, "musicSrv==null");
+				}
+				MediaPlayerFragment.musicSrv.setSong(Integer.parseInt(v
+						.getTag().toString()));
 				MediaPlayerFragment.musicSrv.playSong();
 				if (MediaPlayerFragment.playbackPaused) {
-					//setController();
+					// setController();
 					MediaPlayerFragment.playbackPaused = false;
 				}
 				MediaPlayerFragment.controller.show();

@@ -223,12 +223,21 @@ class NewsAsyncTask extends AsyncTask<Void, Void, Void>{
 															titleString, score,
 															bmp, contentString,
 															latitude, longitude));
-
 													NewsFragment.newsAdt.notifyDataSetChanged();
 												}
 											}
 										});
+							}else{
+								Bitmap bmp = null;
+								NewsFragment.newsList.add(new News(
+										objectIdString,
+										userNameString,
+										userUuidString,
+										titleString, score,
+										bmp, contentString,
+										latitude, longitude));
 							}
+							NewsFragment.newsAdt.notifyDataSetChanged();
 						}
 					}
 				}

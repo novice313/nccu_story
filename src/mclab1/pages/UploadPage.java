@@ -142,22 +142,22 @@ public class UploadPage extends Activity {
 						@Override
 						public void run() {
 
-							if (uploadImage == null) {
-								Toast.makeText(getApplicationContext(),
-										"You must select one picture!",
-										Toast.LENGTH_SHORT);
-							} else {
-								Toast.makeText(getApplicationContext(),
-										"Start uploading", Toast.LENGTH_SHORT)
-										.show();
-								try {
-									Upload();
-								} catch (ParseException e) {
-									e.printStackTrace();
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
+							// if (uploadImage == null) {
+							// Toast.makeText(getApplicationContext(),
+							// "You must select one picture!",
+							// Toast.LENGTH_SHORT);
+							// } else {
+							Toast.makeText(getApplicationContext(),
+									"Start uploading", Toast.LENGTH_SHORT)
+									.show();
+							try {
+								Upload();
+							} catch (ParseException e) {
+								e.printStackTrace();
+							} catch (IOException e) {
+								e.printStackTrace();
 							}
+							// }
 						}
 					});
 				} else {
@@ -184,7 +184,7 @@ public class UploadPage extends Activity {
 		// image
 		if (uploadImage != null) {
 			imageFile = new ParseFile("uploadImage", uploadImage);
-			imageFile.save();
+			imageFile.saveInBackground();
 			Log.d(tag, "upload imageFile complete");
 		} else {
 			Log.d(tag, "no image file.");
@@ -196,7 +196,7 @@ public class UploadPage extends Activity {
 		if (musicPath != null) {
 			uploadMusic = readInFile(musicPath);
 			musicFile = new ParseFile("uploadMusic.mp3", uploadMusic);
-			musicFile.save();
+			musicFile.saveInBackground();
 			Log.d(tag, "upload musicFile complete");
 		} else {
 			Log.d(tag, "no music file.");
@@ -431,8 +431,7 @@ public class UploadPage extends Activity {
 			mScale = (float) ((phone_height / 1.5) / bitmap.getHeight());
 			Log.d(tag, "mScale = " + mScale);
 		} else {// too small situation
-			float mScale_width = phone_width
-					/ (float) bitmap.getWidth();
+			float mScale_width = phone_width / (float) bitmap.getWidth();
 			float mScale_height = (float) ((phone_height / 1.5) / bitmap
 					.getHeight());
 			if (mScale_width < mScale_height) {

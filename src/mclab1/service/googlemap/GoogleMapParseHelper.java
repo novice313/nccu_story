@@ -4,15 +4,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.security.auth.PrivateCredentialPermission;
+
 import mclab1.custom.listview.GoogleMapSearch;
 import mclab1.custom.listview.News;
 import mclab1.pages.GoogleMapFragment;
 import mclab1.sugar.GoogleMapData;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.orm.SugarRecord;
@@ -26,17 +31,23 @@ import com.parse.ParseQuery;
 public class GoogleMapParseHelper {
 
 	public static final String TAG = "GoogleMapParseHelper";
-	final public static int HELPER_PARSE_LIMIT = 100;
+	final public static int HELPER_PARSE_LIMIT = 20;
+	final private static int SEARCH_WAIT_FOR_RESULT = 1;// sec
+	static ProgressDialog dialog;
 
 	public GoogleMapParseHelper() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static void search_offline(String condition) {
+	public static void search_offline(Context mContext, String condition) {
+
+		dialog = ProgressDialog.show(mContext, "讀取中", "如等待過久請確認網路...", true);
+		dialog.setCanceledOnTouchOutside(false);
+
 		ParseQuery<ParseObject> temp1 = new ParseQuery<ParseObject>("offline");
-		temp1.whereEqualTo("userName", condition);
+		temp1.whereContains("userName", condition);
 		ParseQuery<ParseObject> temp2 = new ParseQuery<ParseObject>("offline");
-		temp2.whereEqualTo("title", condition);
+		temp2.whereContains("title", condition);
 		List<ParseQuery<ParseObject>> queries = new ArrayList<ParseQuery<ParseObject>>();
 		queries.add(temp1);
 		queries.add(temp2);
@@ -51,6 +62,7 @@ public class GoogleMapParseHelper {
 			public void done(List<ParseObject> objects, ParseException e) {
 				// TODO Auto-generated method stub
 				if (e == null) {
+					dialog.dismiss();
 					if (!objects.isEmpty()) {
 						for (int i = 0; i < objects.size(); i++) {
 							boolean isNew = true;
@@ -132,16 +144,30 @@ public class GoogleMapParseHelper {
 																		longitude,
 																		state,
 																		SSIDString));
+														GoogleMapFragment.googleMapSearchAdt
+																.notifyDataSetChanged();
 
 														if (bmp != null) {
 															bmp.recycle();
 														}
-														GoogleMapFragment.googleMapSearchAdt
-																.notifyDataSetChanged();
 													}
 												}
 											});
+								} else {
+									Bitmap bmp = null;
+									GoogleMapFragment.searchList
+											.add(new GoogleMapSearch(
+													objectIdString,
+													userNameString,
+													userUuidString,
+													titleString, score, bmp,
+													contentString, latitude,
+													longitude, state,
+													SSIDString));
 								}
+
+								GoogleMapFragment.googleMapSearchAdt
+										.notifyDataSetChanged();
 							}
 						}
 					}
@@ -151,15 +177,16 @@ public class GoogleMapParseHelper {
 		});
 
 		// query story
-		search_story(condition);
+		search_story(mContext, condition);
 
 	}
 
-	public static void search_story(String condition) {
+	public static void search_story(Context Context, String condition) {
+		final Context mContext = Context;
 		ParseQuery<ParseObject> temp1 = new ParseQuery<ParseObject>("story");
-		temp1.whereEqualTo("userName", condition);
+		temp1.whereContains("userName", condition);
 		ParseQuery<ParseObject> temp2 = new ParseQuery<ParseObject>("story");
-		temp2.whereEqualTo("title", condition);
+		temp2.whereContains("title", condition);
 		List<ParseQuery<ParseObject>> queries = new ArrayList<ParseQuery<ParseObject>>();
 		queries.add(temp1);
 		queries.add(temp2);
@@ -175,6 +202,9 @@ public class GoogleMapParseHelper {
 				// TODO Auto-generated method stub
 				if (e == null) {
 					if (!objects.isEmpty()) {
+						if (dialog.isShowing()) {
+							dialog.dismiss();
+						}
 						for (int i = 0; i < objects.size(); i++) {
 							boolean isNew = true;
 							ParseObject parseObject = objects.get(i);
@@ -255,19 +285,53 @@ public class GoogleMapParseHelper {
 																		longitude,
 																		state,
 																		SSIDString));
+														GoogleMapFragment.googleMapSearchAdt
+																.notifyDataSetChanged();
 
 														if (bmp != null) {
 															bmp.recycle();
 														}
-														GoogleMapFragment.googleMapSearchAdt
-																.notifyDataSetChanged();
 													}
 												}
 											});
+								} else {
+									Bitmap bmp = null;
+									GoogleMapFragment.searchList
+											.add(new GoogleMapSearch(
+													objectIdString,
+													userNameString,
+													userUuidString,
+													titleString, score, bmp,
+													contentString, latitude,
+													longitude, state,
+													SSIDString));
 								}
+								GoogleMapFragment.googleMapSearchAdt
+										.notifyDataSetChanged();
 							}
 						}
 					}
+					// new Thread(){
+					// public void run() {
+					// try {
+					// Thread.sleep(SEARCH_WAIT_FOR_RESULT*1000);
+					// } catch (InterruptedException e) {
+					// // TODO Auto-generated catch block
+					// e.printStackTrace();
+					// }
+					if (GoogleMapFragment.searchList.isEmpty()) {
+						if (dialog.isShowing()) {
+							dialog.dismiss();
+						}
+						Toast.makeText(mContext, "No match element.",
+								Toast.LENGTH_SHORT).show();
+					} else {
+						Toast.makeText(mContext, "Click the result you want.",
+								Toast.LENGTH_SHORT).show();
+					}
+					// };
+					// }.start();
+
 					// END search onlineStory task
 				}// END e ==null
 			}

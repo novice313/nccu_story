@@ -28,7 +28,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
@@ -52,8 +51,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -263,6 +260,8 @@ private void  change_to_client_Global_online_fragment(){
 public void onEvent(NewClientConnectionEvent event) {
 
 }
+
+
 /*public void test_connect() {
 String networkSSID = "DIRECT-Q6-Android_4ff3";
 String networkPass = "CegDR821";
@@ -429,10 +428,12 @@ case R.id.btn_change_mode:
 	if(if_Global_local==1){
 		System.out.println("local");
 		if (if_clientL_offline_mode) {
+			if(userName!=null && title!=null && content!=null && imageView!=null && imageView!=null){
 			userName.setVisibility(View.GONE);
 			title.setVisibility(View.GONE);
 			content.setVisibility(View.GONE);
 	        imageView.setVisibility(View.GONE);
+			}
 			if_clientL_offline_mode = false;
 			change_to_client_online_fragment();
 			playerIntent = new Intent(this, Client_Player.class);
@@ -477,6 +478,7 @@ default:
 	return super.onOptionsItemSelected(item);
 }
 }
+
 
 
 
@@ -887,12 +889,10 @@ fragment.showDetails(device);
 public void onChannelDisconnected() {
 }
 
-
 @Override
 public void disconnect() {
 	
 }
-
 
 @Override
 public void cancelDisconnect() {
@@ -901,7 +901,7 @@ public void cancelDisconnect() {
 @Override
 public void connect(WifiP2pConfig config) {
 	// TODO Auto-generated method stub
-	
+
 }
 
 }

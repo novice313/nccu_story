@@ -138,13 +138,12 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 	}
 
 	public void startService() {
-		if (MediaPlayerFragment.playIntent == null) {
-			MediaPlayerFragment.playIntent = new Intent(mContext,
-					MusicService.class);
-			mContext.bindService(MediaPlayerFragment.playIntent,
-					MediaPlayerFragment.musicConnection,
+		if (playIntent == null) {
+			Log.d(tag, "startService");
+			playIntent = new Intent(mContext, MusicService.class);
+			mContext.bindService(playIntent, musicConnection,
 					Context.BIND_AUTO_CREATE);
-			mContext.startService(MediaPlayerFragment.playIntent);
+			mContext.startService(playIntent);
 		}
 	}
 
@@ -200,19 +199,19 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			MusicBinder binder = (MusicBinder) service;
 			// get service
-			MediaPlayerFragment.musicSrv = binder.getService();
+			musicSrv = binder.getService();
 
 			// if(musicSrv!=null){
-			Log.d(tag, MediaPlayerFragment.musicSrv.toString());
+			Log.d(tag, musicSrv.toString());
 			// }
 			// pass list
-			MediaPlayerFragment.musicSrv.setList(MediaPlayerFragment.songList);
-			MediaPlayerFragment.musicBound = true;
+			musicSrv.setList(songList);
+			musicBound = true;
 		}
 
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
-			MediaPlayerFragment.musicBound = false;
+			musicBound = false;
 		}
 	};
 
@@ -242,15 +241,16 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 		// TODO Auto-generated method stub
 		Log.d(tag, "height = " + controller.getHeight());
 		controller.removeAllViews();
-		// if (MediaPlayerFragment.playIntent != null) {
-		// stopService();
-		// }
+		if (playIntent != null) {
+			 stopService();
+		}
+		playIntent = null;
 		super.onDestroyView();
 	}
 
 	public void stopService() {
-		mContext.stopService(playIntent);
 		mContext.unbindService(musicConnection);
+		mContext.stopService(playIntent);
 	}
 
 	@Override
@@ -327,9 +327,9 @@ public class MediaPlayerFragment extends Fragment implements MediaPlayerControl 
 }
 
 class MediaPlayerAsyncTask extends AsyncTask<Void, Void, Void> {
-	
+
 	private Context mContext;
-	
+
 	public MediaPlayerAsyncTask(Context mContext) {
 		// TODO Auto-generated constructor stub
 		this.mContext = mContext;
@@ -355,7 +355,8 @@ class MediaPlayerAsyncTask extends AsyncTask<Void, Void, Void> {
 				long thisId = musicCursor.getLong(idColumn);
 				String thisTitle = musicCursor.getString(titleColumn);
 				String thisArtist = musicCursor.getString(artistColumn);
-				MediaPlayerFragment.songList.add(new Song(thisId, thisTitle, thisArtist));
+				MediaPlayerFragment.songList.add(new Song(thisId, thisTitle,
+						thisArtist));
 			} while (musicCursor.moveToNext());
 		}
 		return null;

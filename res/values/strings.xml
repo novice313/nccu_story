@@ -124,6 +124,7 @@
     
     <!-- slide layer -->
     <string name="close_button_container">Close</string>
+    <string name="type_in_hint">欲查詢姓名或作品名</string>
     <!-- END slide layer -->
     
     <!-- Owner fregment -->

@@ -19,6 +19,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.GpsSatellite;
@@ -41,6 +42,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -92,6 +94,7 @@ public class GoogleMapFragment extends Fragment
 /* implements OnMapReadyCallback */implements OnMapReadyCallback {
 
 	public static ArrayList<News> storyList;
+	List<Marker> markerList = new ArrayList<Marker>();
 	private final static String tag = "GoogleMapFragment";
 	private static final String MAP_FRAGMENT_TAG = "map";
 	final LatLng NCCU = new LatLng(24.986233, 121.575843);
@@ -156,6 +159,7 @@ public class GoogleMapFragment extends Fragment
 		storyList = new ArrayList<News>();
 		setHasOptionsMenu(true);
 
+		// hide key board
 		mActivity.getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 	}
@@ -185,7 +189,7 @@ public class GoogleMapFragment extends Fragment
 				return false;
 			}
 		});
-		
+
 		openSearch = menu.add("openSearch");
 		openSearch.setIcon(R.drawable.ic_action_search).setShowAsAction(
 				MenuItem.SHOW_AS_ACTION_IF_ROOM);
@@ -238,23 +242,19 @@ public class GoogleMapFragment extends Fragment
 				// clear list
 				searchList.clear();
 				googleMapSearchAdt.notifyDataSetChanged();
-				dialog = ProgressDialog.show(mActivity, "讀取中", "如等待過久請確認網路...",
-						true);
-				dialog.setCanceledOnTouchOutside(true);
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							Thread.sleep(3000);
-						} catch (Exception e) {
-							e.printStackTrace();
-						} finally {
-							dialog.dismiss();
-						}
-					}
-				}).start();
 
-				GoogleMapParseHelper.search_offline(query);
+				// Check if no view has focus:
+				// View view = mActivity.getCurrentFocus();
+				// if (view != null) {
+				// Log.d(tag, "view != null");
+				// InputMethodManager imm = (InputMethodManager) mActivity
+				// .getSystemService(Context.INPUT_METHOD_SERVICE);
+				// imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+				// }
+
+				searchView.clearFocus();
+
+				GoogleMapParseHelper.search_offline(mActivity, query);
 				return false;
 			}
 
@@ -268,7 +268,8 @@ public class GoogleMapFragment extends Fragment
 		searchView.setSubmitButtonEnabled(true);
 
 		// 设置该SearchView内默认显示的提示文本
-		searchView.setQueryHint("Name or Title");
+		Resources res = getResources();
+		searchView.setQueryHint(res.getString(R.string.type_in_hint));
 		// END searchView
 
 		// ListView
@@ -287,9 +288,15 @@ public class GoogleMapFragment extends Fragment
 				Log.d(tag, "item " + searchList.get(pos).getTitle()
 						+ " onclick");
 
+				// close the slide layer
+				mSlidingLayer.closeLayer(true);
+
+				// move google map camera to the result
 				GoogleMapSearch googleMapSearch = searchList.get(pos);
 				cameraFocusOnMe(googleMapSearch.getlatitude(),
 						googleMapSearch.getlongitude());
+
+				// is new or not
 				String objectId = googleMapSearch.getobjectId();
 				boolean isNew = true;
 				for (int i = 0; i < storyList.size(); i++) {
@@ -338,6 +345,14 @@ public class GoogleMapFragment extends Fragment
 								googleMapSearch.getuserName(),
 								googleMapSearch.getTitle(), position,
 								googleMapSearch.getScore(), 1);
+						break;
+					}
+				}
+				// show info window
+				for (Marker searchMarker : markerList) {
+					String[] temp = searchMarker.getSnippet().split(",");
+					if (temp[0].compareTo(objectId) == 0) {
+						searchMarker.showInfoWindow();
 						break;
 					}
 				}
@@ -765,7 +780,8 @@ public class GoogleMapFragment extends Fragment
 		}
 
 		// 顯示資訊
-		// txtOutput.setText(where);
+//		 txtOutput.setText(where);
+		Log.d(tag, where);
 	}
 
 	private String getTimeString(long timeInMilliseconds) {
@@ -780,12 +796,13 @@ public class GoogleMapFragment extends Fragment
 		// TODO Auto-generated method stub
 		String snippet = objectIdString + "," + userNameString + "," + score
 				+ "," + type;
-		this.map.addMarker(new MarkerOptions()
+		Marker marker = this.map.addMarker(new MarkerOptions()
 				.position(point)
 				.snippet(snippet)
 				.title(title)
 				.icon(BitmapDescriptorFactory
 						.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+		markerList.add(marker);
 	}
 
 	public void addMarker_Ready(String objectIdString, String userNameString,
@@ -793,12 +810,13 @@ public class GoogleMapFragment extends Fragment
 		// TODO Auto-generated method stub
 		String snippet = objectIdString + "," + userNameString + "," + score
 				+ "," + type + "," + SSIDString;
-		this.map.addMarker(new MarkerOptions()
+		Marker marker = this.map.addMarker(new MarkerOptions()
 				.position(point)
 				.snippet(snippet)
 				.title(title)
 				.icon(BitmapDescriptorFactory
 						.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+		markerList.add(marker);
 	}
 
 	private void addMarker_Broadcast(String objectIdString,
@@ -807,12 +825,13 @@ public class GoogleMapFragment extends Fragment
 
 		String snippet = objectIdString + "," + userNameString + "," + score
 				+ "," + type + "," + SSIDString;
-		this.map.addMarker(new MarkerOptions()
+		Marker marker = this.map.addMarker(new MarkerOptions()
 				.position(point)
 				.snippet(snippet)
 				.title(title)
 				.icon(BitmapDescriptorFactory
 						.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+		markerList.add(marker);
 	}
 
 	private void query_Story(LatLng current_position, double latitudeDistance,
@@ -904,20 +923,32 @@ public class GoogleMapFragment extends Fragment
 															bmp.recycle();
 														}
 
-														LatLng point = new LatLng(
-																latitude,
-																longitude);
-														addMarker_Story(
-																objectIdString,
-																userNameString,
-																titleString,
-																point, score,
-																TYPE_STORY);
-
 													}
 												}
 											});
 								}
+								else{
+									Bitmap bmp = null;
+									storyList.add(new News(
+											objectIdString,
+											userNameString,
+											userUuidString,
+											titleString,
+											score, bmp,
+											contentString,
+											latitude,
+											longitude));
+								}
+
+								LatLng point = new LatLng(
+										latitude,
+										longitude);
+								addMarker_Story(
+										objectIdString,
+										userNameString,
+										titleString,
+										point, score,
+										TYPE_STORY);
 							}
 						}
 					}
@@ -1020,22 +1051,33 @@ public class GoogleMapFragment extends Fragment
 														if (bmp != null) {
 															bmp.recycle();
 														}
-
-														LatLng point = new LatLng(
-																latitude,
-																longitude);
-														addMarker_Ready(
-																objectIdString,
-																userNameString,
-																titleString,
-																point, score,
-																TYPE_READY,
-																SSIDString);
-
+														
 													}
 												}
 											});
+								}else{
+									Bitmap bmp = null;
+									storyList.add(new News(
+											objectIdString,
+											userNameString,
+											userUuidString,
+											titleString,
+											score, bmp,
+											contentString,
+											latitude,
+											longitude));
 								}
+								
+								LatLng point = new LatLng(
+										latitude,
+										longitude);
+								addMarker_Ready(
+										objectIdString,
+										userNameString,
+										titleString,
+										point, score,
+										TYPE_READY,
+										SSIDString);
 							}
 						}
 					}
@@ -1136,21 +1178,30 @@ public class GoogleMapFragment extends Fragment
 														if (bmp != null) {
 															bmp.recycle();
 														}
-
-														LatLng point = new LatLng(
-																latitude,
-																longitude);
-														addMarker_Story(
-																objectIdString,
-																userNameString,
-																titleString,
-																point, score,
-																TYPE_OFFLINE_STORY);
-
 													}
 												}
 											});
+								}else{
+									Bitmap bmp = null;
+									storyList.add(new News(
+											objectIdString,
+											userNameString,
+											userUuidString,
+											titleString,
+											score, bmp,
+											contentString,
+											latitude,
+											longitude));
 								}
+								LatLng point = new LatLng(
+										latitude,
+										longitude);
+								addMarker_Story(
+										objectIdString,
+										userNameString,
+										titleString,
+										point, score,
+										TYPE_OFFLINE_STORY);
 							}
 						}
 					}
@@ -1253,22 +1304,24 @@ public class GoogleMapFragment extends Fragment
 															bmp.recycle();
 														}
 
-														LatLng point = new LatLng(
-																latitude,
-																longitude);
-														addMarker_Broadcast(
-																objectIdString,
-																userNameString,
-																titleString,
-																point,
-																score,
-																TYPE_ONLINE_BROADCAST,
-																SSIDString);
-
 													}
 												}
 											});
+								} else {
+									Bitmap bmp = null;
+									storyList
+											.add(new News(objectIdString,
+													userNameString,
+													userUuidString,
+													titleString, score, bmp,
+													contentString, latitude,
+													longitude));
 								}
+								LatLng point = new LatLng(latitude, longitude);
+								addMarker_Broadcast(objectIdString,
+										userNameString, titleString, point,
+										score, TYPE_ONLINE_BROADCAST,
+										SSIDString);
 							}
 						}
 					}
@@ -1345,49 +1398,28 @@ public class GoogleMapFragment extends Fragment
 				switch (type) {
 				case TYPE_STORY:
 					Log.d(tag, "Icon TYPE_STORY onclick.");
-					
-					//dialog
-					dialog = ProgressDialog.show(mActivity, "讀取中", "如等待過久請確認網路...",
-							true);
-					dialog.setCanceledOnTouchOutside(true);
-					new Thread(new Runnable() {
-						@Override
-						public void run() {
-							try {
-								Thread.sleep(3000);
-							} catch (Exception e) {
-								e.printStackTrace();
-							} finally {
-								dialog.dismiss();
-							}
-						}
-					}).start();
-					
+
+					// dialog
+					dialog = ProgressDialog.show(mActivity, "讀取中",
+							"如等待過久請確認網路...", true);
+					dialog.setCanceledOnTouchOutside(false);
+
 					Intent intent_detail = new Intent();
 					intent_detail.putExtra("objectId", objectId);
 					intent_detail.setClass(mActivity, DetailPage.class);
+
+					dialog.dismiss();
+
 					startActivity(intent_detail);
 					break;
 				case TYPE_OFFLINE_STORY:
 					Log.d(tag, "Icon TYPE_OFFLINE_STORY onclick.");
 
-					//dialog
-					dialog = ProgressDialog.show(mActivity, "讀取中", "如等待過久請確認網路...",
-							true);
-					dialog.setCanceledOnTouchOutside(true);
-					new Thread(new Runnable() {
-						@Override
-						public void run() {
-							try {
-								Thread.sleep(3000);
-							} catch (Exception e) {
-								e.printStackTrace();
-							} finally {
-								dialog.dismiss();
-							}
-						}
-					}).start();
-					
+					// dialog
+					dialog = ProgressDialog.show(mActivity, "讀取中",
+							"如等待過久請確認網路...", true);
+					dialog.setCanceledOnTouchOutside(false);
+
 					ParseQuery<ParseObject> query = ParseQuery
 							.getQuery("offline");
 					// Retrieve the object by id
@@ -1396,6 +1428,8 @@ public class GoogleMapFragment extends Fragment
 								@Override
 								public void done(ParseObject offline,
 										ParseException e) {
+									dialog.dismiss();
+
 									if (e == null) {
 										Globalvariable.titleString = (String) offline
 												.get("title");
@@ -1411,8 +1445,7 @@ public class GoogleMapFragment extends Fragment
 												CustomerDetailActivity.class);
 										mActivity.startActivity(intent);
 
-									}
-									else{
+									} else {
 										e.printStackTrace();
 									}
 								}
@@ -1425,23 +1458,11 @@ public class GoogleMapFragment extends Fragment
 				case TYPE_READY:
 					Log.d(tag, "Icon TYPE_READY onclick.");
 
-					//dialog
-					dialog = ProgressDialog.show(mActivity, "讀取中", "如等待過久請確認網路...",
-							true);
-					dialog.setCanceledOnTouchOutside(true);
-					new Thread(new Runnable() {
-						@Override
-						public void run() {
-							try {
-								Thread.sleep(3000);
-							} catch (Exception e) {
-								e.printStackTrace();
-							} finally {
-								dialog.dismiss();
-							}
-						}
-					}).start();
-					
+					// dialog
+					dialog = ProgressDialog.show(mActivity, "讀取中",
+							"如等待過久請確認網路...", true);
+					dialog.setCanceledOnTouchOutside(false);
+
 					// check is still online or not
 					ParseQuery<ParseObject> checkQuery = new ParseQuery<ParseObject>(
 							"offline");
@@ -1453,6 +1474,8 @@ public class GoogleMapFragment extends Fragment
 								public void done(List<ParseObject> objects,
 										ParseException e) {
 									// TODO Auto-generated method stub
+									dialog.dismiss();
+
 									if (e == null) {
 										ParseObject parseObject = objects
 												.get(0);
@@ -1653,8 +1676,7 @@ public class GoogleMapFragment extends Fragment
 														}
 													});
 										}
-									}
-									else{
+									} else {
 										e.printStackTrace();
 									}
 
@@ -1684,8 +1706,11 @@ public class GoogleMapFragment extends Fragment
 	public void onDestroyView() {
 		super.onDestroyView();
 		Log.d(tag, "onDestroyView.");
-		mapFragment.onDestroyView();
-		map.clear();
+		storyList.clear();
+		if (map != null) {
+			map.clear();
+		}
+
 	}
 
 	@Override
