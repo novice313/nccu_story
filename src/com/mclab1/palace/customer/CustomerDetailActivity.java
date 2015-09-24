@@ -1,5 +1,4 @@
 package com.mclab1.palace.customer;
-//
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ro.ui.pttdroid.Client_Main;
 import ro.ui.pttdroid.Globalvariable;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -21,7 +19,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,7 +26,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.MediaController;
-import android.widget.Toast;
 import android.widget.MediaController.MediaPlayerControl;
 import android.widget.TextView;
 
@@ -71,8 +67,6 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 	Boolean if_add_content=false;
 	Boolean if_inmpintro=false;
 	Boolean if_first_play=true;
-	Boolean if_auto_play=false;
-	Boolean if_play_one=false;
 	String  string_numberTAg=null;
 	String  subnumberTag=null;
 	String  Prestring_numberTAg=null;
@@ -105,83 +99,6 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 		mContent=Globalvariable.contentString;
 		initViews();
 		}
-		
-		
-		/*String mp3Unique=mp3unuiques.get(pos).mp3Unique;
-		System.out.println("mp3Unique  "+mp3Unique+" "+test[1][0]);
-		  L=0;
-		  M=1;
-
-		while(!mp3Unique.equals(test[L][0])&&test[L][0]!=null){
-			System.out.println("testLLLLMM"+test[L][0]);
-			L=L+1;
-		}
-		*/
-		
-		
-		new Thread(){
-		@Override
-		public void run(){
-			while(true){
-				//System.out.println("if_auto_play"+if_auto_play+if_play_one);
-			 if(if_auto_play==true &&if_play_one==false){
-				 if_play_one=true;
-				 
-					System.out.println("if_auto_play2");
-				/* Looper.prepare();
-	                Toast.makeText(
-	                        CustomerDetailActivity.this,
-	                        "開始播放！",
-	                        Toast.LENGTH_LONG).show();
-	                Looper.loop(); */ 
-					System.out.println("if_auto_play3"+test[L][M]);
-			while(test[L][M]!=null){
-				
-		
-				System.out.println("mpintro1"+test[L][M]);
-				mpintro = MediaPlayer.create(getApplicationContext(), Uri.parse(test[L][M]));
-				mpintro.start();
-				
-				System.out.println("outout");
-				while(true){
-					//if(mpintro!=null){
-
-					try{
-						
-						if(mpintro.isPlaying()){
-							//System.out.println("mpintro_isPlaying");
-							}else{
-								System.out.println("mpintro_out"+" "+M+" "+test[L][M]);
-								M=M+1;
-								break;
-								}
-						
-					}catch(IllegalStateException e){
-						mpintro=null;
-						mpintro =new MediaPlayer();
-						
-					}
-					//}else{
-						
-					}
-					//}
-				/*try {
-					TimeUnit.SECONDS.sleep(200);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}*/
-				}
-			System.out.println("onCreatebreak");
-			}
-			}
-				
-				//if_inmpintro=true;
-
-				//TimeUnit.SECONDS.sleep(200);
-				}
-		}.start();
-		
 		
 		/*StopButton.setOnClickListener(new Button.OnClickListener() {
 			
@@ -300,6 +217,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 		        	
 		        }
 				}
+
 				
 				
 			
@@ -328,14 +246,13 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 		customerVoiceListAdapter = new CustomerVoiceListAdapter(this, mp3unuiques);
 		listView.setAdapter(customerVoiceListAdapter);
 		
-		
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
 					long arg3) {	
 				
-				/*if(if_first_play==true){
+				if(if_first_play==true){
 					current_pos=pos;
 					if_first_play=false;
 				}
@@ -357,50 +274,61 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 		    		}
 					
 				}
-				*/
 				
-		        if (mpintro!= null) {
-		        	
-		    		for(int i=0;test[L][i]!=null;i++){
-		    			test[L][i]=null;
-		    			
-		    		}
-		    		System.out.println("mpintro"+mpintro);
-		        	mpintro.stop();
-		        	mpintro.release();
-		        	//mpintro = null;
-		       }
-		        
-				
-				//if(play_one==true && current_pos==pos){					
-					//play_one=false;
-					//current_pos=pos;
+				if(play_one==true && current_pos==pos){					
+					play_one=false;
+					current_pos=pos;
 					System.out.println("play_onetrue"+pos);
-				
 
 				
 				try {
 					
 					
-
-					/*
+					//mediaController.setMediaPlayer(CustomerDetailActivity.class);
+					/*mediaController.setAnchorView(CustomerDetailActivity.this.findViewById(R.id.customer_mp3_listview)); 
+					mediaController.setEnabled(true);
+					mediaController.show();
+					*/
+					
 					String mp3Unique=mp3unuiques.get(pos).mp3Unique;
 					System.out.println("mp3Unique  "+mp3Unique+" "+test[1][0]);
 					  L=0;
 					  M=1;
-					  
-					  
+					/*while(test[L][0]!=null){
+						System.out.println("TestOutput"+test[L][0]);
+						while(test[L][M]!=null){
+							
+							M=M+1;
+						}
+						L=L+1;
+					}*/
 					while(!mp3Unique.equals(test[L][0])&&test[L][0]!=null){
 						System.out.println("testLLLLMM"+test[L][0]);
 						L=L+1;
 					}
-					*/
 						
+				/*	new Thread(){
+						@Override
+						public void run(){
+							while(true){
+								System.out.println("mpintronotplaying1");
+								if(if_inmpintro){
+								if(!mpintro.isPlaying()){
+									System.out.println("mpintronotplaying2");
+									notify();
+								}
+								}
+								
+							}
+							
+						}
+						
+					 }.start();*/
 					
 						
 					
 					System.out.println("testLLLLMM"+test[L][0]+" "+test[L][1]+" "+test[L][2]);
-				/*	new Thread(){
+					new Thread(){
 					@Override
 					public void run(){
 						while(test[L][M]!=null){
@@ -413,7 +341,6 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 							System.out.println("outout");
 							while(true){
 								//if(mpintro!=null){
-
 								try{
 									
 									if(mpintro.isPlaying()){
@@ -433,7 +360,12 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 									
 								}
 								//}
-
+							/*try {
+								TimeUnit.SECONDS.sleep(200);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}*/
 							}
 							
 							//if_inmpintro=true;
@@ -441,7 +373,6 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 							//TimeUnit.SECONDS.sleep(200);
 							}
 					}.start();
-					*/
 
 						System.out.println("testLLLLMM"+test[L][2]);
 
@@ -454,14 +385,12 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 				} catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
-				}//}
+				}}
 				
 				}
 				
 
-			
 		});
-		
 		loaddata();
 
 	}
@@ -593,8 +522,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 	private void loaddata() { 
 		mp3unuiques.clear();
 	    dialog = ProgressDialog.show(CustomerDetailActivity.this,
-	            "讀取mp3", "請 稍 等 . . . . ",true);  //final String [][]test = null;
-	    dialog.show();
+	            "讀取資料中", "請 稍 等 . . . . ",true);  //final String [][]test = null;
 		  ParseQuery<ParseObject> query = ParseQuery
 				.getQuery(VoiceObject.table_name);
 		//query.orderByAscending("numberTag");
@@ -696,7 +624,6 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 													test[z][intvalue.intValue()]=filePath;
 													System.out.println("if_init1testz"+test[z][0]+" "+z+" "+(Integer) intvalue.intValue()+" "+
 													filePath);
-													if_auto_play=true;
 													
 												}
 
@@ -770,8 +697,8 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 														    if(test[L][0]!=null){
 																VoiceDataElement voiceDataElement=new VoiceDataElement();
 																	System.out.println("voiceDataElement2"+" "+test[L][0]+" "+test[L][1]);
-																	voiceDataElement.mp3Unique=test[L][0];//第一個片段當開頭		
-																	System.out.println("sdFormat3"+sdFormat3.format(parseObject.getCreatedAt())+L);
+																	voiceDataElement.mp3Unique=test[L][0];//第一個片段當開頭
+																	System.out.println("sdFormat3"+sdFormat3.format(parseObject.getCreatedAt()));
 																	voiceDataElement.createdTime=sdFormat3.format(parseObject.getCreatedAt());
 																	//Storefilepath.add(test[L][M]);
 																	mp3unuiques.add(voiceDataElement);
@@ -805,9 +732,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 
 
 				//}
-					//if_auto_play=true;    //全部都下載，才開始播
-					System.out.println("Run"+if_auto_play);
-					System.out.println("OutRun"+if_auto_play);
+					System.out.println("Out");
 					dialog.dismiss();
 					/*try{
 					AudioInputStream clip1 = AudioSystem.getAudioInputStream(new File(tempFile+"Tim.mp3"));

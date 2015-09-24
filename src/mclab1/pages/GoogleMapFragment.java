@@ -3,39 +3,9 @@ package mclab1.pages;
 import java.util.ArrayList;
 import java.util.List;
 
+import mclab1.custom.listview.News;
 import ro.ui.pttdroid.Client_Main;
 import ro.ui.pttdroid.Globalvariable;
-
-import mclab1.custom.listview.News;
-import mclab1.sugar.Owner;
-
-import com.farproc.wifi.connecter.TestWifiScan;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
-import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.plus.model.people.Person.ObjectType;
-import com.mclab1.palace.customer.CustomerDetailActivity;
-import com.orm.SugarRecord;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
-import com.parse.GetDataCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -53,6 +23,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.farproc.wifi.connecter.TestWifiScan;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.mclab1.palace.customer.CustomerDetailActivity;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.GetDataCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
 import edu.mclab1.nccu_story.R;
 
 public class GoogleMapFragment extends Fragment
@@ -859,6 +855,7 @@ public class GoogleMapFragment extends Fragment
 												Globalvariable.longitude = longitude;
 												System.out.println("GOGOGO4"
 														+ if_Global_local);
+												
 												Intent intent = new Intent(
 														getActivity(),
 														Client_Main.class); // 改寫成TestWifiScan.this
@@ -866,6 +863,7 @@ public class GoogleMapFragment extends Fragment
 														"if_Global_local",
 														if_Global_local);// 可放所有基本類別
 												startActivity(intent);
+											
 											}
 										} else {// no longer exists
 											Log.d(tag,

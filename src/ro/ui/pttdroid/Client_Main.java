@@ -22,8 +22,10 @@ import java.util.List;
 import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
 import ro.ui.pttdroid.settings.CommSettings;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -435,11 +437,13 @@ case R.id.btn_change_mode:
 			}
 		    if(imageView!=null){
 		        imageView.setVisibility(View.GONE);
-			}
+			} 
+		   
 			if_clientL_offline_mode = false;
 			change_to_client_online_fragment();
 			playerIntent = new Intent(this, Client_Player.class);
 			startService(playerIntent);
+			
 			} 
 		}
 	
@@ -524,6 +528,9 @@ private void init() {  //init=> OnResume
 	                        "您必須要跳到設定 =>WIFI =>選可用的wifi",
 	                        Toast.LENGTH_LONG).show();
 	                Looper.loop();  
+	                
+	    		    Intent settintIntent = new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS);   
+	    		    startActivity(settintIntent); 
 		    		
 		    	}else{
                     Looper.prepare();  
@@ -532,6 +539,9 @@ private void init() {  //init=> OnResume
                         "您必須要跳到設定的WIFI，選擇WIFI名稱"+Globalvariable.client_Main_SSID,
                         Toast.LENGTH_LONG).show();
                 Looper.loop();  
+                
+    		    Intent settintIntent = new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS);   
+    		    startActivity(settintIntent); 
 
 		    	}
                 
