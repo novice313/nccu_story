@@ -5,7 +5,9 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import ro.ui.pttdroid.Client_Main;
+import edu.mclab1.nccu_story.R;
+import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,7 +21,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
+import android.widget.Toast;
 import com.mclab1.palace.guider.DisplayEvent;
 import com.mclab1.place.events.EraseServerConnectionEvent;
 import com.mclab1.place.events.NewServerConnectionEvent;
@@ -27,6 +29,7 @@ import com.mclab1.place.events.NewServerConnectionEvent;
 import de.greenrobot.event.EventBus;
 import edu.mclab1.nccu_story.R;
 
+@SuppressLint("ShowToast")
 public class CustomerFragment extends Fragment {
 	public static final String SOCKET_TAG_STRING = "wifi-socket-test";
 	public static final String TAG = "CustomerFragment";
@@ -46,6 +49,11 @@ public class CustomerFragment extends Fragment {
 		View view = inflater.inflate(R.layout.customer_fragment, container,
 				false);
 		//init_view(view);
+		
+        Toast.makeText(
+                getActivity(),
+                "注意！請使用者要回扣給導覽員，只限一個人回扣，並把聲音賤關小聲",
+                5000).show();
 
 		return view;
 	}

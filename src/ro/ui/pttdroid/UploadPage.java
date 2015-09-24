@@ -19,6 +19,29 @@ import java.util.List;
 import java.util.UUID;
 
 import mclab1.sugar.Owner;
+
+import com.mclab1.palaca.parsehelper.ParseHelper;
+import com.mclab1.palace.customer.CustomerActivityGlobal;
+import com.orm.SugarRecord;
+import com.parse.FindCallback;
+//import com.example.fileexplorer.FileexplorerActivity;
+//import com.facebook.login.LoginManager;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
+
+
+
+
+
+
+
+
+
+//import edu.mclab1.nccu_story.MainActivity;
+//import edu.mclab1.nccu_story.R;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -67,9 +90,9 @@ public class UploadPage extends Activity {
 	ImageView imageView;
 	TextView music_path;
 	Button btn_upload;
-	Spinner spinner_language;
+	Spinner spinner_language;                              //spinner_language for 語言
 	//boolean LogIn = false;
-	private String[] language = { "Ch", "Eng", "Ja", "Kr" };
+	//private String[] language = { "Ch", "Eng", "Ja", "Kr" };
 	private ArrayAdapter<String> languageList;
 	WifiInfo wifiinfo ;
 	static String wifiinfo_getSSID;
@@ -134,7 +157,7 @@ public class UploadPage extends Activity {
 		userName = (TextView) findViewById(R.id.username);
 		title = (EditText) findViewById(R.id.title);
 		content = (EditText) findViewById(R.id.content);
-		spinner_language = (Spinner) findViewById(R.id.language_spinner);
+		//spinner_language = (Spinner) findViewById(R.id.language_spinner);
 		imageView = (ImageView) findViewById(R.id.imageView);
 		//music_path = (TextView) findViewById(R.id.music_path);
 		btn_upload = (Button) findViewById(R.id.btn_upload);
@@ -164,10 +187,14 @@ public class UploadPage extends Activity {
 
 		if(LogIn==true){//暫時改
 		btn_upload.setOnClickListener(new OnClickListener() {
-			
-
+		   
 			@Override
 			public void onClick(View arg0) {
+				btn_upload.setEnabled(false);
+				dialog=  ProgressDialog.show(UploadPage.this,
+		               "正在上傳資料中", "請 稍 等 . . . . ",true);
+		        dialog.show();
+		        
 
 				Log.d(tag, "btn_upload onclick");
 					runOnUiThread(new Runnable() {
@@ -175,23 +202,21 @@ public class UploadPage extends Activity {
 						@Override
 						public void run() {
 
-							if (uploadImage == null) {
-								Toast.makeText(getApplicationContext(),
-										"You must select one picture!",
-										Toast.LENGTH_SHORT);
-							} else {
-								/*Toast.makeText(getApplicationContext(),
-										"Start uploading", Toast.LENGTH_SHORT)
-										.show();*/
-								
+							//if (uploadImage == null) {
+							//	Toast.makeText(getApplicationContext(),
+							//			"You must select one picture!",
+							//			Toast.LENGTH_SHORT);
+							//} else {
+						
 								try {
-									Upload();
+									 Upload();
 								} catch (ParseException e) {
 									e.printStackTrace();
 								} catch (IOException e) {
 									e.printStackTrace();
 								}
-					   }
+							
+					  // }
 						}
 					});
 			    uuid = UUID.randomUUID().toString(); 
@@ -205,9 +230,9 @@ public class UploadPage extends Activity {
 			
 		}
 
-		languageList = new ArrayAdapter<String>(UploadPage.this,
-				android.R.layout.simple_spinner_item, language);
-		spinner_language.setAdapter(languageList);
+		//languageList = new ArrayAdapter<String>(UploadPage.this,
+		//		android.R.layout.simple_spinner_item, language);
+		//spinner_language.setAdapter(languageList);
 		
 
 	}
@@ -230,9 +255,6 @@ public class UploadPage extends Activity {
 	protected void Upload() throws ParseException, IOException {
 		ParseFile imageFile = null;
 		ParseFile musicFile = null;
-		
-        dialog = ProgressDialog.show(UploadPage.this,
-                "正在上傳資料中", "請 稍 等 . . . . ",true);
 
 		// image
 		if (uploadImage != null) {
@@ -249,9 +271,9 @@ public class UploadPage extends Activity {
 		ParseObject uploadObject = new ParseObject("offline");
 		uploadObject.put("userName", userName.getText().toString());
 		uploadObject.put("title", title.getText().toString());
-		uploadObject
-				.put("language", language[spinner_language
-						.getSelectedItemPosition()].toString());
+		//uploadObject
+		//		.put("language", language[spinner_language
+		//				.getSelectedItemPosition()].toString());
 		if (imageFile != null) {
 			uploadObject.put("image", imageFile);
 		}

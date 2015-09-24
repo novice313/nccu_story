@@ -11,7 +11,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import ro.ui.pttdroid.UploadPage;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import android.os.HandlerThread;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.mclab1.palaca.parsehelper.VoiceObject;
 import com.mclab1.palace.guider.DisplayEvent;
@@ -64,6 +67,7 @@ public class CustomerActivityGlobal extends Activity {
 	int intvalue2=0;
 	int intvalue3=0;
 	int i=0;
+	ProgressDialog dialog;
 
 	
 	@Override
@@ -189,7 +193,7 @@ public class CustomerActivityGlobal extends Activity {
 								int mincre=Integer.valueOf(creatStri.substring(3,5));
 								int seccre=Integer.valueOf(creatStri.substring(6,8));
 								final int crevalue=hurcre*60*60+mincre*60+seccre;
-								EventBus.getDefault().post(new DisplayEvent(hurcre+" "+seccre+" "+crevalue+" "+intValue)) ;
+								//EventBus.getDefault().post(new DisplayEvent(hurcre+" "+seccre+" "+crevalue+" "+intValue)) ;
 								if((crevalue+30)>intValue){    // 最後存的後時間和10s相比 聽眾會有10s的落差，聲音會接起來10s中的空白會用技術接起來
 								BufferedOutputStream bos;
 								try {
@@ -209,23 +213,26 @@ public class CustomerActivityGlobal extends Activity {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
-								EventBus.getDefault().post(new DisplayEvent("indexvalue.intValue()"+indexvalue.intValue()));
+								//EventBus.getDefault().post(new DisplayEvent("indexvalue.intValue()"+indexvalue.intValue()));
 								realtimearray[(indexvalue.intValue()-1)]=filePath;
-								EventBus.getDefault().post(new DisplayEvent("Download mp3 completed"+filePath));
+								//EventBus.getDefault().post(new DisplayEvent("Download mp3 completed"+filePath));
 								//System.out.println("Download mp3 completed"+filePath+" "+realtimedatas.isEmpty());
 								if(if_notplay&&realtimearray[(indexvalue.intValue()-1)]!=null){
 									if_notplay=false;
 									new Thread(){	
 										@Override
 										public void run(){
-											EventBus.getDefault().post(new DisplayEvent("i am comming"));
+											//EventBus.getDefault().post(new DisplayEvent("i am comming"));
 											while(true){
 											if(if_for){
 												i=(indexvalue.intValue()-1);
 											for(;realtimearray[i]!=null;i++){
 												if(if_wait){
 													 try {
-														 EventBus.getDefault().post(new DisplayEvent("Wait.30...."));
+													        dialog = ProgressDialog.show(CustomerActivityGlobal.this,
+													                "正在讀取資料中～請等30秒", "耐心等候. . . . ",true);
+													        dialog.show();
+														 //EventBus.getDefault().post(new DisplayEvent("Wait.30...."));
 														Thread.sleep(30000);
 													} catch (InterruptedException e) {
 														// TODO Auto-generated catch block
@@ -236,6 +243,13 @@ public class CustomerActivityGlobal extends Activity {
 												//EventBus.getDefault().post(new DisplayEvent("realtimearray[i]"+realtimearray[i]));
 												mpintro = MediaPlayer.create(CustomerActivityGlobal.this, Uri.parse(realtimearray[i]));
 												mpintro.start();
+												dialog.dismiss();
+												
+								                Toast.makeText(
+								                        CustomerActivityGlobal.this,
+								                        "開始播放!",
+								                        Toast.LENGTH_LONG).show();
+												
 												/*EventBus.getDefault().post(new DisplayEvent("IsPlaying"
 														+" "+i+" "+indexvalue.intValue()));*/
 												
@@ -261,15 +275,14 @@ public class CustomerActivityGlobal extends Activity {
 											int mintemp2  = tempdDate2.getMinutes();
 											int sectemp2  = tempdDate2.getSeconds();
 											intvalue2=hurtemp2*60*60+mintemp2*60+sectemp2;
-											//System.out.println("intValue2"+mintemp2+" "+sectemp2+" "+intvalue2);
-											EventBus.getDefault().post(new DisplayEvent("wait and find realtimearray_i"
-													+" "+i));
+											//EventBus.getDefault().post(new DisplayEvent("wait and find realtimearray_i"
+											//		+" "+i));
 											if_for=false;
 											}   //if if_for
 											
 											if(realtimearray[i]!=null){
-												EventBus.getDefault().post(new DisplayEvent("find realtimearray!!!"
-														+realtimearray[i]+" "+i));
+												//EventBus.getDefault().post(new DisplayEvent("find realtimearray!!!"
+												//		+realtimearray[i]+" "+i));
 												if_for=true;		
 											}
 											
@@ -280,8 +293,14 @@ public class CustomerActivityGlobal extends Activity {
 											intvalue3=hurtemp3*60*60+mintemp3*60+sectemp3;
 											System.out.println("intValue3"+mintemp3+" "+sectemp3+" "+realtimearray[i]);
 											if((intvalue2+180)<intvalue3){
-												EventBus.getDefault().post(new DisplayEvent("maximum to wait 180s!!!"
-														+realtimearray[i]+" "+i));
+												
+												//EventBus.getDefault().post(new DisplayEvent("maximum to wait 180s!!!"
+												//		+realtimearray[i]+" "+i));
+														
+										                Toast.makeText(
+										                        CustomerActivityGlobal.this,
+										                        "最多等180秒！",
+										                        Toast.LENGTH_LONG).show();
 												break;
 											}
 											
@@ -291,7 +310,7 @@ public class CustomerActivityGlobal extends Activity {
 											for(int j=0;j<arr_size;j++){
 												realtimearray[j]=null;     //做完清空
 											}
-											EventBus.getDefault().post(new DisplayEvent("mpintro_out"));
+											//EventBus.getDefault().post(new DisplayEvent("mpintro_out"));
 											//realtimedatas.clear();
 											System.out.println("completedtoplaymp3"+filePath);
 											if_notplay=true;
@@ -454,9 +473,9 @@ public class CustomerActivityGlobal extends Activity {
 		super.onResume();
 		try {
 			EventBus.getDefault().register(this);
-			EventBus.getDefault().post(new DisplayEvent("Customer init!"));
-			EventBus.getDefault().postSticky(
-					new DisplayEvent("Customer test sticky!"));
+			//EventBus.getDefault().post(new DisplayEvent("Customer init!"));
+			//EventBus.getDefault().postSticky(
+			//		new DisplayEvent("Customer test sticky!"));
 			//EventBus.getDefault().postSticky(
 			//		new DisplayEvent("CommSettings.getMulticastAddr!"+CommSettings.getMulticastAddr()));
 		} catch (Exception e) {

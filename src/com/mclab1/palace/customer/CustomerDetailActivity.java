@@ -245,7 +245,6 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 		
 		customerVoiceListAdapter = new CustomerVoiceListAdapter(this, mp3unuiques);
 		listView.setAdapter(customerVoiceListAdapter);
-		
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -389,7 +388,6 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 				
 				}
 				
-
 		});
 		loaddata();
 

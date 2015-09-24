@@ -2872,19 +2872,20 @@ containing a value of this type.
         public static final int microphone_normal_image=0x7f0200a0;
         public static final int microphone_pressed_image=0x7f0200a1;
         public static final int notif_icon=0x7f0200a2;
-        public static final int notification_template_icon_bg=0x7f0200af;
+        public static final int notification_template_icon_bg=0x7f0200b0;
         public static final int placeholder=0x7f0200a3;
         public static final int play=0x7f0200a4;
-        public static final int powered_by_google_dark=0x7f0200a5;
-        public static final int powered_by_google_light=0x7f0200a6;
-        public static final int quit_icon=0x7f0200a7;
-        public static final int rand=0x7f0200a8;
-        public static final int rounded_corner=0x7f0200a9;
-        public static final int sidebar_shadow=0x7f0200aa;
-        public static final int star=0x7f0200ab;
-        public static final int star_off=0x7f0200ac;
-        public static final int touchscreen=0x7f0200ad;
-        public static final int wi_fi_direct=0x7f0200ae;
+        public static final int player_stop=0x7f0200a5;
+        public static final int powered_by_google_dark=0x7f0200a6;
+        public static final int powered_by_google_light=0x7f0200a7;
+        public static final int quit_icon=0x7f0200a8;
+        public static final int rand=0x7f0200a9;
+        public static final int rounded_corner=0x7f0200aa;
+        public static final int sidebar_shadow=0x7f0200ab;
+        public static final int star=0x7f0200ac;
+        public static final int star_off=0x7f0200ad;
+        public static final int touchscreen=0x7f0200ae;
+        public static final int wi_fi_direct=0x7f0200af;
     }
     public static final class id {
         public static final int AbsoluteLayout1=0x7f0b0098;

@@ -30,6 +30,7 @@ import ro.ui.pttdroid.settings.CommSettings;
 import ro.ui.pttdroid.util.Audio;
 import ro.ui.pttdroid.util.Log;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -56,6 +57,9 @@ public class Player extends Service
 	private TelephonyManager	telephonyManager;
 	private PhoneCallListener	phoneCallListener;
 	private Boolean if_super_node = false;
+    private NotificationManager _nm;
+   int timeout=0;
+
 	//private MultiRecorder multiRecorder;
 	public class PlayerBinder extends Binder 
 	{
@@ -86,7 +90,17 @@ public class Player extends Service
 		        getText(R.string.app_running), pendingIntent);
 		startForeground(1, notification);
 		*/
-		
+		Notification notification = new Notification.Builder(this)
+	     .setContentTitle("GuidING")
+	     .setContentText(getText(R.string.app_name))
+	     .setSmallIcon(R.drawable.ic_launcher)
+	     .build();
+	    /*_nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+	    Notification notification = new Notification(R.drawable.ic_launcher,"Service started", System.currentTimeMillis());
+	    PendingIntent contentIntent = PendingIntent.getActivity(this, 0,new Intent(this, Client_Main.class), 0);
+	    notification.setLatestEventInfo(this, "GuidING","Service started", contentIntent);
+	    _nm.notify(R.string.app_running, notification);
+	    */
 		
 		/*Intent notificationIntent = new Intent(this, Main.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
@@ -154,7 +168,30 @@ public class Player extends Service
 					while(isRunning()) 
 					{							
 						try 
-						{	System.out.println("socket_receive"+packet);
+						{
+							
+							switch(CommSettings.getCastType()) 
+							{
+								case CommSettings.BROADCAST:
+									android.util.Log.i("pttdroid", "Broadcast!");
+									socket = new DatagramSocket(CommSettings.getPort());
+									socket.setBroadcast(true);
+								break;
+								case CommSettings.MULTICAST:
+									socket = new MulticastSocket(CommSettings.getPort());
+									System.out.println("PlayerInetAddress2"+GuiderRecorder.commIP);
+									((MulticastSocket) socket).joinGroup(InetAddress.getByName(Main.commIP));	 //接收到聲音的ip									
+								break;
+								case CommSettings.UNICAST:
+									socket = new DatagramSocket(CommSettings.getPort());
+								break;
+							}	
+							
+							
+							
+							
+							
+							System.out.println("socket_receive"+packet);
 						
 
 						/*if(Main.if_guider){
@@ -163,7 +200,19 @@ public class Player extends Service
 							EventBus.getDefault().postSticky(new DisplayEvent("i am client"));
 						}*/
 						    //System.out.println("encodedFrame+socket.receive"+encodedFrame);
-						//socket.setSoTimeout(1000);
+							
+							/*if(timeout<=500){
+			                 try{
+							    socket.setSoTimeout(1000);
+
+			                  }catch(Exception e){
+			                	  e.printStackTrace();
+					         	//System.out.println("i am in catch !");
+			                  }
+							}
+							
+							timeout=timeout+1;
+							*/
 						socket.receive(packet);
 
 							/*if(if_super_node){
@@ -174,7 +223,7 @@ public class Player extends Service
 						}
 						catch(SocketException e) //Due to socket.close() 
 						{
-							break;
+						   break;
 						}
 						catch(Exception e) 
 						{
@@ -226,6 +275,7 @@ public class Player extends Service
 							Log.error(getClass(), e);
 						}
 					}
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -254,7 +304,7 @@ public class Player extends Service
 					break;
 					case CommSettings.MULTICAST:
 						socket = new MulticastSocket(CommSettings.getPort());
-						//System.out.println("PlayerInetAddress"+InetAddress.getByName(Premain.Selected));
+						System.out.println("PlayerInetAddress"+GuiderRecorder.commIP);
 						((MulticastSocket) socket).joinGroup(InetAddress.getByName(Main.commIP));	 //接收到聲音的ip									
 					break;
 					case CommSettings.UNICAST:

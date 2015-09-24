@@ -1610,7 +1610,7 @@ public class GoogleMapFragment extends Fragment
 															wifiManager2
 																	.reconnect();
 															if_find_wificonnect = true;
-															if_Global_local = 1;
+															if_Global_local = 1;       //判斷是給 Local
 															break;
 														}
 													}
@@ -1634,6 +1634,7 @@ public class GoogleMapFragment extends Fragment
 														"if_Global_local",
 														if_Global_local);// 可放所有基本類別
 												startActivity(intent);
+											
 											}
 										} else {// no longer exists
 											Log.d(tag,

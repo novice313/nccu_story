@@ -23,6 +23,7 @@ import java.net.MulticastSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.text.SimpleDateFormat;
@@ -33,6 +34,7 @@ import ro.ui.pttdroid.settings.AudioSettings;
 import ro.ui.pttdroid.settings.CommSettings;
 import ro.ui.pttdroid.util.Audio;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -42,7 +44,6 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
@@ -71,7 +72,7 @@ public class Client_Player extends Service
 	public int count=0;
 	public static int count_three=0;
 	private Socket connSocket;
-
+    private NotificationManager _nm;
 	
 
 	private Boolean if_super_node = false;
@@ -147,7 +148,19 @@ public class Client_Player extends Service
 		telephonyManager.listen(phoneCallListener, PhoneStateListener.LISTEN_CALL_STATE);
 		
 		//acquireWakeLock();
-				
+		
+		Notification notification = new Notification.Builder(this)
+	     .setContentTitle("GuidING")
+	     .setContentText(getText(R.string.app_name))
+	     .setSmallIcon(R.drawable.ic_launcher)
+	     .build();
+	    /*_nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+	    Notification notification = new Notification(R.drawable.ic_launcher,"Service started", System.currentTimeMillis());
+	    PendingIntent contentIntent = PendingIntent.getActivity(this, 0,new Intent(this, Client_Main.class), 0);
+	    notification.setLatestEventInfo(this, "GuidING","Service started", contentIntent);
+	    _nm.notify(R.string.app_running, notification);
+	    */
+	    
 		/*Notification notification = new Notification(R.drawable.notif_icon, 
 				getText(R.string.app_name),
 		        System.currentTimeMillis());

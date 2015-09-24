@@ -67,6 +67,7 @@ public class GuiderRecorder extends Thread
 	private DatagramSocket recorder_socket;
 	private DatagramPacket newpacket;
 	private DatagramPacket packet;
+	public static String commIP="";
 
 
 	
@@ -183,7 +184,8 @@ public class GuiderRecorder extends Thread
 						case CommSettings.MULTICAST:
 							/*EventBus.getDefault().postSticky(
 									new DisplayEvent("Selected"+Main.Selected));*/
-							addr=InetAddress.getByName("239.255.255.250"); //播出聲音的ip
+							commIP=Main.commIP;
+							addr=InetAddress.getByName(Main.commIP); //播出聲音的ip
 							//addr = CommSettings.getMulticastAddr();					
 						break;
 						case CommSettings.UNICAST:
@@ -568,8 +570,8 @@ public class GuiderRecorder extends Thread
 				//set_raw_file_not_writing();
 				FLameUtils lameUtils = new FLameUtils(1, Audio.SAMPLE_RATE, 320);
 				System.out.println(lameUtils.raw2mp3(tempFile, mp3File));
-				EventBus.getDefault().postSticky(
-						new DisplayEvent("Saving RealtimeFinal mp3!"));
+				//EventBus.getDefault().postSticky(
+				//		new DisplayEvent("Saving RealtimeFinal mp3!"));
 				
 				RealtimeVoiceObject realtimeVoiceObject = new RealtimeVoiceObject();
 				if_Final_normal=0;
@@ -724,8 +726,8 @@ public class GuiderRecorder extends Thread
 				String mp3File = Environment.getExternalStorageDirectory().getPath()
 						+"/"+dts+"Realtime"+".mp3";
 				System.out.println("Initsavingmp3file"+mp3File);
-				EventBus.getDefault().postSticky(
-						new DisplayEvent("Initsavingmp3file!"+mp3File));
+				//EventBus.getDefault().postSticky(
+				//		new DisplayEvent("Initsavingmp3file!"+mp3File));
 				//set_raw_file_not_writing();
 				FLameUtils lameUtils = new FLameUtils(1, Audio.SAMPLE_RATE, 192);
 				System.out.println(lameUtils.raw2mp3(tempFile, mp3File));
