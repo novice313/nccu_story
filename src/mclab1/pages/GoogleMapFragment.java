@@ -2,6 +2,7 @@ package mclab1.pages;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -67,6 +68,7 @@ import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -254,7 +256,7 @@ public class GoogleMapFragment extends Fragment
 
 				searchView.clearFocus();
 
-				GoogleMapParseHelper.search_offline(mActivity, query);
+				new GoogleMapParseHelper(mActivity, query).execute();
 				return false;
 			}
 
@@ -448,14 +450,14 @@ public class GoogleMapFragment extends Fragment
 		this.map = map;
 		// show NCCU
 		// nccu: 24°58'46"N 121°34'15"E
-		map.addMarker(new MarkerOptions().position(
-				new LatLng(24.5846, 121.3415)).title("Marker"));
-		map.addMarker(new MarkerOptions()
-				.position(NCCU)
-				.title("NCCU")
-				.snippet(",,," + TYPE_NCCU)
-				.icon(BitmapDescriptorFactory
-						.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+//		map.addMarker(new MarkerOptions().position(
+//				new LatLng(24.5846, 121.3415)).title("Marker"));
+//		map.addMarker(new MarkerOptions()
+//				.position(NCCU)
+//				.title("NCCU")
+//				.snippet(",,," + TYPE_NCCU)
+//				.icon(BitmapDescriptorFactory
+//						.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(NCCU,
 				initial_zoom_size));
 
@@ -738,6 +740,7 @@ public class GoogleMapFragment extends Fragment
 		markerOpt.position(new LatLng(lat, lng));
 		markerOpt.snippet(",,," + TYPE_USER);
 		markerOpt.title("我在這裡");
+		markerOpt.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_location_me));
 		if (map == null) {
 			Log.d(tag, "map == null");
 		}
@@ -801,7 +804,7 @@ public class GoogleMapFragment extends Fragment
 				.snippet(snippet)
 				.title(title)
 				.icon(BitmapDescriptorFactory
-						.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+						.fromResource(R.drawable.ic_marker_offline)));
 		markerList.add(marker);
 	}
 
@@ -815,7 +818,7 @@ public class GoogleMapFragment extends Fragment
 				.snippet(snippet)
 				.title(title)
 				.icon(BitmapDescriptorFactory
-						.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+						.fromResource(R.drawable.ic_marker_ready)));
 		markerList.add(marker);
 	}
 
@@ -830,7 +833,7 @@ public class GoogleMapFragment extends Fragment
 				.snippet(snippet)
 				.title(title)
 				.icon(BitmapDescriptorFactory
-						.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+						.fromResource(R.drawable.ic_marker_online)));
 		markerList.add(marker);
 	}
 
@@ -887,6 +890,7 @@ public class GoogleMapFragment extends Fragment
 										.getDouble("latitude");
 								final double longitude = parseObject
 										.getDouble("longitude");
+								final Date createdAtDate = parseObject.getCreatedAt();
 
 								ParseFile imageFile = (ParseFile) parseObject
 										.get("image");
@@ -917,7 +921,7 @@ public class GoogleMapFragment extends Fragment
 																score, bmp,
 																contentString,
 																latitude,
-																longitude));
+																longitude, createdAtDate));
 
 														if (bmp != null) {
 															bmp.recycle();
@@ -937,7 +941,7 @@ public class GoogleMapFragment extends Fragment
 											score, bmp,
 											contentString,
 											latitude,
-											longitude));
+											longitude, createdAtDate));
 								}
 
 								LatLng point = new LatLng(
@@ -1013,6 +1017,7 @@ public class GoogleMapFragment extends Fragment
 										.getDouble("latitude");
 								final double longitude = parseObject
 										.getDouble("longitude");
+								final Date createdAtDate = parseObject.getCreatedAt();
 
 								ParseFile imageFile = (ParseFile) parseObject
 										.get("image");
@@ -1046,7 +1051,7 @@ public class GoogleMapFragment extends Fragment
 																score, bmp,
 																contentString,
 																latitude,
-																longitude));
+																longitude, createdAtDate));
 
 														if (bmp != null) {
 															bmp.recycle();
@@ -1065,7 +1070,7 @@ public class GoogleMapFragment extends Fragment
 											score, bmp,
 											contentString,
 											latitude,
-											longitude));
+											longitude, createdAtDate));
 								}
 								
 								LatLng point = new LatLng(
@@ -1140,6 +1145,7 @@ public class GoogleMapFragment extends Fragment
 										.getDouble("latitude");
 								final double longitude = parseObject
 										.getDouble("longitude");
+								final Date createdAtDate = parseObject.getCreatedAt();
 
 								ParseFile imageFile = (ParseFile) parseObject
 										.get("image");
@@ -1173,7 +1179,7 @@ public class GoogleMapFragment extends Fragment
 																score, bmp,
 																contentString,
 																latitude,
-																longitude));
+																longitude, createdAtDate));
 
 														if (bmp != null) {
 															bmp.recycle();
@@ -1191,7 +1197,7 @@ public class GoogleMapFragment extends Fragment
 											score, bmp,
 											contentString,
 											latitude,
-											longitude));
+											longitude, createdAtDate));
 								}
 								LatLng point = new LatLng(
 										latitude,
@@ -1266,6 +1272,7 @@ public class GoogleMapFragment extends Fragment
 										.getDouble("latitude");
 								final double longitude = parseObject
 										.getDouble("longitude");
+								final Date createdAtDate = parseObject.getCreatedAt();
 
 								ParseFile imageFile = (ParseFile) parseObject
 										.get("image");
@@ -1298,7 +1305,7 @@ public class GoogleMapFragment extends Fragment
 																score, bmp,
 																contentString,
 																latitude,
-																longitude));
+																longitude, createdAtDate));
 
 														if (bmp != null) {
 															bmp.recycle();
@@ -1315,7 +1322,7 @@ public class GoogleMapFragment extends Fragment
 													userUuidString,
 													titleString, score, bmp,
 													contentString, latitude,
-													longitude));
+													longitude, createdAtDate));
 								}
 								LatLng point = new LatLng(latitude, longitude);
 								addMarker_Broadcast(objectIdString,

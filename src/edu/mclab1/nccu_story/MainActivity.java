@@ -14,8 +14,10 @@ import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -35,7 +37,13 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.orm.SugarRecord;
+import com.parse.FindCallback;
+import com.parse.LogInCallback;
 import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 public class MainActivity extends FragmentActivity implements
 		ActionBar.TabListener {
@@ -55,6 +63,7 @@ public class MainActivity extends FragmentActivity implements
 	// facebook
 	CallbackManager callbackManager;
 	public static AccessToken accessToken;
+	private final static String PASSWORD = "TtsaiLabMcla1";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +71,9 @@ public class MainActivity extends FragmentActivity implements
 		setContentView(R.layout.activity_main);
 
 		// test
-		// Parse.enableLocalDatastore(this);
 		Parse.initialize(this, "wtSFcggR896xMJQUGblYuphkF6EVw4ChcLcpSowP",
 				"IwJ3gTRBe8cARlxMf3xh97eai2a7MNLP68vdL3IY");
+		Log.d(tag, "WARNING");
 
 		// WifiManager mWifiManager = (WifiManager)
 		// getSystemService(Context.WIFI_SERVICE);
@@ -75,9 +84,9 @@ public class MainActivity extends FragmentActivity implements
 		// Toast.LENGTH_LONG).show();
 		// }
 
-		// ParseObject testObject = new ParseObject("TestObject");
-		// testObject.put("foo", "bar");
-		// testObject.saveInBackground();
+		ParseObject testObject = new ParseObject("TestObject");
+		testObject.put("foo", "bar");
+		testObject.saveInBackground();
 
 		// Initilization
 		// MainActivity.context = getApplicationContext();
@@ -153,20 +162,18 @@ public class MainActivity extends FragmentActivity implements
 										// TODO Auto-generated method stub
 										// 讀出姓名 ID FB個人頁面連結
 										Log.d("FB", "complete");
-										Log.d("FB",
-												"id= " + object.optString("id"));
-										Log.d("FB",
-												"name= "
-														+ object.optString("name"));
-										Log.d("FB",
-												"gender= "
-														+ object.optString("gender"));
-										Log.d("FB",
-												"locale= "
-														+ object.optString("locale"));
-										Log.d("FB",
-												"link= "
-														+ object.optString("link"));
+										String id = object.optString("id");
+										String name = object.optString("name");
+										String gender = object
+												.optString("gender");
+										String locale = object
+												.optString("locale");
+										String link = object.optString("link");
+										Log.d("FB", "id= " + id);
+										Log.d("FB", "name= " + name);
+										Log.d("FB", "gender= " + gender);
+										Log.d("FB", "locale= " + locale);
+										Log.d("FB", "link= " + link);
 
 										List<Owner> owner = SugarRecord
 												.listAll(Owner.class);
@@ -175,17 +182,17 @@ public class MainActivity extends FragmentActivity implements
 										}
 										Log.d(tag, "Verify owner." + " owner= "
 												+ owner.size());
-										Owner newOwner = new Owner(object
-												.optString("id"), object
-												.optString("name"), object
-												.optString("gender"), object
-												.optString("locale"), object
-												.optString("link"));
+										Owner newOwner = new Owner(id, name,
+												gender, locale, link);
 										// newOwner.setId((long) 1);
 										newOwner.save();
 										List<Owner> NewOwner = SugarRecord
 												.listAll(Owner.class);
 										Log.d(tag, "owner= " + NewOwner.size());
+
+										// save to parse
+										 new ParseSaveUserHelper(id, name,
+										 gender, locale, link, PASSWORD).execute();
 
 									}
 								});
@@ -220,8 +227,8 @@ public class MainActivity extends FragmentActivity implements
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		
-		//hockey app
+
+		// hockey app
 		checkForCrashes();
 		checkForUpdates();
 	}
@@ -371,6 +378,71 @@ public class MainActivity extends FragmentActivity implements
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+}
+
+class ParseSaveUserHelper extends AsyncTask<Void, Void, Void> {
+
+	String id, name, gender, locale, link, password;
+
+	public ParseSaveUserHelper(String id, String name, String gender,
+			String locale, String link, String password) {
+		// TODO Auto-generated constructor stub
+		this.id = id;
+		this.name = name;
+		this.gender = gender;
+		this.locale = locale;
+		this.link = link;
+		this.password = password;
+	}
+
+	@Override
+	protected Void doInBackground(Void... params) {
+		// TODO Auto-generated method stub
+		ParseQuery<ParseUser> query = ParseUser.getQuery();
+		query.whereEqualTo("userUuid", id);
+		query.findInBackground(new FindCallback<ParseUser>() {
+
+			@Override
+			public void done(List<ParseUser> objects, ParseException e) {
+				// TODO Auto-generated method stub
+				if (e == null) {
+					if (objects.isEmpty()) {
+						ParseUser parseUser = new ParseUser();
+						parseUser.put("userUuid", id);
+						parseUser.setUsername(name);
+						parseUser.put("gender", gender);
+						parseUser.put("locale", locale);
+						parseUser.setPassword(password);
+						parseUser.put("link", link);
+						try {
+							parseUser.signUp();
+						} catch (ParseException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					} else {
+						ParseUser parseUser = objects.get(0);
+						parseUser.put("userUuid", id);
+						parseUser.setUsername(name);
+						parseUser.put("gender", gender);
+						parseUser.put("locale", locale);
+						parseUser.put("link", link);
+						try {
+							parseUser.save();
+						} catch (ParseException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				} else {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		return null;
 	}
 
 }

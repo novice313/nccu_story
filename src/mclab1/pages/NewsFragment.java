@@ -1,6 +1,7 @@
 package mclab1.pages;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import mclab1.custom.listview.News;
@@ -94,7 +95,7 @@ public class NewsFragment extends Fragment {
 
 		return view;
 	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// TODO Auto-generated method stub
@@ -110,7 +111,7 @@ public class NewsFragment extends Fragment {
 	}
 
 	public static void getNewsList() {
-		
+
 		new NewsAsyncTask(LIMIT).execute();
 	}
 
@@ -145,8 +146,8 @@ public class NewsFragment extends Fragment {
 
 }
 
-class NewsAsyncTask extends AsyncTask<Void, Void, Void>{
-	
+class NewsAsyncTask extends AsyncTask<Void, Void, Void> {
+
 	private int LIMIT;
 
 	public NewsAsyncTask(int limit) {
@@ -159,7 +160,7 @@ class NewsAsyncTask extends AsyncTask<Void, Void, Void>{
 		// TODO Auto-generated method stub
 		super.onPreExecute();
 	}
-	
+
 	@Override
 	protected void onCancelled() {
 		// TODO Auto-generated method stub
@@ -169,7 +170,7 @@ class NewsAsyncTask extends AsyncTask<Void, Void, Void>{
 	@Override
 	protected Void doInBackground(Void... params) {
 		// TODO Auto-generated method stub
-		
+
 		ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
 				"story");
 		// parseQuery.whereEqualTo("userName", "Jeny Zheng Lan");
@@ -199,6 +200,7 @@ class NewsAsyncTask extends AsyncTask<Void, Void, Void>{
 									.getDouble("latitude");
 							final double longitude = parseObject
 									.getDouble("longitude");
+							final Date createdAt = parseObject.getCreatedAt();
 
 							ParseFile imageFile = (ParseFile) parseObject
 									.get("image");
@@ -216,26 +218,30 @@ class NewsAsyncTask extends AsyncTask<Void, Void, Void>{
 															.decodeByteArray(
 																	data, 0,
 																	data.length);
-													NewsFragment.newsList.add(new News(
-															objectIdString,
-															userNameString,
-															userUuidString,
-															titleString, score,
-															bmp, contentString,
-															latitude, longitude));
-													NewsFragment.newsAdt.notifyDataSetChanged();
+													NewsFragment.newsList
+															.add(new News(
+																	objectIdString,
+																	userNameString,
+																	userUuidString,
+																	titleString,
+																	score,
+																	bmp,
+																	contentString,
+																	latitude,
+																	longitude,
+																	createdAt));
+													NewsFragment.newsAdt
+															.notifyDataSetChanged();
 												}
 											}
 										});
-							}else{
+							} else {
 								Bitmap bmp = null;
 								NewsFragment.newsList.add(new News(
-										objectIdString,
-										userNameString,
-										userUuidString,
-										titleString, score,
-										bmp, contentString,
-										latitude, longitude));
+										objectIdString, userNameString,
+										userUuidString, titleString, score,
+										bmp, contentString, latitude,
+										longitude, createdAt));
 							}
 							NewsFragment.newsAdt.notifyDataSetChanged();
 						}
@@ -244,10 +250,91 @@ class NewsAsyncTask extends AsyncTask<Void, Void, Void>{
 			}
 
 		});
-		
+
+		ParseQuery<ParseObject> parseQuery_offline = new ParseQuery<ParseObject>(
+				"offline");
+		// parseQuery.whereEqualTo("userName", "Jeny Zheng Lan");
+		parseQuery_offline.setLimit(LIMIT);
+		parseQuery_offline.whereEqualTo("State", "offline");
+		parseQuery_offline.addDescendingOrder("createdAt");
+		parseQuery_offline.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				if (e == null) {
+					if (!objects.isEmpty()) {
+						for (int i = 0; i < objects.size(); i++) {
+							ParseObject parseObject = objects.get(i);
+							final String objectIdString = parseObject
+									.getObjectId();
+							final String userNameString = parseObject
+									.getString("userName");
+							final String userUuidString = parseObject
+									.getString("userUuid");
+							final String titleString = parseObject
+									.getString("title");
+							final int score = parseObject.getInt("score");
+							final String contentString = parseObject
+									.getString("content");
+
+							final double latitude = parseObject
+									.getDouble("latitude");
+							final double longitude = parseObject
+									.getDouble("longitude");
+							final Date createdAt = parseObject.getCreatedAt();
+
+							ParseFile imageFile = (ParseFile) parseObject
+									.get("image");
+							if (imageFile != null) {
+								imageFile
+										.getDataInBackground(new GetDataCallback() {
+
+											@Override
+											public void done(byte[] data,
+													ParseException e) {
+												if (e == null) {
+													// Log.d(tag,
+													// "parseFile done");
+													Bitmap bmp = BitmapFactory
+															.decodeByteArray(
+																	data, 0,
+																	data.length);
+													NewsFragment.newsList
+															.add(new News(
+																	objectIdString,
+																	userNameString,
+																	userUuidString,
+																	titleString,
+																	score,
+																	bmp,
+																	contentString,
+																	latitude,
+																	longitude,
+																	createdAt));
+													NewsFragment.newsAdt
+															.notifyDataSetChanged();
+												}
+											}
+										});
+							} else {
+								Bitmap bmp = null;
+								NewsFragment.newsList.add(new News(
+										objectIdString, userNameString,
+										userUuidString, titleString, score,
+										bmp, contentString, latitude,
+										longitude, createdAt));
+							}
+							NewsFragment.newsAdt.notifyDataSetChanged();
+						}
+					}
+				}
+			}
+
+		});
+
 		return null;
 	};
-	
+
 	@Override
 	protected void onPostExecute(Void result) {
 		// TODO Auto-generated method stub

@@ -1,6 +1,7 @@
 package mclab1.pages;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import mclab1.custom.listview.News;
@@ -54,7 +55,7 @@ public class OwnerFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		Log.d(tag, "onCreateView");
-		
+
 		View view;
 
 		// instantiate list
@@ -70,8 +71,7 @@ public class OwnerFragment extends Fragment {
 					Toast.LENGTH_SHORT).show();
 		} else {
 
-			view = inflater.inflate(R.layout.fragment_news, container,
-					false);
+			view = inflater.inflate(R.layout.fragment_news, container, false);
 			newsView = (ListView) view.findViewById(R.id.news_list);
 
 			final String userName = owner.get(owner.size() - 1).userName;
@@ -84,7 +84,7 @@ public class OwnerFragment extends Fragment {
 					getNewsList(userName);
 				}
 			});
-			
+
 			// create and set adapter
 			newsAdt = new NewsAdapter(getActivity().getApplicationContext(),
 					newsList);
@@ -226,6 +226,7 @@ public class OwnerFragment extends Fragment {
 								.getDouble("latitude");
 						final double longitude = parseObject
 								.getDouble("longitude");
+						final Date createdAtDate = parseObject.getCreatedAt();
 
 						ParseFile imageFile = (ParseFile) parseObject
 								.get("image");
@@ -247,7 +248,8 @@ public class OwnerFragment extends Fragment {
 														userUuidString,
 														titleString, score,
 														bmp, contentString,
-														latitude, longitude));
+														latitude, longitude,
+														createdAtDate));
 
 												// redo if data change
 												newsAdt.notifyDataSetChanged();

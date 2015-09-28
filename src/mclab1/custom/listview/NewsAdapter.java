@@ -1,6 +1,10 @@
 package mclab1.custom.listview;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import com.orm.Database;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -25,6 +29,7 @@ public class NewsAdapter extends BaseAdapter{
 
 	// constructor
 	public NewsAdapter(Context c, ArrayList<News> theNews) {
+		Collections.sort(theNews, new CustomComparator());
 		news = theNews;
 		newsInf = LayoutInflater.from(c);
 	}
@@ -100,4 +105,11 @@ public class NewsAdapter extends BaseAdapter{
 		return newsLay;
 	}
 
+}
+
+class CustomComparator implements Comparator<News> {
+    @Override
+    public int compare(News n1, News n2) {
+        return n1.getCreatedDate().compareTo(n2.getCreatedDate());
+    }
 }

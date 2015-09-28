@@ -1,5 +1,7 @@
 package mclab1.custom.listview;
 
+import java.util.Date;
+
 import android.graphics.Bitmap;
 
 public class News {
@@ -14,9 +16,10 @@ public class News {
 	private String content;
 	private double latitude;
 	private double longitude;
+	private Date createdAt;
 
 	public News(String objectId, String userName,String userUuid, String Title, int score, Bitmap bmp,
-			String content, double latitude, double longitude) {
+			String content, double latitude, double longitude, Date createdAt) {
 		this.objectId = objectId;
 		this.userName = userName;
 		this.userUuid = userUuid;
@@ -26,6 +29,7 @@ public class News {
 		this.content = content;
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.createdAt = createdAt;
 	}
 
 	public String getobjectId() {
@@ -62,5 +66,9 @@ public class News {
 
 	public double getlongitude(){
 		return longitude;
+	}
+	
+	public Date getCreatedDate(){
+		return createdAt;
 	}
 }
