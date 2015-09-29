@@ -39,6 +39,8 @@ import com.parse.SaveCallback;
 
 
 
+
+import android.annotation.SuppressLint;
 //import edu.mclab1.nccu_story.MainActivity;
 //import edu.mclab1.nccu_story.R;
 import android.app.Activity;
@@ -121,6 +123,7 @@ public class UploadPage extends Activity {
 	public static double latitudeString=24.98;
 	public static double longitudeString=121.575;
 	ProgressDialog dialog;
+	ProgressDialog dialog_title;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -182,25 +185,33 @@ public class UploadPage extends Activity {
 
 			@Override
 			public void onClick(View arg0) {
-				
-				dialog=  ProgressDialog.show(UploadPage.this,
-		               "正在上傳資料中", "請 稍 等 . . . . ",true);
-		        dialog.show();
-		        
-
-				Log.d(tag, "btn_upload onclick");
+				System.out.println("btn_upload onclick"+title.getText().toString().isEmpty()+content.getText().toString().isEmpty());
 					runOnUiThread(new Runnable() {
 
 						@Override
 						public void run() {
 
-							//if (uploadImage == null) {
-							//	Toast.makeText(getApplicationContext(),
-							//			"You must select one picture!",
-							//			Toast.LENGTH_SHORT);
-							//} else {
+							if(title.getText().toString().isEmpty() || content.getText().toString().isEmpty()){
+								
+					           /* dialog_title = ProgressDialog.show(UploadPage.this,
+					                    "注意", "你必須要輸入標題和廣播內容！",true);
+					            try {
+									Thread.sleep(3000);
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+					            dialog_title.dismiss();
+					            */
+							} else {
+							
 						
 								try {
+									btn_upload.setEnabled(false); 
+									dialog=  ProgressDialog.show(UploadPage.this,
+							               "正在上傳資料中", "請 稍 等 . . . . ",true);
+							        dialog.show();
+							        
 									 Upload();
 								} catch (ParseException e) {
 									e.printStackTrace();
@@ -208,7 +219,7 @@ public class UploadPage extends Activity {
 									e.printStackTrace();
 								}
 							
-					  // }
+					   }
 						}
 					});
 			    uuid = UUID.randomUUID().toString(); 

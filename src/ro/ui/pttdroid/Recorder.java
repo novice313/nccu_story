@@ -150,7 +150,7 @@ public class Recorder extends Thread
 				break;
 				case CommSettings.MULTICAST:				
 				try {
-					addr = InetAddress.getByName("239.255.255.250");
+					addr = InetAddress.getByName(Client_Player.getIP);
 				} catch (UnknownHostException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

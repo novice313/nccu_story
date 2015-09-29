@@ -102,6 +102,11 @@
                  android:gravity="center"
                  />
               
+
+
+
+            </FrameLayout>
+            
           <com.parse.ParseImageView
             android:id="@+id/showimage"
             android:layout_width="220dp"
@@ -110,9 +115,6 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="60dp"
              />
-
-
-            </FrameLayout>
             
 
 

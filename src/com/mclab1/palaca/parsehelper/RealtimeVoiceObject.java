@@ -2,12 +2,18 @@ package com.mclab1.palaca.parsehelper;
 
 import java.io.File;
 import java.io.FileInputStream;
+
+import ro.ui.pttdroid.Client_Main;
+import ro.ui.pttdroid.Main;
 import android.net.wifi.WifiInfo;
+import android.widget.Toast;
+
 import com.mclab1.palace.guider.DisplayEvent;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.SaveCallback;
+
 import de.greenrobot.event.EventBus;
 
 public class RealtimeVoiceObject {
@@ -42,6 +48,7 @@ public class RealtimeVoiceObject {
 			,final double latitudestring,final double longitudestring,final String guiderid,final int if_Final_normal) {
 			 
 
+		
 		//new Thread() {
 		//	@Override
 		//	public void run() {
@@ -115,11 +122,20 @@ public class RealtimeVoiceObject {
 								parseObject.saveEventually();
 								                                     //update offline table
 							
-								
+								if(if_Final_normal==1){
 								EventBus.getDefault()
 								.postSticky(
 										new DisplayEvent(
 												"這一段上傳parse成功!"));
+								}
+								else{
+									EventBus.getDefault()
+									.postSticky(
+											new DisplayEvent(
+													"最後一段上傳parse成功!!!!!"));
+									
+									
+								}
 								//String path = Environment.getExternalStorageDirectory().getPath();
 								//檔案路徑，記得要加斜線(這樣/sdcard/filename)
 			//String mp3File = Environment.getExternalStorageDirectory()+"/A"+dts+"Realtime"+".mp3";

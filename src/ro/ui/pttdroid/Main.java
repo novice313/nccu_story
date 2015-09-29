@@ -20,10 +20,12 @@ package ro.ui.pttdroid;
 import java.io.BufferedOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+
 import ro.ui.pttdroid.Player.PlayerBinder;
 import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
 import ro.ui.pttdroid.settings.CommSettings;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -645,6 +647,7 @@ public class Main extends FragmentActivity implements ChannelListener,
 			microphoneImage = (ImageView) findViewById(R.id.microphone_image);
 			microphoneImage.setOnClickListener(new OnClickListener() {
 
+				@SuppressLint("ShowToast")
 				@Override
 				public void onClick(View v) {
 					if (!if_talking) {
@@ -658,7 +661,7 @@ public class Main extends FragmentActivity implements ChannelListener,
 						setMicrophoneState(MicrophoneSwitcher.MIC_STATE_PRESSED);
 						EventBus.getDefault().post(new ResumeAudioEvent());
 						EventBus.getDefault().postSticky(
-								new DisplayEvent("Start talking!"));
+								new DisplayEvent("導覽員開始講話!"));
 					} else {
 						// stop takling
 						setMicrophoneState(MicrophoneSwitcher.MIC_STATE_NORMAL);
@@ -671,7 +674,7 @@ public class Main extends FragmentActivity implements ChannelListener,
 						if_talking = false;
 						EventBus.getDefault().post(new PauseAudioEvent());
 						EventBus.getDefault().postSticky(
-								new DisplayEvent("Stop talking!"));
+								new DisplayEvent("請注意是否最後一段是否傳成功!!"));
 					}
 
 				}

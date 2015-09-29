@@ -162,7 +162,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 				// final ParseImageView imageView = (ParseImageView) findViewById(R.id.personalprfile);
 				// imageView.setParseFile(image);
 				// System.out.println("image"+image);
-				// if(image!=null){
+		    if(image!=null){
 				image.getDataInBackground(new GetDataCallback() {
 
 				@Override
@@ -205,6 +205,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 					
 				}
 				});
+		    }
 					
 
 					

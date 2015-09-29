@@ -162,7 +162,7 @@ public class Player extends Service
 					{							
 						try 
 						{
-							
+							/*
 							switch(CommSettings.getCastType()) 
 							{
 								case CommSettings.BROADCAST:
@@ -172,13 +172,14 @@ public class Player extends Service
 								break;
 								case CommSettings.MULTICAST:
 									socket = new MulticastSocket(CommSettings.getPort());
-									System.out.println("PlayerInetAddress2"+GuiderRecorder.commIP);
-									((MulticastSocket) socket).joinGroup(InetAddress.getByName(Main.commIP));	 //接收到聲音的ip									
+									System.out.println(""+GuiderRecorder.commIP);
+									((MulticastSocket) socket).joinGroup(InetAddress.getByName("239.255.255.252"));	 //接收到聲音的ip									
 								break;
 								case CommSettings.UNICAST:
 									socket = new DatagramSocket(CommSettings.getPort());
 								break;
 							}	
+							*/
 							
 							
 							
@@ -206,6 +207,8 @@ public class Player extends Service
 							
 							timeout=timeout+1;
 							*/
+							
+							
 						socket.receive(packet);
 
 							/*if(if_super_node){
@@ -216,11 +219,11 @@ public class Player extends Service
 						}
 						catch(SocketException e) //Due to socket.close() 
 						{
-						   break;
+						  // break;
 						}
 						catch(Exception e) 
 						{
-							e.printStackTrace();
+							//e.printStackTrace();
 						}
 									
 
@@ -241,7 +244,7 @@ public class Player extends Service
 						}
 						progress.incrementAndGet();
 					}
-					synchronized(this)
+					/*synchronized(this)
 					{
 						try 
 						{	
@@ -252,10 +255,10 @@ public class Player extends Service
 						{
 							Log.error(getClass(), e);
 						}
-					}
+					}*/
 					player.stop();
 					player.release();
-					synchronized(this)
+					/*synchronized(this)
 					{
 						
 						try 
@@ -267,7 +270,7 @@ public class Player extends Service
 						{
 							Log.error(getClass(), e);
 						}
-					}
+					}*/
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -298,7 +301,7 @@ public class Player extends Service
 					case CommSettings.MULTICAST:
 						socket = new MulticastSocket(CommSettings.getPort());
 						System.out.println("PlayerInetAddress"+GuiderRecorder.commIP);
-						((MulticastSocket) socket).joinGroup(InetAddress.getByName(Main.commIP));	 //接收到聲音的ip									
+						((MulticastSocket) socket).joinGroup(InetAddress.getByName("239.255.255.252"));	 //接收到聲音的ip									
 					break;
 					case CommSettings.UNICAST:
 						socket = new DatagramSocket(CommSettings.getPort());

@@ -195,9 +195,41 @@ listen_guide .setOnClickListener(new View.OnClickListener() {
 	        public void onClick(View v) {
 	        	
 	        }});*/
+
+
+
 init();
 
-microphoneSwitcher.hide();
+change_to_client_online_fragment();
+playerIntent = new Intent(this, Client_Player.class);
+startService(playerIntent);
+
+
+/*if(if_Global_local==1){
+	System.out.println("local");
+	if (if_clientL_offline_mode) {
+		
+		if_clientL_offline_mode = false;
+		change_to_client_online_fragment();
+		playerIntent = new Intent(this, Client_Player.class);
+		startService(playerIntent);
+		
+		} 
+	}
+
+if(if_Global_local==0){
+	System.out.println("global");
+		if(if_clientL_offline_mode){	
+			if_clientL_offline_mode=false;
+			change_to_client_Global_online_fragment();
+		} 
+		invalidateOptionsMenu();
+		
+	}
+	
+	*/
+
+//microphoneSwitcher.hide();
 
 intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
 intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
@@ -399,10 +431,10 @@ microphoneSwitcher.shutdown();
 @Override
 public boolean onCreateOptionsMenu(Menu menu) {
 if (if_guider) {
-	getMenuInflater().inflate(R.menu.action_items, menu);
+	//getMenuInflater().inflate(R.menu.action_items, menu);
 } else {
 	if (if_clientL_offline_mode&&if_clientL_offline_mode) {
-		getMenuInflater().inflate(R.menu.menu_client_offline, menu);
+		//getMenuInflater().inflate(R.menu.menu_client_offline, menu);
 	} 
 	/*else if(!if_clientL_offline_mode) 
 	{
@@ -521,25 +553,20 @@ private void init() {  //init=> OnResume
 		    if(if_loading_final==false){       //圖load進去才算final
 		    	dialog.dismiss();
 		    	if(if_Global_local==0){
-                    Looper.prepare();  
-
+                    Looper.prepare();
 	                Toast.makeText(
 	                        Client_Main.this,
 	                        "您必須要跳到設定 =>WIFI =>選可用的wifi",
 	                        Toast.LENGTH_LONG).show();
-	                Looper.loop();  
-	                
-	    		    Intent settintIntent = new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS);   
+	                Intent settintIntent = new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS);   
 	    		    startActivity(settintIntent); 
 		    		
 		    	}else{
-                    Looper.prepare();  
-                Toast.makeText(
-                        Client_Main.this,
-                        "您必須要跳到設定的WIFI，選擇WIFI名稱"+Globalvariable.client_Main_SSID,
-                        Toast.LENGTH_LONG).show();
-                Looper.loop();  
-                
+                    Looper.prepare();
+	                Toast.makeText(
+	                        Client_Main.this,
+	                        "您必須要跳到設定的WIFI，選擇WIFI名稱"+Globalvariable.client_Main_SSID,
+	                        Toast.LENGTH_LONG).show();
     		    Intent settintIntent = new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS);   
     		    startActivity(settintIntent); 
 
@@ -575,14 +602,16 @@ private void init() {  //init=> OnResume
 				userName.setText(userNameString);
 				title.setText(titleString);
 				title.append("\t"+contentString);
-				
+		       // if_loading_final=true;
+               //dialog.dismiss();      //有字就停止 dialog
+
 				
 			final ParseFile image =(ParseFile)objects.get(0).get("image");
 				// ((ParseObject) me).getParseFile("data");
 			// final ParseImageView imageView = (ParseImageView) findViewById(R.id.personalprfile);
 			// imageView.setParseFile(image);
 			// System.out.println("image"+image);
-			// if(image!=null){
+		  if(image!=null){
 			image.getDataInBackground(new GetDataCallback() {
 
 			@Override
@@ -601,7 +630,7 @@ private void init() {  //init=> OnResume
 			        imageView.setParseFile(image);
 			        imageView.setImageBitmap(bmp);
 			        if_loading_final=true;
-                    dialog.dismiss();
+	                dialog.dismiss();      
 
 			       /* imageView.loadInBackground(new GetDataCallback() {
 			            public void done(byte[] data, ParseException e) {
@@ -626,6 +655,7 @@ private void init() {  //init=> OnResume
 				
 			}
 			});
+		  }
 				
 
 				

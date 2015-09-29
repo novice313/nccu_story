@@ -80,7 +80,7 @@ public class Client_Player extends Service
 	private volatile boolean playing = true;
 	Thread loopthread;
 	volatile boolean terminate = false;
-	String getIP="";
+	public static String getIP="";
 	int just_one=1;
 	//PowerManager.WakeLock mWakeLock; 
 
