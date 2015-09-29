@@ -53,7 +53,7 @@ public class CustomerFragment extends Fragment {
         Toast.makeText(
                 getActivity(),
                 "注意！請使用者要回扣給導覽員，只限一個人回扣，並把聲音賤關小聲",
-                5000).show();
+                100000).show();
 
 		return view;
 	}
@@ -205,9 +205,7 @@ public class CustomerFragment extends Fragment {
 		super.onResume();
 		try {
 			EventBus.getDefault().register(this);
-			EventBus.getDefault().post(new DisplayEvent("Guider init!"));
-			EventBus.getDefault().postSticky(
-					new DisplayEvent("Guider test sticky!"));
+			EventBus.getDefault().post(new DisplayEvent("導覽員，聲音部分初始化"));
 			/*EventBus.getDefault().postSticky(
 					new DisplayEvent("CommSettings.getMulticastAddr!"+CommSettings.getMulticastAddr()));*/
 		} catch (Exception e) {

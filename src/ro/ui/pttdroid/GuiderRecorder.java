@@ -119,7 +119,7 @@ public class GuiderRecorder extends Thread
 	//在Guider的時候判斷是否ip有重複到239.255.255.250 ;239.255.255.251 ;239.255.255.252...etc
 	String Selection[]={"239.255.255.250","239.255.255.251","239.255.255.252","239.255.255.253","239.255.255.254"};
 	Boolean Selection_boolean[]={false,false,false,false,false};
-	Boolean if_have_ip=false;
+	public static Boolean if_have_ip=false;
 	
 	@Override
 	public void run() 
@@ -223,7 +223,7 @@ public class GuiderRecorder extends Thread
 					*/
 					
 					//packet_number= new DatagramPacket(buffer,buffer.length,addr,CommSettings.getPort());
-				    if(index%300==0){     //調整參數因為為了Client端和Guider端的全限問題
+				    if(index%500==0){     //調整參數因為為了Client端和Guider端的全限問題
 					recorder_socket.send(newpacket);  //to local player
 				    }else{
 				    	recorder_socket.send(packet);
@@ -472,7 +472,7 @@ public class GuiderRecorder extends Thread
 		RealtimerawVoiceQueue =new ArrayList<VoiceData>();
 		RealtimerawFinalVoiceQueue =new ArrayList<VoiceData>();
 		EventBus.getDefault().postSticky(
-				new DisplayEvent("Init recording file!"));
+				new DisplayEvent("初始化錄音系統！"));
 		System.out.println("Init recording file");
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("offline");   // add offline table to Online
 		// Retrieve the object by id
@@ -533,7 +533,7 @@ public class GuiderRecorder extends Thread
 	    final File file = new File(tempFile);
 		if (!file.exists()) {
 			EventBus.getDefault().postSticky(
-					new DisplayEvent("Failed Init saving mp3 Realtime_stop_recording!"));
+					new DisplayEvent("raw檔案上傳失敗"));
 			return;
 		}
 
@@ -565,8 +565,8 @@ public class GuiderRecorder extends Thread
 				String mp3File = Environment.getExternalStorageDirectory().getPath()
 						+"/"+dts+"Realtime"+".mp3";
 				System.out.println("Initsavingmp3file"+mp3File);
-				EventBus.getDefault().postSticky(
-						new DisplayEvent("Initsavingmp3file!"));
+				//EventBus.getDefault().postSticky(
+				//		new DisplayEvent("存成mp3檔案！"));
 				//set_raw_file_not_writing();
 				FLameUtils lameUtils = new FLameUtils(1, Audio.SAMPLE_RATE, 320);
 				System.out.println(lameUtils.raw2mp3(tempFile, mp3File));
@@ -695,7 +695,7 @@ public class GuiderRecorder extends Thread
 	    final File file = new File(tempFile);
 		if (!file.exists()) {
 			EventBus.getDefault().postSticky(
-					new DisplayEvent("Failed Init saving mp3 Realtime_stop_recording!"));
+					new DisplayEvent("raw檔案上傳失敗"));//Failed Init saving mp3 Realtime_stop_recording!
 			return;
 		}
 
@@ -732,7 +732,7 @@ public class GuiderRecorder extends Thread
 				FLameUtils lameUtils = new FLameUtils(1, Audio.SAMPLE_RATE, 192);
 				System.out.println(lameUtils.raw2mp3(tempFile, mp3File));
 				EventBus.getDefault().postSticky(
-						new DisplayEvent("Saving Realtime mp3!"));
+						new DisplayEvent("存成mp3檔案！"));
 				RealtimeVoiceObject realtimeVoiceObject = new RealtimeVoiceObject();
 				if_Final_normal=1;
 				realtimeVoiceObject.saveVoiceObject(mp3File,tempFile,numberTag,SubnumbeTag,UploadPage.latitudeString,UploadPage.longitudeString,Globalvariable.guiderid,if_Final_normal); //parse to cloud
