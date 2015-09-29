@@ -54,7 +54,7 @@ public class MainActivity extends FragmentActivity implements
 	private ViewPager viewPager;
 	private ActionBar actionBar;
 	private TabsPagerAdapter mAdapter;
-	private String[] tabs = { "News", "Googlemap", "Mediaplayer", "Owner" };
+	public static String[] tabs = { "News", "Googlemap"/*, "Mediaplayer", "Owner" */};
 	public static int tabsize = 0;
 
 	// Result codes
@@ -369,12 +369,6 @@ public class MainActivity extends FragmentActivity implements
 			// intent_recorder.setClass(MainActivity.this,
 			// FileexplorerActivity.class);
 			// startActivity(intent_recorder);
-			break;
-		case R.id.action_refresh:
-			Log.d(tag, "refresh onclick");
-
-			NewsFragment.newsList.clear();
-			NewsFragment.getNewsList();
 			break;
 		}
 		return super.onOptionsItemSelected(item);

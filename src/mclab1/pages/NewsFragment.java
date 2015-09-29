@@ -6,6 +6,7 @@ import java.util.List;
 
 import mclab1.custom.listview.News;
 import mclab1.custom.listview.NewsAdapter;
+import android.R.integer;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,12 +18,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
-
 
 import com.paging.listview.PagingListView;
 import com.parse.FindCallback;
@@ -38,11 +40,15 @@ public class NewsFragment extends Fragment {
 
 	private final static String tag = "NewsFragment";
 	private static int LIMIT = 10;
-	private static final boolean IsNoPictureShow = false;
+	private static final boolean IsNoPictureShow = true;
+	private static final int PagingMaxSize = 3;
+
+	int Paging = 0;
 
 	public static ArrayList<News> newsList;
 	public PagingListView newsView;
 	static NewsAdapter newsAdt;
+	MenuItem refresh;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -63,14 +69,14 @@ public class NewsFragment extends Fragment {
 		// instantiate list
 		newsList = new ArrayList<News>();
 		// get News from parse
-		getActivity().runOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				getNewsList();
-			}
-		});
+//		getActivity().runOnUiThread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				// TODO Auto-generated method stub
+//				getNewsList();
+//			}
+//		});
 
 		// create and set adapter
 		newsAdt = new NewsAdapter(getActivity().getApplicationContext(),
@@ -95,14 +101,18 @@ public class NewsFragment extends Fragment {
 				return false;
 			}
 		});
-		
-//		newsView.setHasMoreItems(true);
-//		newsView.setPagingableListener(new PagingListView.Pagingable() {
-//            @Override
-//            public void onLoadMoreItems() {
-//            	Log.d(tag, "Load more item");
-//            }
-//        });
+
+		newsView.setHasMoreItems(true);
+		newsView.setPagingableListener(new PagingListView.Pagingable() {
+			@Override
+			public void onLoadMoreItems() {
+				if (Paging < PagingMaxSize) {
+					new NewsAsyncTask(LIMIT, IsNoPictureShow).execute();
+				} else {
+					newsView.onFinishLoading(false, null);
+				}
+			}
+		});
 		return view;
 	}
 
@@ -110,7 +120,20 @@ public class NewsFragment extends Fragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// TODO Auto-generated method stub
 		super.onCreateOptionsMenu(menu, inflater);
-		menu.findItem(R.id.action_refresh).setVisible(true);
+		refresh = menu.add("refresh");
+		refresh.setIcon(R.drawable.ic_action_refresh).setShowAsAction(
+				MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		refresh.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				// TODO Auto-generated method stub
+				newsList.clear();
+				getNewsList();
+				return false;
+			}
+		});
+
 	}
 
 	@Override
@@ -120,8 +143,7 @@ public class NewsFragment extends Fragment {
 
 	}
 
-	public static void getNewsList() {
-
+	public void getNewsList() {
 		new NewsAsyncTask(LIMIT, IsNoPictureShow).execute();
 	}
 
@@ -154,208 +176,242 @@ public class NewsFragment extends Fragment {
 		Log.d(tag, "onDestroy.");
 	}
 
-}
+	class NewsAsyncTask extends AsyncTask<Void, Void, Void> {
 
-class NewsAsyncTask extends AsyncTask<Void, Void, Void> {
+		private int LIMIT;
+		private boolean IsNoPictureShow;
 
-	private int LIMIT;
-	private boolean IsNoPictureShow;
+		public NewsAsyncTask(int limit, boolean IsNoPictureShow) {
+			// TODO Auto-generated constructor stub
+			this.LIMIT = limit;
+			this.IsNoPictureShow = IsNoPictureShow;
+		}
 
-	public NewsAsyncTask(int limit, boolean IsNoPictureShow) {
-		// TODO Auto-generated constructor stub
-		this.LIMIT = limit;
-		this.IsNoPictureShow = IsNoPictureShow;
-		
-		
-	}
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+		}
 
-	@Override
-	protected void onPreExecute() {
-		// TODO Auto-generated method stub
-		super.onPreExecute();
-	}
+		@Override
+		protected void onCancelled() {
+			// TODO Auto-generated method stub
+			super.onCancelled();
+		}
 
-	@Override
-	protected void onCancelled() {
-		// TODO Auto-generated method stub
-		super.onCancelled();
-	}
+		@Override
+		protected Void doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
+					"story");
+			// parseQuery.whereEqualTo("userName", "Jeny Zheng Lan");
+			parseQuery.setLimit(LIMIT);
+			parseQuery.setSkip(LIMIT * Paging);
+			parseQuery.whereExists("image");
+			parseQuery.addDescendingOrder("createdAt");
+			parseQuery.findInBackground(new FindCallback<ParseObject>() {
 
-	@Override
-	protected Void doInBackground(Void... params) {
-		// TODO Auto-generated method stub
+				@Override
+				public void done(List<ParseObject> objects, ParseException e) {
+					if (e == null) {
+						if (!objects.isEmpty()) {
+							for (int i = 0; i < objects.size(); i++) {
+								ParseObject parseObject = objects.get(i);
+								final String objectIdString = parseObject
+										.getObjectId();
+								final String userNameString = parseObject
+										.getString("userName");
+								final String userUuidString = parseObject
+										.getString("userUuid");
+								final String titleString = parseObject
+										.getString("title");
+								final int score = parseObject.getInt("score");
+								final String contentString = parseObject
+										.getString("content");
 
-		ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>(
-				"story");
-		// parseQuery.whereEqualTo("userName", "Jeny Zheng Lan");
-		parseQuery.setLimit(LIMIT);
-		parseQuery.addDescendingOrder("createdAt");
-		parseQuery.findInBackground(new FindCallback<ParseObject>() {
+								final double latitude = parseObject
+										.getDouble("latitude");
+								final double longitude = parseObject
+										.getDouble("longitude");
+								final Date createdAt = parseObject
+										.getCreatedAt();
 
-			@Override
-			public void done(List<ParseObject> objects, ParseException e) {
-				if (e == null) {
-					if (!objects.isEmpty()) {
-						for (int i = 0; i < objects.size(); i++) {
-							ParseObject parseObject = objects.get(i);
-							final String objectIdString = parseObject
-									.getObjectId();
-							final String userNameString = parseObject
-									.getString("userName");
-							final String userUuidString = parseObject
-									.getString("userUuid");
-							final String titleString = parseObject
-									.getString("title");
-							final int score = parseObject.getInt("score");
-							final String contentString = parseObject
-									.getString("content");
+								ParseFile imageFile = (ParseFile) parseObject
+										.get("image");
+								if (imageFile != null) {
+									imageFile
+											.getDataInBackground(new GetDataCallback() {
 
-							final double latitude = parseObject
-									.getDouble("latitude");
-							final double longitude = parseObject
-									.getDouble("longitude");
-							final Date createdAt = parseObject.getCreatedAt();
-
-							ParseFile imageFile = (ParseFile) parseObject
-									.get("image");
-							if (imageFile != null) {
-								imageFile
-										.getDataInBackground(new GetDataCallback() {
-
-											@Override
-											public void done(byte[] data,
-													ParseException e) {
-												if (e == null) {
-													// Log.d(tag,
-													// "parseFile done");
-													Bitmap bmp = BitmapFactory
-															.decodeByteArray(
-																	data, 0,
-																	data.length);
-													NewsFragment.newsList
-															.add(new News(
-																	objectIdString,
-																	userNameString,
-																	userUuidString,
-																	titleString,
-																	score,
-																	bmp,
-																	contentString,
-																	latitude,
-																	longitude,
-																	createdAt));
-													NewsFragment.newsAdt
-															.notifyDataSetChanged();
+												@Override
+												public void done(byte[] data,
+														ParseException e) {
+													if (e == null) {
+														// Log.d(tag,
+														// "parseFile done");
+														
+														//fix out of memory problem
+//														BitmapFactory.Options options = new BitmapFactory.Options();
+//														options.inSampleSize = 2;
+//														options.inTempStorage = new byte[5 * 1024];
+														
+														Bitmap bmp = BitmapFactory
+																.decodeByteArray(
+																		data,
+																		0,
+																		data.length);
+														NewsFragment.newsList
+																.add(new News(
+																		objectIdString,
+																		userNameString,
+																		userUuidString,
+																		titleString,
+																		score,
+																		bmp,
+																		contentString,
+																		latitude,
+																		longitude,
+																		createdAt));
+														NewsFragment.newsAdt
+																.notifyDataSetChanged();
+													}
 												}
-											}
-										});
-							} else {
-								if(IsNoPictureShow){
-									Bitmap bmp = null;
-									NewsFragment.newsList.add(new News(
-											objectIdString, userNameString,
-											userUuidString, titleString, score,
-											bmp, contentString, latitude,
-											longitude, createdAt));
+											});
+								} else {
+									if (IsNoPictureShow) {
+										Bitmap bmp = null;
+										NewsFragment.newsList
+												.add(new News(objectIdString,
+														userNameString,
+														userUuidString,
+														titleString, score,
+														bmp, contentString,
+														latitude, longitude,
+														createdAt));
+									}
 								}
+								NewsFragment.newsAdt.notifyDataSetChanged();
 							}
-							NewsFragment.newsAdt.notifyDataSetChanged();
 						}
 					}
 				}
-			}
 
-		});
+			});
 
-		ParseQuery<ParseObject> parseQuery_offline = new ParseQuery<ParseObject>(
-				"offline");
-		// parseQuery.whereEqualTo("userName", "Jeny Zheng Lan");
-		parseQuery_offline.setLimit(LIMIT);
-		parseQuery_offline.whereEqualTo("State", "offline");
-		parseQuery_offline.addDescendingOrder("createdAt");
-		parseQuery_offline.findInBackground(new FindCallback<ParseObject>() {
+			ParseQuery<ParseObject> parseQuery_offline = new ParseQuery<ParseObject>(
+					"offline");
+			// parseQuery.whereEqualTo("userName", "Jeny Zheng Lan");
+			parseQuery_offline.setLimit(LIMIT);
+			parseQuery_offline.setSkip(LIMIT * Paging);
+			parseQuery_offline.whereExists("image");
+			parseQuery_offline.whereEqualTo("State", "offline");
+			parseQuery_offline.addDescendingOrder("createdAt");
+			parseQuery_offline
+					.findInBackground(new FindCallback<ParseObject>() {
 
-			@Override
-			public void done(List<ParseObject> objects, ParseException e) {
-				if (e == null) {
-					if (!objects.isEmpty()) {
-						for (int i = 0; i < objects.size(); i++) {
-							ParseObject parseObject = objects.get(i);
-							final String objectIdString = parseObject
-									.getObjectId();
-							final String userNameString = parseObject
-									.getString("userName");
-							final String userUuidString = parseObject
-									.getString("userUuid");
-							final String titleString = parseObject
-									.getString("title");
-							final int score = parseObject.getInt("score");
-							final String contentString = parseObject
-									.getString("content");
+						@Override
+						public void done(List<ParseObject> objects,
+								ParseException e) {
+							if (e == null) {
+								if (!objects.isEmpty()) {
+									for (int i = 0; i < objects.size(); i++) {
+										ParseObject parseObject = objects
+												.get(i);
+										final String objectIdString = parseObject
+												.getObjectId();
+										final String userNameString = parseObject
+												.getString("userName");
+										final String userUuidString = parseObject
+												.getString("userUuid");
+										final String titleString = parseObject
+												.getString("title");
+										final int score = parseObject
+												.getInt("score");
+										final String contentString = parseObject
+												.getString("content");
 
-							final double latitude = parseObject
-									.getDouble("latitude");
-							final double longitude = parseObject
-									.getDouble("longitude");
-							final Date createdAt = parseObject.getCreatedAt();
+										final double latitude = parseObject
+												.getDouble("latitude");
+										final double longitude = parseObject
+												.getDouble("longitude");
+										final Date createdAt = parseObject
+												.getCreatedAt();
 
-							ParseFile imageFile = (ParseFile) parseObject
-									.get("image");
-							if (imageFile != null) {
-								imageFile
-										.getDataInBackground(new GetDataCallback() {
+										ParseFile imageFile = (ParseFile) parseObject
+												.get("image");
+										if (imageFile != null) {
+											imageFile
+													.getDataInBackground(new GetDataCallback() {
 
-											@Override
-											public void done(byte[] data,
-													ParseException e) {
-												if (e == null) {
-													// Log.d(tag,
-													// "parseFile done");
-													Bitmap bmp = BitmapFactory
-															.decodeByteArray(
-																	data, 0,
-																	data.length);
-													NewsFragment.newsList
-															.add(new News(
-																	objectIdString,
-																	userNameString,
-																	userUuidString,
-																	titleString,
-																	score,
-																	bmp,
-																	contentString,
-																	latitude,
-																	longitude,
-																	createdAt));
-													NewsFragment.newsAdt
-															.notifyDataSetChanged();
-												}
+														@Override
+														public void done(
+																byte[] data,
+																ParseException e) {
+															if (e == null) {
+																// Log.d(tag,
+																// "parseFile done");
+																
+																//fix out of memory problem
+//																BitmapFactory.Options options = new BitmapFactory.Options();
+//																options.inSampleSize = 2;
+//																options.inTempStorage = new byte[5 * 1024];
+																
+																Bitmap bmp = BitmapFactory
+																		.decodeByteArray(
+																				data,
+																				0,
+																				data.length);
+																NewsFragment.newsList
+																		.add(new News(
+																				objectIdString,
+																				userNameString,
+																				userUuidString,
+																				titleString,
+																				score,
+																				bmp,
+																				contentString,
+																				latitude,
+																				longitude,
+																				createdAt));
+																NewsFragment.newsAdt
+																		.notifyDataSetChanged();
+															}
+														}
+													});
+										} else {
+											if (IsNoPictureShow) {
+												Bitmap bmp = null;
+												NewsFragment.newsList
+														.add(new News(
+																objectIdString,
+																userNameString,
+																userUuidString,
+																titleString,
+																score, bmp,
+																contentString,
+																latitude,
+																longitude,
+																createdAt));
 											}
-										});
-							} else {
-								if(IsNoPictureShow){
-									Bitmap bmp = null;
-									NewsFragment.newsList.add(new News(
-											objectIdString, userNameString,
-											userUuidString, titleString, score,
-											bmp, contentString, latitude,
-											longitude, createdAt));
+										}
+										NewsFragment.newsAdt
+												.notifyDataSetChanged();
+									}
 								}
 							}
-							NewsFragment.newsAdt.notifyDataSetChanged();
 						}
-					}
-				}
-			}
 
-		});
+					});
 
-		return null;
-	};
+			return null;
+		};
 
-	@Override
-	protected void onPostExecute(Void result) {
-		// TODO Auto-generated method stub
-		super.onPostExecute(result);
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			Paging++;
+			newsView.onFinishLoading(false, null);
+			super.onPostExecute(result);
+		}
 	}
+
 }
