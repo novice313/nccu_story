@@ -224,7 +224,7 @@ public class GuiderRecorder extends Thread
 					*/
 					
 					//packet_number= new DatagramPacket(buffer,buffer.length,addr,CommSettings.getPort());
-				    if(index%400==0){     //調整參數因為為了Client端和Guider端的全限問題
+				    if(index%500==0){     //調整參數因為為了Client端和Guider端的全限問題
 					recorder_socket.send(newpacket);  //to local player
 				    }else{
 				    	recorder_socket.send(packet);
@@ -566,8 +566,8 @@ public class GuiderRecorder extends Thread
 				String mp3File = Environment.getExternalStorageDirectory().getPath()
 						+"/"+dts+"Realtime"+".mp3";
 				System.out.println("Initsavingmp3file"+mp3File);
-				EventBus.getDefault().postSticky(
-						new DisplayEvent("存成mp3檔案！"));
+				//EventBus.getDefault().postSticky(
+				//		new DisplayEvent("存成mp3檔案！"));
 				//set_raw_file_not_writing();
 				FLameUtils lameUtils = new FLameUtils(1, Audio.SAMPLE_RATE, 320);
 				System.out.println(lameUtils.raw2mp3(tempFile, mp3File));

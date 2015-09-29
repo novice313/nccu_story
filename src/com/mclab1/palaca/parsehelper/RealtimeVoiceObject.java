@@ -91,8 +91,10 @@ public class RealtimeVoiceObject {
 					fileInputStream.close();
 					file = new ParseFile("Realtime.mp3", data);//change
 
+					if(if_Final_normal==1){
 						EventBus.getDefault().postSticky(
 							new DisplayEvent("準備上傳到parse....."));
+					}
 					file.saveInBackground(new SaveCallback() {
 
 						@Override

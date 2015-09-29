@@ -51,7 +51,7 @@ public class CustomerFragment extends Fragment {
         Toast.makeText(
                 getActivity(),
                 "注意！請使用者要回扣給導覽員，只限一個人回扣，並把聲音賤關小聲",
-                5000).show();
+                100000).show();
 
 		return view;
 	}

@@ -200,12 +200,13 @@ listen_guide .setOnClickListener(new View.OnClickListener() {
 
 init();
 
-change_to_client_online_fragment();
+/*change_to_client_online_fragment();
 playerIntent = new Intent(this, Client_Player.class);
 startService(playerIntent);
+*/
 
 
-/*if(if_Global_local==1){
+if(if_Global_local==1){
 	System.out.println("local");
 	if (if_clientL_offline_mode) {
 		
@@ -217,6 +218,7 @@ startService(playerIntent);
 		} 
 	}
 
+
 if(if_Global_local==0){
 	System.out.println("global");
 		if(if_clientL_offline_mode){	
@@ -226,8 +228,6 @@ if(if_Global_local==0){
 		invalidateOptionsMenu();
 		
 	}
-	
-	*/
 
 //microphoneSwitcher.hide();
 
