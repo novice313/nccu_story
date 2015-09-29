@@ -117,6 +117,7 @@ public class GoogleMapFragment extends Fragment
 
 	GoogleMap map;
 	public static final int PARSE_LIMIT = 10;
+	private static final int WAIT_FOR_QUERY_TIME = 2;//sec
 
 	/** GPS */
 	private LocationManager locationMgr;
@@ -515,7 +516,7 @@ public class GoogleMapFragment extends Fragment
 						LatLng temp_position = current_position;
 						Log.d(tag, "temp_position = " + current_position);
 						try {
-							Thread.sleep(3000);
+							Thread.sleep(WAIT_FOR_QUERY_TIME*1000);
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

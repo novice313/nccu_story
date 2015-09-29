@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import com.orm.Database;
+import com.paging.listview.PagingBaseAdapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -20,12 +21,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import edu.mclab1.nccu_story.R;
 
-public class NewsAdapter extends BaseAdapter{
+public class NewsAdapter extends PagingBaseAdapter<News>{
 
 	private static final String tag = "NewsAdaptertag";
 	// song list and layout
 	private ArrayList<News> news;
 	private LayoutInflater newsInf;
+	
+	private static final int[] COLORS = new int[] {
+        R.color.green_light, R.color.orange_light,
+        R.color.blue_light, R.color.red_light };
 
 	// constructor
 	public NewsAdapter(Context c, ArrayList<News> theNews) {
@@ -55,11 +60,14 @@ public class NewsAdapter extends BaseAdapter{
 		LinearLayout newsLay = (LinearLayout) newsInf.inflate(R.layout.detail,
 				parent, false);
 		// get title and artist views
-		
+		LinearLayout banner = (LinearLayout) newsLay.findViewById(R.id.banner);
 		TextView userName = (TextView) newsLay.findViewById(R.id.userName);
 		TextView title = (TextView) newsLay.findViewById(R.id.title);
 		ImageView image = (ImageView) newsLay.findViewById(R.id.imageView);
 		TextView content = (TextView) newsLay.findViewById(R.id.content);
+		
+		//set banner background color
+		banner.setBackgroundColor(parent.getResources().getColor(R.color.blue_light));
 		
 		// get song using position
 		News currNews = news.get(position);

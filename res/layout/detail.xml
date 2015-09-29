@@ -5,10 +5,10 @@
     android:orientation="vertical" >
 
     <LinearLayout
+        android:id="@+id/banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="#FF00FFFF"
         android:divider="@android:color/transparent"
         android:dividerHeight="10.0sp" >
 

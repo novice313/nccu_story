@@ -23,6 +23,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 
+
+import com.paging.listview.PagingListView;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -36,9 +38,10 @@ public class NewsFragment extends Fragment {
 
 	private final static String tag = "NewsFragment";
 	private static int LIMIT = 10;
+	private static final boolean IsNoPictureShow = false;
 
 	public static ArrayList<News> newsList;
-	public ListView newsView;
+	public PagingListView newsView;
 	static NewsAdapter newsAdt;
 
 	@Override
@@ -52,7 +55,7 @@ public class NewsFragment extends Fragment {
 			Bundle savedInstanceState) {
 		Log.d(tag, "onCreateView");
 		View view = inflater.inflate(R.layout.fragment_news, container, false);
-		newsView = (ListView) view.findViewById(R.id.news_list);
+		newsView = (PagingListView) view.findViewById(R.id.news_list);
 
 		// set recorder icon at action bar
 		setHasOptionsMenu(true);
@@ -92,7 +95,14 @@ public class NewsFragment extends Fragment {
 				return false;
 			}
 		});
-
+		
+//		newsView.setHasMoreItems(true);
+//		newsView.setPagingableListener(new PagingListView.Pagingable() {
+//            @Override
+//            public void onLoadMoreItems() {
+//            	Log.d(tag, "Load more item");
+//            }
+//        });
 		return view;
 	}
 
@@ -112,7 +122,7 @@ public class NewsFragment extends Fragment {
 
 	public static void getNewsList() {
 
-		new NewsAsyncTask(LIMIT).execute();
+		new NewsAsyncTask(LIMIT, IsNoPictureShow).execute();
 	}
 
 	@Override
@@ -149,10 +159,14 @@ public class NewsFragment extends Fragment {
 class NewsAsyncTask extends AsyncTask<Void, Void, Void> {
 
 	private int LIMIT;
+	private boolean IsNoPictureShow;
 
-	public NewsAsyncTask(int limit) {
+	public NewsAsyncTask(int limit, boolean IsNoPictureShow) {
 		// TODO Auto-generated constructor stub
 		this.LIMIT = limit;
+		this.IsNoPictureShow = IsNoPictureShow;
+		
+		
 	}
 
 	@Override
@@ -236,12 +250,14 @@ class NewsAsyncTask extends AsyncTask<Void, Void, Void> {
 											}
 										});
 							} else {
-								Bitmap bmp = null;
-								NewsFragment.newsList.add(new News(
-										objectIdString, userNameString,
-										userUuidString, titleString, score,
-										bmp, contentString, latitude,
-										longitude, createdAt));
+								if(IsNoPictureShow){
+									Bitmap bmp = null;
+									NewsFragment.newsList.add(new News(
+											objectIdString, userNameString,
+											userUuidString, titleString, score,
+											bmp, contentString, latitude,
+											longitude, createdAt));
+								}
 							}
 							NewsFragment.newsAdt.notifyDataSetChanged();
 						}
@@ -317,12 +333,14 @@ class NewsAsyncTask extends AsyncTask<Void, Void, Void> {
 											}
 										});
 							} else {
-								Bitmap bmp = null;
-								NewsFragment.newsList.add(new News(
-										objectIdString, userNameString,
-										userUuidString, titleString, score,
-										bmp, contentString, latitude,
-										longitude, createdAt));
+								if(IsNoPictureShow){
+									Bitmap bmp = null;
+									NewsFragment.newsList.add(new News(
+											objectIdString, userNameString,
+											userUuidString, titleString, score,
+											bmp, contentString, latitude,
+											longitude, createdAt));
+								}
 							}
 							NewsFragment.newsAdt.notifyDataSetChanged();
 						}
