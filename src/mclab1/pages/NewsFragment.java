@@ -206,7 +206,7 @@ public class NewsFragment extends Fragment {
 					"story");
 			// parseQuery.whereEqualTo("userName", "Jeny Zheng Lan");
 			parseQuery.setLimit(LIMIT);
-			parseQuery.setSkip(LIMIT * Paging);
+//			parseQuery.setSkip(LIMIT * Paging);
 			parseQuery.whereExists("image");
 			parseQuery.addDescendingOrder("createdAt");
 			parseQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -301,7 +301,7 @@ public class NewsFragment extends Fragment {
 					"offline");
 			// parseQuery.whereEqualTo("userName", "Jeny Zheng Lan");
 			parseQuery_offline.setLimit(LIMIT);
-			parseQuery_offline.setSkip(LIMIT * Paging);
+//			parseQuery_offline.setSkip(LIMIT * Paging);
 			parseQuery_offline.whereExists("image");
 			parseQuery_offline.whereEqualTo("State", "offline");
 			parseQuery_offline.addDescendingOrder("createdAt");
