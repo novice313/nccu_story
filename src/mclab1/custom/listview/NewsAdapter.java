@@ -21,16 +21,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import edu.mclab1.nccu_story.R;
 
-public class NewsAdapter extends PagingBaseAdapter<News>{
+public class NewsAdapter extends PagingBaseAdapter<News> {
 
 	private static final String tag = "NewsAdaptertag";
 	// song list and layout
 	private ArrayList<News> news;
 	private LayoutInflater newsInf;
-	
-	private static final int[] COLORS = new int[] {
-        R.color.green_light, R.color.orange_light,
-        R.color.blue_light, R.color.red_light };
+
+	private static final int[] COLORS = new int[] { R.color.green_light,
+			R.color.orange_light, R.color.blue_light, R.color.red_light };
 
 	// constructor
 	public NewsAdapter(Context c, ArrayList<News> theNews) {
@@ -65,59 +64,61 @@ public class NewsAdapter extends PagingBaseAdapter<News>{
 		TextView title = (TextView) newsLay.findViewById(R.id.title);
 		ImageView image = (ImageView) newsLay.findViewById(R.id.imageView);
 		TextView content = (TextView) newsLay.findViewById(R.id.content);
-		
-		//set banner background color
-		banner.setBackgroundColor(parent.getResources().getColor(R.color.blue_light));
-		
+
+		// set banner background color
+		banner.setBackgroundColor(parent.getResources().getColor(
+				R.color.blue_light));
+
 		// get song using position
 		News currNews = news.get(position);
-		
+
 		Log.d(tag, currNews.toString());
-		
+
 		// get title and artist strings
 		userName.setText(currNews.getuserName());
 		title.setText(currNews.getTitle());
 		Bitmap bmp = currNews.getImage();
-		if(bmp!=null){
+		if (bmp != null) {
 			image.setImageBitmap(bmp);
 		}
-		
+
 		content.setText(currNews.getContent());
 		// set position as tag
 		newsLay.setTag(position);
 		newsLay.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				//songPick
-				Log.d(tag, v.toString()+" onClick");
-//				MainActivity.musicSrv.setSong(Integer.parseInt(v.getTag().toString()));
-//				MainActivity.musicSrv.playSong();
-//				if (MainActivity.playbackPaused) {
-//					//setController();
-//					MainActivity.playbackPaused = false;
-//				}
-//				MainActivity.controller.show(0);
+				// songPick
+				Log.d(tag, v.toString() + " onClick");
+				// MainActivity.musicSrv.setSong(Integer.parseInt(v.getTag().toString()));
+				// MainActivity.musicSrv.playSong();
+				// if (MainActivity.playbackPaused) {
+				// //setController();
+				// MainActivity.playbackPaused = false;
+				// }
+				// MainActivity.controller.show(0);
 			}
 		});
-		
+
 		newsLay.setOnLongClickListener(new OnLongClickListener() {
-			
+
 			@Override
 			public boolean onLongClick(View v) {
 				// TODO Auto-generated method stub
-				Log.d(tag, v.toString()+" onLongClick");
+				Log.d(tag, v.toString() + " onLongClick");
 				return false;
 			}
 		});
 		return newsLay;
 	}
 
+
 }
 
 class CustomComparator implements Comparator<News> {
-    @Override
-    public int compare(News n1, News n2) {
-        return n1.getCreatedDate().compareTo(n2.getCreatedDate());
-    }
+	@Override
+	public int compare(News n1, News n2) {
+		return n1.getCreatedDate().compareTo(n2.getCreatedDate());
+	}
 }

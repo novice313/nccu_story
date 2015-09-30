@@ -396,7 +396,8 @@ public class GoogleMapFragment extends Fragment
 
 		switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(mActivity)) {
 		case ConnectionResult.SUCCESS:
-			Toast.makeText(mActivity, "SUCCESS", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(mActivity, "SUCCESS", Toast.LENGTH_SHORT).show();
+			Log.d(tag, "GoogleMap SUCCESS");
 
 			// It isn't possible to set a fragment's id programmatically so we
 			// set a tag instead and
@@ -421,19 +422,23 @@ public class GoogleMapFragment extends Fragment
 			}
 			break;
 		case ConnectionResult.SERVICE_MISSING:
-			Toast.makeText(mActivity, "SERVICE MISSING", Toast.LENGTH_SHORT)
-					.show();
+//			Toast.makeText(mActivity, "SERVICE MISSING", Toast.LENGTH_SHORT)
+//					.show();
+			Log.d(tag, "GoogleMap SERVICE MISSING");
 			break;
 		case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
-			Toast.makeText(mActivity, "UPDATE REQUIRED", Toast.LENGTH_SHORT)
-					.show();
+//			Toast.makeText(mActivity, "UPDATE REQUIRED", Toast.LENGTH_SHORT)
+//					.show();
+			Log.d(tag, "GoogleMap UPDATE REQUIRED");
 			break;
 		default:
-			Toast.makeText(
-					mActivity,
-					GooglePlayServicesUtil
-							.isGooglePlayServicesAvailable(mActivity),
-					Toast.LENGTH_SHORT).show();
+//			Toast.makeText(
+//					mActivity,
+//					GooglePlayServicesUtil
+//							.isGooglePlayServicesAvailable(mActivity),
+//					Toast.LENGTH_SHORT).show();
+			Log.d(tag, ""+GooglePlayServicesUtil
+							.isGooglePlayServicesAvailable(mActivity));
 		}// END switch
 
 	}
@@ -656,19 +661,19 @@ public class GoogleMapFragment extends Fragment
 			switch (status) {
 			case LocationProvider.OUT_OF_SERVICE:
 				Log.v(tag, "Status Changed: Out of Service");
-				Toast.makeText(mActivity, "Status Changed: Out of Service",
-						Toast.LENGTH_SHORT).show();
+//				Toast.makeText(mActivity, "Status Changed: Out of Service",
+//						Toast.LENGTH_SHORT).show();
 				break;
 			case LocationProvider.TEMPORARILY_UNAVAILABLE:
 				Log.v(tag, "Status Changed: Temporarily Unavailable");
-				Toast.makeText(mActivity,
-						"Status Changed: Temporarily Unavailable",
-						Toast.LENGTH_SHORT).show();
+//				Toast.makeText(mActivity,
+//						"Status Changed: Temporarily Unavailable",
+//						Toast.LENGTH_SHORT).show();
 				break;
 			case LocationProvider.AVAILABLE:
 				Log.v(tag, "Status Changed: Available");
-				Toast.makeText(mActivity, "Status Changed: Available",
-						Toast.LENGTH_SHORT).show();
+//				Toast.makeText(mActivity, "Status Changed: Available",
+//						Toast.LENGTH_SHORT).show();
 				break;
 			}
 		}
@@ -696,19 +701,19 @@ public class GoogleMapFragment extends Fragment
 			switch (event) {
 			case GpsStatus.GPS_EVENT_STARTED:
 				Log.d(tag, "GPS_EVENT_STARTED");
-				Toast.makeText(mActivity, "GPS_EVENT_STARTED",
-						Toast.LENGTH_SHORT).show();
+//				Toast.makeText(mActivity, "GPS_EVENT_STARTED",
+//						Toast.LENGTH_SHORT).show();
 				break;
 			case GpsStatus.GPS_EVENT_STOPPED:
 				Log.d(tag, "GPS_EVENT_STOPPED");
-				Toast.makeText(mActivity, "GPS_EVENT_STOPPED",
-						Toast.LENGTH_SHORT).show();
+//				Toast.makeText(mActivity, "GPS_EVENT_STOPPED",
+//						Toast.LENGTH_SHORT).show();
 				break;
 			case GpsStatus.GPS_EVENT_FIRST_FIX:
 				Log.d(tag, "GPS_EVENT_FIRST_FIX");
-				Toast.makeText(mActivity, "GPS_EVENT_FIRST_FIX",
-						Toast.LENGTH_SHORT).show();
-				break;
+//				Toast.makeText(mActivity, "GPS_EVENT_FIRST_FIX",
+//						Toast.LENGTH_SHORT).show();
+//				break;
 			case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
 				Log.d(tag, "GPS_EVENT_SATELLITE_STATUS");
 
@@ -747,8 +752,8 @@ public class GoogleMapFragment extends Fragment
 		}
 		markerMe = map.addMarker(markerOpt);
 
-		Toast.makeText(mActivity, "lat:" + lat + ",lng:" + lng,
-				Toast.LENGTH_SHORT).show();
+//		Toast.makeText(mActivity, "lat:" + lat + ",lng:" + lng,
+//				Toast.LENGTH_SHORT).show();
 	}
 
 	private void cameraFocusOnMe(double lat, double lng) {
