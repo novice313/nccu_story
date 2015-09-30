@@ -5,13 +5,13 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import ro.ui.pttdroid.Client_Main;
-import edu.mclab1.nccu_story.R;
+
 import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,10 +22,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import com.mclab1.palace.guider.DisplayEvent;
 import com.mclab1.place.events.EraseServerConnectionEvent;
 import com.mclab1.place.events.NewServerConnectionEvent;
+
 import de.greenrobot.event.EventBus;
+import edu.mclab1.nccu_story.R;
 
 @SuppressLint("ShowToast")
 public class CustomerFragment extends Fragment {
@@ -48,10 +51,23 @@ public class CustomerFragment extends Fragment {
 				false);
 		//init_view(view);
 		
-        Toast.makeText(
+		
+		final Toast toast = Toast.makeText(getActivity(), "注意！請使用者要回扣給導覽員，只限一個人回扣，並把聲音賤關小聲", Toast.LENGTH_SHORT);
+	    toast.show();
+
+	    Handler handler = new Handler();
+	        handler.postDelayed(new Runnable() {
+	           @Override
+	           public void run() {
+	               toast.cancel(); 
+	           }
+	    }, 100000);
+	        
+        /*Toast.makeText(
                 getActivity(),
                 "注意！請使用者要回扣給導覽員，只限一個人回扣，並把聲音賤關小聲",
                 100000).show();
+                */
 
 		return view;
 	}

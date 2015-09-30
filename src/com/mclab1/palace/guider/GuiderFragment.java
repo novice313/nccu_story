@@ -76,7 +76,7 @@ public class GuiderFragment extends Fragment {
 		super.onResume();
 		try {
 			EventBus.getDefault().register(this);
-			EventBus.getDefault().post(new DisplayEvent("Guider init!"));
+			EventBus.getDefault().post(new DisplayEvent("導覽員聲音，初始化"));
 			//EventBus.getDefault().postSticky(new DisplayEvent("Guider test sticky  for PRO GUIDER !"));
 			/*EventBus.getDefault().postSticky(new DisplayEvent("CommSettings.getMulticastAddr() !"+CommSettings.getMulticastAddr()));*/
 		} catch (Exception e) {
