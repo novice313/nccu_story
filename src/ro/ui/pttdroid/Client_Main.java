@@ -579,6 +579,7 @@ private void init() {  //init=> OnResume
 		}
 	}.start();
 
+
 	new Thread() {
 		@Override
 		public void run() {
@@ -590,7 +591,7 @@ private void init() {  //init=> OnResume
 			}
 	// Retrieve the object by id	
 	query.whereEqualTo("latitude", Globalvariable.latitude);    //柏傳給我經緯度，我做經緯度限制
-	query.whereEqualTo("longitude", Globalvariable.longitude);  	
+	query.whereEqualTo("longitude", Globalvariable.longitude);
 	query.findInBackground(new FindCallback<ParseObject>() {	
 		@Override
 		public void done(List<ParseObject> objects, ParseException e) {
@@ -600,10 +601,12 @@ private void init() {  //init=> OnResume
 				String titleString  =(String) objects.get(0).get("title");
 				String contentString  =(String) objects.get(0).get("content");
         		System.out.println("SHow"+userNameString+" "+titleString+" "+contentString);
-
+        		
+        		if(if_Global_local==1){
 				userName.setText(userNameString);
 				title.setText(titleString);
 				title.append("\t"+contentString);
+        		}
 		        if_loading_final=true;
                 dialog.dismiss();      //有字就停止 dialog
 
@@ -629,8 +632,10 @@ private void init() {  //init=> OnResume
 			       // ImageView imageView=(ImageView) findViewById(R.id.personalprfile);
 			        // Set the Bitmap into the
 			        // ImageView
+			        if(if_Global_local==1){
 			        imageView.setParseFile(image);
 			        imageView.setImageBitmap(bmp);
+			        }
 			        if_loading_final=true;
 	                dialog.dismiss();      
 
@@ -675,6 +680,7 @@ private void init() {  //init=> OnResume
 		
 	});
 		}}.start();
+	
 	
 
 	
