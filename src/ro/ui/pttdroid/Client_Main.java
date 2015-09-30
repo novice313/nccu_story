@@ -221,8 +221,10 @@ if(if_Global_local==1){
 
 if(if_Global_local==0){
 	System.out.println("global");
-		if(if_clientL_offline_mode){	
+		if(if_clientL_offline_mode){
+			if_loading_final=true;
 			if_clientL_offline_mode=false;
+			microphoneSwitcher.hide();
 			change_to_client_Global_online_fragment();
 		} 
 		invalidateOptionsMenu();
@@ -602,8 +604,8 @@ private void init() {  //init=> OnResume
 				userName.setText(userNameString);
 				title.setText(titleString);
 				title.append("\t"+contentString);
-		       // if_loading_final=true;
-               //dialog.dismiss();      //有字就停止 dialog
+		        if_loading_final=true;
+                dialog.dismiss();      //有字就停止 dialog
 
 				
 			final ParseFile image =(ParseFile)objects.get(0).get("image");
