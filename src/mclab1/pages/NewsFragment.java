@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import ro.ui.pttdroid.Globalvariable;
+
 import mclab1.custom.listview.News;
 import mclab1.custom.listview.NewsAdapter;
 import android.R.integer;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,8 +30,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 
+import com.mclab1.palace.customer.CustomerDetailActivity;
 import com.paging.listview.PagingListView;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -49,7 +55,16 @@ public class NewsFragment extends Fragment {
 	public PagingListView newsView;
 	static NewsAdapter newsAdt;
 	MenuItem refresh;
+	private Context mContext;
+	ProgressDialog dialog;
 
+	@Override
+	public void onAttach(Context context) {
+		// TODO Auto-generated method stub
+		this.mContext = context;
+		super.onAttach(context);
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -69,14 +84,14 @@ public class NewsFragment extends Fragment {
 		// instantiate list
 		newsList = new ArrayList<News>();
 		// get News from parse
-//		getActivity().runOnUiThread(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				// TODO Auto-generated method stub
-//				getNewsList();
-//			}
-//		});
+		// getActivity().runOnUiThread(new Runnable() {
+		//
+		// @Override
+		// public void run() {
+		// // TODO Auto-generated method stub
+		// getNewsList();
+		// }
+		// });
 
 		// create and set adapter
 		newsAdt = new NewsAdapter(getActivity().getApplicationContext(),
@@ -93,11 +108,53 @@ public class NewsFragment extends Fragment {
 					MediaPlayerFragment.musicSrv.pausePlayer();
 				}
 
-				Intent intent_toDetailPage = new Intent();
-				intent_toDetailPage.putExtra("objectId", newsList.get(pos)
-						.getobjectId());
-				intent_toDetailPage.setClass(getActivity(), DetailPage.class);
-				startActivity(intent_toDetailPage);
+				String state = newsList.get(pos).getState();
+				if(state.compareTo(GoogleMapFragment.TYPE[1])==0){
+					Intent intent_toDetailPage = new Intent();
+					intent_toDetailPage.putExtra("objectId", newsList.get(pos)
+							.getobjectId());
+					intent_toDetailPage.setClass(getActivity(), DetailPage.class);
+					startActivity(intent_toDetailPage);
+				}
+				else if(state.compareTo(GoogleMapFragment.TYPE[2])==0){
+					// dialog
+					dialog = ProgressDialog.show(mContext, "讀取中",
+							"如等待過久請確認網路...", true);
+					dialog.setCanceledOnTouchOutside(false);
+
+					final double latitude = newsList.get(pos).getlatitude();
+					final double longitude = newsList.get(pos).getlongitude();
+					ParseQuery<ParseObject> query = ParseQuery
+							.getQuery("offline");
+					// Retrieve the object by id
+					query.getInBackground(newsList.get(pos).getobjectId(),
+							new GetCallback<ParseObject>() { // 以後博要給我object ID
+								@Override
+								public void done(ParseObject offline,
+										ParseException e) {
+									dialog.dismiss();
+
+									if (e == null) {
+										Globalvariable.titleString = (String) offline
+												.get("title");
+										Globalvariable.contentString = (String) offline
+												.get("content");
+										Globalvariable.latitude = latitude;
+										Globalvariable.longitude = longitude;
+										System.out.println("Globalvariable"
+												+ Globalvariable.titleString);
+										System.out.println("Globalvariable"
+												+ Globalvariable.contentString);
+										Intent intent = new Intent(mContext,
+												CustomerDetailActivity.class);
+										mContext.startActivity(intent);
+
+									} else {
+										e.printStackTrace();
+									}
+								}
+							});
+				}
 				return false;
 			}
 		});
@@ -121,7 +178,7 @@ public class NewsFragment extends Fragment {
 		// TODO Auto-generated method stub
 		super.onCreateOptionsMenu(menu, inflater);
 		refresh = menu.add("refresh");
-		refresh.setIcon(R.drawable.ic_action_refresh).setShowAsAction(
+		refresh.setIcon(R.drawable.ic_refresh).setShowAsAction(
 				MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		refresh.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
@@ -206,7 +263,7 @@ public class NewsFragment extends Fragment {
 					"story");
 			// parseQuery.whereEqualTo("userName", "Jeny Zheng Lan");
 			parseQuery.setLimit(LIMIT);
-//			parseQuery.setSkip(LIMIT * Paging);
+			// parseQuery.setSkip(LIMIT * Paging);
 			parseQuery.whereExists("image");
 			parseQuery.addDescendingOrder("createdAt");
 			parseQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -233,6 +290,8 @@ public class NewsFragment extends Fragment {
 										.getDouble("latitude");
 								final double longitude = parseObject
 										.getDouble("longitude");
+								final String stateString = parseObject
+										.getString("State");
 								final Date createdAt = parseObject
 										.getCreatedAt();
 
@@ -248,12 +307,17 @@ public class NewsFragment extends Fragment {
 													if (e == null) {
 														// Log.d(tag,
 														// "parseFile done");
-														
-														//fix out of memory problem
-//														BitmapFactory.Options options = new BitmapFactory.Options();
-//														options.inSampleSize = 2;
-//														options.inTempStorage = new byte[5 * 1024];
-														
+
+														// fix out of memory
+														// problem
+														// BitmapFactory.Options
+														// options = new
+														// BitmapFactory.Options();
+														// options.inSampleSize
+														// = 2;
+														// options.inTempStorage
+														// = new byte[5 * 1024];
+
 														Bitmap bmp = BitmapFactory
 																.decodeByteArray(
 																		data,
@@ -270,6 +334,7 @@ public class NewsFragment extends Fragment {
 																		contentString,
 																		latitude,
 																		longitude,
+																		stateString,
 																		createdAt));
 														NewsFragment.newsAdt
 																.notifyDataSetChanged();
@@ -279,14 +344,12 @@ public class NewsFragment extends Fragment {
 								} else {
 									if (IsNoPictureShow) {
 										Bitmap bmp = null;
-										NewsFragment.newsList
-												.add(new News(objectIdString,
-														userNameString,
-														userUuidString,
-														titleString, score,
-														bmp, contentString,
-														latitude, longitude,
-														createdAt));
+										NewsFragment.newsList.add(new News(
+												objectIdString, userNameString,
+												userUuidString, titleString,
+												score, bmp, contentString,
+												latitude, longitude,
+												stateString, createdAt));
 									}
 								}
 								NewsFragment.newsAdt.notifyDataSetChanged();
@@ -301,7 +364,7 @@ public class NewsFragment extends Fragment {
 					"offline");
 			// parseQuery.whereEqualTo("userName", "Jeny Zheng Lan");
 			parseQuery_offline.setLimit(LIMIT);
-//			parseQuery_offline.setSkip(LIMIT * Paging);
+			// parseQuery_offline.setSkip(LIMIT * Paging);
 			parseQuery_offline.whereExists("image");
 			parseQuery_offline.whereEqualTo("State", "offline");
 			parseQuery_offline.addDescendingOrder("createdAt");
@@ -333,6 +396,8 @@ public class NewsFragment extends Fragment {
 												.getDouble("latitude");
 										final double longitude = parseObject
 												.getDouble("longitude");
+										final String stateString = parseObject
+												.getString("State");
 										final Date createdAt = parseObject
 												.getCreatedAt();
 
@@ -349,12 +414,19 @@ public class NewsFragment extends Fragment {
 															if (e == null) {
 																// Log.d(tag,
 																// "parseFile done");
-																
-																//fix out of memory problem
-//																BitmapFactory.Options options = new BitmapFactory.Options();
-//																options.inSampleSize = 2;
-//																options.inTempStorage = new byte[5 * 1024];
-																
+
+																// fix out of
+																// memory
+																// problem
+																// BitmapFactory.Options
+																// options = new
+																// BitmapFactory.Options();
+																// options.inSampleSize
+																// = 2;
+																// options.inTempStorage
+																// = new byte[5
+																// * 1024];
+
 																Bitmap bmp = BitmapFactory
 																		.decodeByteArray(
 																				data,
@@ -371,6 +443,7 @@ public class NewsFragment extends Fragment {
 																				contentString,
 																				latitude,
 																				longitude,
+																				stateString,
 																				createdAt));
 																NewsFragment.newsAdt
 																		.notifyDataSetChanged();
@@ -390,6 +463,7 @@ public class NewsFragment extends Fragment {
 																contentString,
 																latitude,
 																longitude,
+																stateString,
 																createdAt));
 											}
 										}

@@ -417,18 +417,18 @@ class ParseSaveUserHelper extends AsyncTask<Void, Void, Void> {
 							e1.printStackTrace();
 						}
 					} else {
-						ParseUser parseUser = objects.get(0);
-						parseUser.put("userUuid", id);
-						parseUser.setUsername(name);
-						parseUser.put("gender", gender);
-						parseUser.put("locale", locale);
-						parseUser.put("link", link);
-						try {
-							parseUser.save();
-						} catch (ParseException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+//						ParseUser parseUser = objects.get(0);
+//						parseUser.put("userUuid", id);
+//						parseUser.setUsername(name);
+//						parseUser.put("gender", gender);
+//						parseUser.put("locale", locale);
+//						parseUser.put("link", link);
+//						try {
+//							parseUser.save();
+//						} catch (ParseException e1) {
+//							// TODO Auto-generated catch block
+//							e1.printStackTrace();
+//						}
 					}
 				} else {
 					e.printStackTrace();

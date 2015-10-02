@@ -61,9 +61,9 @@ public class NewsAdapter extends PagingBaseAdapter<News> {
 		// get title and artist views
 		LinearLayout banner = (LinearLayout) newsLay.findViewById(R.id.banner);
 		TextView userName = (TextView) newsLay.findViewById(R.id.userName);
-		TextView title = (TextView) newsLay.findViewById(R.id.title);
 		ImageView image = (ImageView) newsLay.findViewById(R.id.imageView);
 		TextView content = (TextView) newsLay.findViewById(R.id.content);
+		TextView title = (TextView) newsLay.findViewById(R.id.title);
 
 		// set banner background color
 		banner.setBackgroundColor(parent.getResources().getColor(
@@ -76,7 +76,7 @@ public class NewsAdapter extends PagingBaseAdapter<News> {
 
 		// get title and artist strings
 		userName.setText(currNews.getuserName());
-		title.setText(currNews.getTitle());
+		title.setText("#Keyword "+currNews.getTitle());
 		Bitmap bmp = currNews.getImage();
 		if (bmp != null) {
 			image.setImageBitmap(bmp);

@@ -110,14 +110,14 @@ public class GoogleMapFragment extends Fragment
 	public static final int TYPE_OFFLINE_STORY = 2;
 	public static final int TYPE_ONLINE_BROADCAST = 3;
 	public static final int TYPE_READY = 4;
-	public static String[] TYPE = { "", "story", "offline", "online", "Ready" };
+	public static final String[] TYPE = { "", "story", "offline", "online", "Ready" };
 
 	public static final int TYPE_NCCU = 98;
 	public static final int TYPE_USER = 99;
 
 	GoogleMap map;
 	public static final int PARSE_LIMIT = 10;
-	private static final int WAIT_FOR_QUERY_TIME = 2;//sec
+	private static final int WAIT_FOR_QUERY_TIME = 2;// sec
 
 	/** GPS */
 	private LocationManager locationMgr;
@@ -396,7 +396,7 @@ public class GoogleMapFragment extends Fragment
 
 		switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(mActivity)) {
 		case ConnectionResult.SUCCESS:
-//			Toast.makeText(mActivity, "SUCCESS", Toast.LENGTH_SHORT).show();
+			// Toast.makeText(mActivity, "SUCCESS", Toast.LENGTH_SHORT).show();
 			Log.d(tag, "GoogleMap SUCCESS");
 
 			// It isn't possible to set a fragment's id programmatically so we
@@ -422,23 +422,25 @@ public class GoogleMapFragment extends Fragment
 			}
 			break;
 		case ConnectionResult.SERVICE_MISSING:
-//			Toast.makeText(mActivity, "SERVICE MISSING", Toast.LENGTH_SHORT)
-//					.show();
+			// Toast.makeText(mActivity, "SERVICE MISSING", Toast.LENGTH_SHORT)
+			// .show();
 			Log.d(tag, "GoogleMap SERVICE MISSING");
 			break;
 		case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
-//			Toast.makeText(mActivity, "UPDATE REQUIRED", Toast.LENGTH_SHORT)
-//					.show();
+			// Toast.makeText(mActivity, "UPDATE REQUIRED", Toast.LENGTH_SHORT)
+			// .show();
 			Log.d(tag, "GoogleMap UPDATE REQUIRED");
 			break;
 		default:
-//			Toast.makeText(
-//					mActivity,
-//					GooglePlayServicesUtil
-//							.isGooglePlayServicesAvailable(mActivity),
-//					Toast.LENGTH_SHORT).show();
-			Log.d(tag, ""+GooglePlayServicesUtil
-							.isGooglePlayServicesAvailable(mActivity));
+			// Toast.makeText(
+			// mActivity,
+			// GooglePlayServicesUtil
+			// .isGooglePlayServicesAvailable(mActivity),
+			// Toast.LENGTH_SHORT).show();
+			Log.d(tag,
+					""
+							+ GooglePlayServicesUtil
+									.isGooglePlayServicesAvailable(mActivity));
 		}// END switch
 
 	}
@@ -456,14 +458,14 @@ public class GoogleMapFragment extends Fragment
 		this.map = map;
 		// show NCCU
 		// nccu: 24°58'46"N 121°34'15"E
-//		map.addMarker(new MarkerOptions().position(
-//				new LatLng(24.5846, 121.3415)).title("Marker"));
-//		map.addMarker(new MarkerOptions()
-//				.position(NCCU)
-//				.title("NCCU")
-//				.snippet(",,," + TYPE_NCCU)
-//				.icon(BitmapDescriptorFactory
-//						.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+		// map.addMarker(new MarkerOptions().position(
+		// new LatLng(24.5846, 121.3415)).title("Marker"));
+		// map.addMarker(new MarkerOptions()
+		// .position(NCCU)
+		// .title("NCCU")
+		// .snippet(",,," + TYPE_NCCU)
+		// .icon(BitmapDescriptorFactory
+		// .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(NCCU,
 				initial_zoom_size));
 
@@ -521,7 +523,7 @@ public class GoogleMapFragment extends Fragment
 						LatLng temp_position = current_position;
 						Log.d(tag, "temp_position = " + current_position);
 						try {
-							Thread.sleep(WAIT_FOR_QUERY_TIME*1000);
+							Thread.sleep(WAIT_FOR_QUERY_TIME * 1000);
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -661,19 +663,19 @@ public class GoogleMapFragment extends Fragment
 			switch (status) {
 			case LocationProvider.OUT_OF_SERVICE:
 				Log.v(tag, "Status Changed: Out of Service");
-//				Toast.makeText(mActivity, "Status Changed: Out of Service",
-//						Toast.LENGTH_SHORT).show();
+				// Toast.makeText(mActivity, "Status Changed: Out of Service",
+				// Toast.LENGTH_SHORT).show();
 				break;
 			case LocationProvider.TEMPORARILY_UNAVAILABLE:
 				Log.v(tag, "Status Changed: Temporarily Unavailable");
-//				Toast.makeText(mActivity,
-//						"Status Changed: Temporarily Unavailable",
-//						Toast.LENGTH_SHORT).show();
+				// Toast.makeText(mActivity,
+				// "Status Changed: Temporarily Unavailable",
+				// Toast.LENGTH_SHORT).show();
 				break;
 			case LocationProvider.AVAILABLE:
 				Log.v(tag, "Status Changed: Available");
-//				Toast.makeText(mActivity, "Status Changed: Available",
-//						Toast.LENGTH_SHORT).show();
+				// Toast.makeText(mActivity, "Status Changed: Available",
+				// Toast.LENGTH_SHORT).show();
 				break;
 			}
 		}
@@ -701,19 +703,19 @@ public class GoogleMapFragment extends Fragment
 			switch (event) {
 			case GpsStatus.GPS_EVENT_STARTED:
 				Log.d(tag, "GPS_EVENT_STARTED");
-//				Toast.makeText(mActivity, "GPS_EVENT_STARTED",
-//						Toast.LENGTH_SHORT).show();
+				// Toast.makeText(mActivity, "GPS_EVENT_STARTED",
+				// Toast.LENGTH_SHORT).show();
 				break;
 			case GpsStatus.GPS_EVENT_STOPPED:
 				Log.d(tag, "GPS_EVENT_STOPPED");
-//				Toast.makeText(mActivity, "GPS_EVENT_STOPPED",
-//						Toast.LENGTH_SHORT).show();
+				// Toast.makeText(mActivity, "GPS_EVENT_STOPPED",
+				// Toast.LENGTH_SHORT).show();
 				break;
 			case GpsStatus.GPS_EVENT_FIRST_FIX:
 				Log.d(tag, "GPS_EVENT_FIRST_FIX");
-//				Toast.makeText(mActivity, "GPS_EVENT_FIRST_FIX",
-//						Toast.LENGTH_SHORT).show();
-//				break;
+				// Toast.makeText(mActivity, "GPS_EVENT_FIRST_FIX",
+				// Toast.LENGTH_SHORT).show();
+				// break;
 			case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
 				Log.d(tag, "GPS_EVENT_SATELLITE_STATUS");
 
@@ -746,14 +748,15 @@ public class GoogleMapFragment extends Fragment
 		markerOpt.position(new LatLng(lat, lng));
 		markerOpt.snippet(",,," + TYPE_USER);
 		markerOpt.title("我在這裡");
-		markerOpt.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_location_me));
+		markerOpt.icon(BitmapDescriptorFactory
+				.fromResource(R.drawable.ic_marker_location_me));
 		if (map == null) {
 			Log.d(tag, "map == null");
 		}
 		markerMe = map.addMarker(markerOpt);
 
-//		Toast.makeText(mActivity, "lat:" + lat + ",lng:" + lng,
-//				Toast.LENGTH_SHORT).show();
+		// Toast.makeText(mActivity, "lat:" + lat + ",lng:" + lng,
+		// Toast.LENGTH_SHORT).show();
 	}
 
 	private void cameraFocusOnMe(double lat, double lng) {
@@ -789,7 +792,7 @@ public class GoogleMapFragment extends Fragment
 		}
 
 		// 顯示資訊
-//		 txtOutput.setText(where);
+		// txtOutput.setText(where);
 		Log.d(tag, where);
 	}
 
@@ -896,7 +899,10 @@ public class GoogleMapFragment extends Fragment
 										.getDouble("latitude");
 								final double longitude = parseObject
 										.getDouble("longitude");
-								final Date createdAtDate = parseObject.getCreatedAt();
+								final String stateString = parseObject
+										.getString("State");
+								final Date createdAtDate = parseObject
+										.getCreatedAt();
 
 								ParseFile imageFile = (ParseFile) parseObject
 										.get("image");
@@ -927,7 +933,9 @@ public class GoogleMapFragment extends Fragment
 																score, bmp,
 																contentString,
 																latitude,
-																longitude, createdAtDate));
+																longitude,
+																stateString,
+																createdAtDate));
 
 														if (bmp != null) {
 															bmp.recycle();
@@ -936,29 +944,18 @@ public class GoogleMapFragment extends Fragment
 													}
 												}
 											});
-								}
-								else{
+								} else {
 									Bitmap bmp = null;
-									storyList.add(new News(
-											objectIdString,
-											userNameString,
-											userUuidString,
-											titleString,
-											score, bmp,
-											contentString,
-											latitude,
-											longitude, createdAtDate));
+									storyList.add(new News(objectIdString,
+											userNameString, userUuidString,
+											titleString, score, bmp,
+											contentString, latitude, longitude,
+											stateString, createdAtDate));
 								}
 
-								LatLng point = new LatLng(
-										latitude,
-										longitude);
-								addMarker_Story(
-										objectIdString,
-										userNameString,
-										titleString,
-										point, score,
-										TYPE_STORY);
+								LatLng point = new LatLng(latitude, longitude);
+								addMarker_Story(objectIdString, userNameString,
+										titleString, point, score, TYPE_STORY);
 							}
 						}
 					}
@@ -1023,7 +1020,10 @@ public class GoogleMapFragment extends Fragment
 										.getDouble("latitude");
 								final double longitude = parseObject
 										.getDouble("longitude");
-								final Date createdAtDate = parseObject.getCreatedAt();
+								final String stateString = parseObject
+										.getString("State");
+								final Date createdAtDate = parseObject
+										.getCreatedAt();
 
 								ParseFile imageFile = (ParseFile) parseObject
 										.get("image");
@@ -1057,37 +1057,29 @@ public class GoogleMapFragment extends Fragment
 																score, bmp,
 																contentString,
 																latitude,
-																longitude, createdAtDate));
+																longitude,
+																stateString,
+																createdAtDate));
 
 														if (bmp != null) {
 															bmp.recycle();
 														}
-														
+
 													}
 												}
 											});
-								}else{
+								} else {
 									Bitmap bmp = null;
-									storyList.add(new News(
-											objectIdString,
-											userNameString,
-											userUuidString,
-											titleString,
-											score, bmp,
-											contentString,
-											latitude,
-											longitude, createdAtDate));
+									storyList.add(new News(objectIdString,
+											userNameString, userUuidString,
+											titleString, score, bmp,
+											contentString, latitude, longitude,
+											stateString, createdAtDate));
 								}
-								
-								LatLng point = new LatLng(
-										latitude,
-										longitude);
-								addMarker_Ready(
-										objectIdString,
-										userNameString,
-										titleString,
-										point, score,
-										TYPE_READY,
+
+								LatLng point = new LatLng(latitude, longitude);
+								addMarker_Ready(objectIdString, userNameString,
+										titleString, point, score, TYPE_READY,
 										SSIDString);
 							}
 						}
@@ -1151,7 +1143,10 @@ public class GoogleMapFragment extends Fragment
 										.getDouble("latitude");
 								final double longitude = parseObject
 										.getDouble("longitude");
-								final Date createdAtDate = parseObject.getCreatedAt();
+								final String stateString = parseObject
+										.getString("State");
+								final Date createdAtDate = parseObject
+										.getCreatedAt();
 
 								ParseFile imageFile = (ParseFile) parseObject
 										.get("image");
@@ -1185,7 +1180,9 @@ public class GoogleMapFragment extends Fragment
 																score, bmp,
 																contentString,
 																latitude,
-																longitude, createdAtDate));
+																longitude,
+																stateString,
+																createdAtDate));
 
 														if (bmp != null) {
 															bmp.recycle();
@@ -1193,26 +1190,17 @@ public class GoogleMapFragment extends Fragment
 													}
 												}
 											});
-								}else{
+								} else {
 									Bitmap bmp = null;
-									storyList.add(new News(
-											objectIdString,
-											userNameString,
-											userUuidString,
-											titleString,
-											score, bmp,
-											contentString,
-											latitude,
-											longitude, createdAtDate));
+									storyList.add(new News(objectIdString,
+											userNameString, userUuidString,
+											titleString, score, bmp,
+											contentString, latitude, longitude,
+											stateString, createdAtDate));
 								}
-								LatLng point = new LatLng(
-										latitude,
-										longitude);
-								addMarker_Story(
-										objectIdString,
-										userNameString,
-										titleString,
-										point, score,
+								LatLng point = new LatLng(latitude, longitude);
+								addMarker_Story(objectIdString, userNameString,
+										titleString, point, score,
 										TYPE_OFFLINE_STORY);
 							}
 						}
@@ -1278,7 +1266,10 @@ public class GoogleMapFragment extends Fragment
 										.getDouble("latitude");
 								final double longitude = parseObject
 										.getDouble("longitude");
-								final Date createdAtDate = parseObject.getCreatedAt();
+								final String stateString = parseObject
+										.getString("State");
+								final Date createdAtDate = parseObject
+										.getCreatedAt();
 
 								ParseFile imageFile = (ParseFile) parseObject
 										.get("image");
@@ -1311,7 +1302,9 @@ public class GoogleMapFragment extends Fragment
 																score, bmp,
 																contentString,
 																latitude,
-																longitude, createdAtDate));
+																longitude,
+																stateString,
+																createdAtDate));
 
 														if (bmp != null) {
 															bmp.recycle();
@@ -1322,13 +1315,11 @@ public class GoogleMapFragment extends Fragment
 											});
 								} else {
 									Bitmap bmp = null;
-									storyList
-											.add(new News(objectIdString,
-													userNameString,
-													userUuidString,
-													titleString, score, bmp,
-													contentString, latitude,
-													longitude, createdAtDate));
+									storyList.add(new News(objectIdString,
+											userNameString, userUuidString,
+											titleString, score, bmp,
+											contentString, latitude, longitude,
+											stateString, createdAtDate));
 								}
 								LatLng point = new LatLng(latitude, longitude);
 								addMarker_Broadcast(objectIdString,
@@ -1623,7 +1614,8 @@ public class GoogleMapFragment extends Fragment
 															wifiManager2
 																	.reconnect();
 															if_find_wificonnect = true;
-															if_Global_local = 1;       //判斷是給 Local
+															if_Global_local = 1; // 判斷是給
+																					// Local
 															break;
 														}
 													}
@@ -1647,7 +1639,7 @@ public class GoogleMapFragment extends Fragment
 														"if_Global_local",
 														if_Global_local);// 可放所有基本類別
 												startActivity(intent);
-											
+
 											}
 										} else {// no longer exists
 											Log.d(tag,
