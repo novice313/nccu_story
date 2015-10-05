@@ -11,10 +11,10 @@
         android:showAsAction="ifRoom|withText"																					
         android:title="Connect Guider"/> -->
     <item
-        android:id="@+id/btn_change_mode"																																																																					
+        android:id="@+id/btn_to_goolemap"																																																																					
         android:icon="@drawable/headset_a"																																																																																																																																																																																																																																																																																									
         android:showAsAction="ifRoom|withText"
-        android:title="Change Guide Mode"/>
+        android:title=""/>
       
     <!-- <item
         android:id="@+id/btn_change_modeg"

@@ -4,6 +4,11 @@
         android:id="@+id/list_to_client"
         android:icon="@drawable/quit_icon"
         android:showAsAction="ifRoom|withText"
-        android:title="list_to_client"/>
+        android:title=""/>
+    
+       <!--  <item
+        android:id="@+id/back"
+        android:title="back"/>
+         -->
 
 </menu>

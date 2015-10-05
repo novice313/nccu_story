@@ -93,7 +93,7 @@ public class RealtimeVoiceObject {
 
 					if(if_Final_normal==1){
 						EventBus.getDefault().postSticky(
-							new DisplayEvent("準備上傳到parse....."));
+							new DisplayEvent("上傳中....."));
 					}
 					file.saveInBackground(new SaveCallback() {
 
@@ -134,7 +134,7 @@ public class RealtimeVoiceObject {
 									EventBus.getDefault()
 									.postSticky(
 											new DisplayEvent(
-													"最後一段上傳parse成功!!!!!"));
+													"上傳成功!!!!!"));
 									
 									
 								}

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+
+      <RelativeLayout
+            android:id="@+id/client_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+               <TextView
+                   android:id="@+id/userName_client"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentTop="true"
+                   android:layout_alignTop="@+id/microphone_image"
+                   android:layout_marginTop="15dp"
+                   android:layout_toEndOf="@+id/microphone_image"
+                   android:layout_weight="0.5"
+                   android:ems="10"
+                   android:textColor="#1c1f87" />
+                   <!-- android:text="username" -->
+
+    <ImageView
+        android:id="@+id/microphone_image"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:src="@drawable/personal" />
+
+            
+
+            
+            
+           <!--  <ImageButton
+                android:id="@+id/listen_guide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/headset"
+                /> -->
+
+            
+      <!--  <Button
+            android:id="@+id/roundButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="3.0dip"            
+            android:background="@layout/shape1"
+            android:text="按下去即可聽到導覽!" />  -->
+
+          <!--   <ImageView
+                android:id="@+id/writing"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="right"
+                android:padding="20dp"
+                android:src="@drawable/circle_green"
+                android:visibility="invisible" /> -->
+
+           <!--  <Spinner
+                android:id="@+id/mySpinner"
+                android:layout_width="90dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="3dp"
+                android:layout_weight="1"
+                android:textColor="#8B008B"
+                
+                android:drawSelectorOnTop="true" /> -->
+
+           <!--  <Spinner
+                android:id="@+id/mySpinner2"
+                android:layout_width="90dp"
+                android:layout_height="45dp" 
+                android:layout_marginTop="7dp"
+                android:layout_weight="1"
+                android:textColor="#8B008B"     
+                android:drawSelectorOnTop="true" />  -->
+
+        </RelativeLayout>
+            
+         <FrameLayout
+            android:id="@+id/outer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" >
+
+        </FrameLayout>
+         
+
+            <com.parse.ParseImageView
+                android:id="@+id/showimage"
+                android:layout_width="220dp"
+                android:layout_height="200dp"
+                android:layout_below="@+id/main"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="17dp" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/content"
+                android:layout_marginTop="10dp"
+                android:textColor="#838B8B"
+                />
+                        <!--  android:text="title"   -->
+            
+
+            <TextView
+                android:id="@+id/content"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/showimage"
+                android:layout_marginTop="15dp"
+               />
+            <!--  android:text="content"  -->
+
+</RelativeLayout>

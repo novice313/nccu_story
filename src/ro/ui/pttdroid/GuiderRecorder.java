@@ -224,22 +224,13 @@ public class GuiderRecorder extends Thread
 					*/
 					
 					//packet_number= new DatagramPacket(buffer,buffer.length,addr,CommSettings.getPort());
-				    if(index%500==0){     //調整參數因為為了Client端和Guider端的全限問題
-					recorder_socket.send(newpacket);  //to local player
-				    }else{
+				   
+					//if(index%500==0){     //調整參數因為為了Client端和Guider端的全限問題
+					//recorder_socket.send(newpacket);  //to local player
+				   // }else{
 				    	recorder_socket.send(packet);
-				    }
+				    //}
 				    index=index+1;
-					/*if(if_300){
-					tempValue=intValue;
-					if_300=false;
-					}
-					System.out.println("tempValue "+tempValue+" "+intValue);
-					if(tempValue+330==intValue){
-					System.out.println("temp_stop_recording");
-					//temp_stop_recording();
-					if_300=true;
-					}*/
 					
 					if(if_60){
 						RealValue=intValue;

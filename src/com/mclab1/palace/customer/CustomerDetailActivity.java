@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import ro.ui.pttdroid.Globalvariable;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
@@ -20,6 +21,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -87,12 +90,17 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
 		setContentView(R.layout.customer_activity_detail);
 		//final RelativeLayout background = (RelativeLayout)findViewById(R.id.back);
 		//StopButton = (Button)findViewById(R.id.StopButton);
+    	ActionBar actionBar = getActionBar();
+    	actionBar.setDisplayHomeAsUpEnabled(true);
+    	getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.bar));  //標題配色
 		
-		
+	    dialog = ProgressDialog.show(CustomerDetailActivity.this,
+	            "讀取資料中", "請 稍 等 . . . . ",true);
+	    dialog.show();
 		Log.d(msg, "The onCreate() event");
 		if(mTitle!=null && mContent!=null){
 		mTitle=Globalvariable.titleString ;
@@ -144,6 +152,27 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 		}*/
 	}
 	
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return true;
+
+	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	switch (item.getItemId()) {
+	case android.R.id.home:
+		finish();
+		invalidateOptionsMenu(); 
+		return true;	
+
+
+
+	default:
+		return super.onOptionsItemSelected(item);
+
+	}}
+		
 	private void initViews() {
 		
 	    imageView = (ParseImageView) findViewById(R.id.customer_activity_image);
@@ -522,8 +551,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 	@SuppressWarnings("null")
 	private void loaddata() { 
 		mp3unuiques.clear();
-	    dialog = ProgressDialog.show(CustomerDetailActivity.this,
-	            "讀取資料中", "請 稍 等 . . . . ",true);  //final String [][]test = null;
+     //final String [][]test = null;
 		  ParseQuery<ParseObject> query = ParseQuery
 				.getQuery(VoiceObject.table_name);
 		//query.orderByAscending("numberTag");

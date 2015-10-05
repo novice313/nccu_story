@@ -110,10 +110,11 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                 activity.resetData();
             }
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
-            DeviceListFragment fragment = (DeviceListFragment) activity.getFragmentManager()
+           /* DeviceListFragment fragment = (DeviceListFragment) activity.getFragmentManager()
                     .findFragmentById(R.id.frag_list);
             fragment.updateThisDevice((WifiP2pDevice) intent.getParcelableExtra(
                     WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
+                    */
             
             if (manager != null) {
 				manager.requestGroupInfo(channel,

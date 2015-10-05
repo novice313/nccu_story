@@ -52,14 +52,14 @@ public class CustomerFragment extends Fragment {
 		//init_view(view);
 		
 		
-		final Toast toast = Toast.makeText(getActivity(), "注意！請使用者要回扣給導覽員，只限一個人回扣，並把聲音賤關小聲", Toast.LENGTH_SHORT);
-	    toast.show();
+		//final Toast toast = Toast.makeText(getActivity(), "注意！請使用者要回扣給導覽員，只限一個人回扣，並把聲音賤關小聲", Toast.LENGTH_SHORT);
+	    //toast.show();
 
 	    Handler handler = new Handler();
 	        handler.postDelayed(new Runnable() {
 	           @Override
 	           public void run() {
-	               toast.cancel(); 
+	               //toast.cancel(); 
 	           }
 	    }, 100000);
 	        

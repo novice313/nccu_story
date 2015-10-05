@@ -1,61 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-
-      <TextView
-          android:id="@+id/username"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_weight="0.5"
-          android:ems="10"
-          />
-
-     <!--  <Spinner
+    <!--
+           <Spinner
           android:id="@+id/language_spinner"
           android:layout_width="wrap_content"
           android:layout_height="39dp"
           android:drawSelectorOnTop="true" />
-           -->
-
+    -->
 
     <EditText
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_upload"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="25dp"
         android:layout_weight="0.5"
         android:ems="10"
-        android:hint="廣播的標題~" />
+        android:hint="#請輸入Keyword(標題)" />
 
-    <EditText
-        android:id="@+id/content"
+    <Button
+        android:id="@+id/btn_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="下一步" />
+
+    <TextView
+        android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="15dp"
+        android:layout_weight="0.5"
+        android:layout_alignTop="@+id/personal"
+        android:layout_toEndOf="@+id/personal"
         android:ems="10"
-        android:hint="廣播的內容~" />
+        android:textColor="#1c1f87" />
+
+    <ImageView
+        android:id="@+id/personal"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:src="@drawable/personal" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/title"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/content"
+        android:layout_marginBottom="81dp"
         android:layout_weight="5"
-        android:src="@drawable/icon" />
+        />
 
-   <LinearLayout
+    <ImageView
+        android:id="@+id/gray_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:src="@drawable/gray_background" />
+    
+    <EditText
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/username"
+        android:layout_marginTop="35dp"
+        android:layout_weight="2"
+        android:ems="10"
+        android:hint="請輸入內容" />
 
-
-
-        <Button
-            android:id="@+id/btn_upload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Upload" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>
