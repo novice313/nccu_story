@@ -133,7 +133,7 @@ public class UploadPage extends Activity {
 		setContentView(R.layout.page_upload_offline);
 		ParseHelper.initParse(this);
 		
-		getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.bar));  //標題配色
+		getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.bar));  //標題配色
     	ActionBar actionBar = getActionBar();
     	actionBar.setDisplayHomeAsUpEnabled(true);
 		

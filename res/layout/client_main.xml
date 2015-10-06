@@ -15,11 +15,10 @@
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:layout_alignParentTop="true"
-                   android:layout_alignTop="@+id/microphone_image"
                    android:layout_marginTop="15dp"
-                   android:layout_toEndOf="@+id/microphone_image"
                    android:layout_weight="0.5"
-                   android:ems="10"
+                   android:layout_alignTop="@+id/microphone_image"
+                   android:layout_toEndOf="@+id/microphone_image"
                    android:textColor="#1c1f87" />
                    <!-- android:text="username" -->
 
@@ -81,34 +80,14 @@
         </RelativeLayout>
             
          <FrameLayout
-            android:id="@+id/outer_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true" >
+             android:id="@+id/outer_layout"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent" >
 
         </FrameLayout>
-         
-
-            <com.parse.ParseImageView
-                android:id="@+id/showimage"
-                android:layout_width="220dp"
-                android:layout_height="200dp"
-                android:layout_below="@+id/main"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="17dp" />
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/content"
-                android:layout_marginTop="10dp"
-                android:textColor="#838B8B"
-                />
-                        <!--  android:text="title"   -->
-            
+        
+                     
+            <!--  android:text="content"  -->
 
             <TextView
                 android:id="@+id/content"
@@ -116,8 +95,22 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/showimage"
-                android:layout_marginTop="15dp"
-               />
-            <!--  android:text="content"  -->
+                android:layout_marginTop="69dp" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/content"
+                android:textColor="#838B8B" />
+
+            <com.parse.ParseImageView
+                android:id="@+id/showimage"
+                android:layout_width="220dp"
+                android:layout_height="200dp"
+                android:layout_below="@+id/client_main"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="22dp" />
 
 </RelativeLayout>

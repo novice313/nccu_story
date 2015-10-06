@@ -9,7 +9,7 @@
     <color name="white">#ffffff</color>
     <color name="buttons_view_bk">@android:color/darker_gray</color>
     <color name="content_bk">@android:color/background_light</color>
-    <drawable name="bar">#77bfdb</drawable>
+    <color name="bar">#77bfdb</color>
    
 
     <!-- Went to: $android-sdk > Android:v14 > res > values > colors.xml and copied the colors -->

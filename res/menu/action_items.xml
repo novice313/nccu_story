@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
      <item
         android:id="@+id/btn_to_goolemap"
-        android:icon="@drawable/headset_a"
+        android:icon="@drawable/home"
         android:title=""
         android:showAsAction="ifRoom|withText" />
 

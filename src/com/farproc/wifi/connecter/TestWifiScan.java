@@ -80,7 +80,7 @@ public class TestWifiScan extends ListActivity {
     	
     	ActionBar actionBar = getActionBar();
     	actionBar.setDisplayHomeAsUpEnabled(true);
-    	getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.bar));  //標題配色
+    	getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.bar));  //標題配色
 
     	
 		Toast.makeText(getApplicationContext(), "您要和身上的無線AP做連接!",

@@ -96,7 +96,7 @@ public class CustomerDetailActivity extends Activity {   //************offline *
 		//StopButton = (Button)findViewById(R.id.StopButton);
     	ActionBar actionBar = getActionBar();
     	actionBar.setDisplayHomeAsUpEnabled(true);
-    	getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.bar));  //標題配色
+    	getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.bar));  //標題配色
 		
 	    dialog = ProgressDialog.show(CustomerDetailActivity.this,
 	            "讀取資料中", "請 稍 等 . . . . ",true);

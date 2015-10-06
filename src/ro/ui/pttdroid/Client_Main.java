@@ -158,7 +158,7 @@ content=(TextView)findViewById(R.id.content);
 
 ActionBar actionBar = getActionBar();
 actionBar.setDisplayHomeAsUpEnabled(true);
-getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.bar));  //標題配色
+getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.bar));  //標題配色
 
 /*ImageButton ready_image_guide;
 ready_image_guide=(ImageButton)findViewById(R.id.ready_image_guide); 
@@ -613,9 +613,12 @@ private void init() {  //init=> OnResume
 				String contentString  =(String) objects.get(0).get("content");
         		System.out.println("SHow"+userNameString+" "+titleString+" "+contentString);
         		
+
         		if(if_Global_local==1){
-        			if(userName!=null)
+        			if(userName!=null){
+        				userNameString=userNameString+"(導覽者)";
         				userName.setText(userNameString);
+        			}
         			if(title!=null)
         				title.setText("#"+titleString);
         			if(content!=null)

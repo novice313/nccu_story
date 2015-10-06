@@ -200,7 +200,7 @@ public class Main extends FragmentActivity implements ChannelListener,
 		setContentView(R.layout.main);
 
 
-    	getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.bar));  //標題配色
+    	getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.bar));  //標題配色
 		 System.out.println("startmain!!!!!!!!!!");
 		 
 		/* mContext = this.getApplicationContext();

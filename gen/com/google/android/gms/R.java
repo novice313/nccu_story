@@ -58,8 +58,8 @@ public final class R {
 		public static final int common_signin_btn_light_text_disabled = 0x7f080013;
 		public static final int common_signin_btn_light_text_focused = 0x7f080014;
 		public static final int common_signin_btn_light_text_pressed = 0x7f080012;
-		public static final int common_signin_btn_text_dark = 0x7f08002c;
-		public static final int common_signin_btn_text_light = 0x7f08002d;
+		public static final int common_signin_btn_text_dark = 0x7f08002d;
+		public static final int common_signin_btn_text_light = 0x7f08002e;
 		public static final int wallet_bright_foreground_disabled_holo_light = 0x7f08001c;
 		public static final int wallet_bright_foreground_holo_dark = 0x7f080017;
 		public static final int wallet_bright_foreground_holo_light = 0x7f08001d;
@@ -73,8 +73,8 @@ public final class R {
 		public static final int wallet_hint_foreground_holo_light = 0x7f08001e;
 		public static final int wallet_holo_blue_light = 0x7f080022;
 		public static final int wallet_link_text_light = 0x7f080023;
-		public static final int wallet_primary_text_holo_light = 0x7f08002e;
-		public static final int wallet_secondary_text_holo_dark = 0x7f08002f;
+		public static final int wallet_primary_text_holo_light = 0x7f08002f;
+		public static final int wallet_secondary_text_holo_dark = 0x7f080030;
 	}
 	public static final class drawable {
 		public static final int cast_ic_notification_0 = 0x7f020003;
@@ -108,12 +108,12 @@ public final class R {
 		public static final int common_signin_btn_text_normal_light = 0x7f020033;
 		public static final int common_signin_btn_text_pressed_dark = 0x7f020034;
 		public static final int common_signin_btn_text_pressed_light = 0x7f020035;
-		public static final int ic_plusone_medium_off_client = 0x7f020049;
-		public static final int ic_plusone_small_off_client = 0x7f02004a;
-		public static final int ic_plusone_standard_off_client = 0x7f02004b;
-		public static final int ic_plusone_tall_off_client = 0x7f02004c;
-		public static final int powered_by_google_dark = 0x7f020063;
-		public static final int powered_by_google_light = 0x7f020064;
+		public static final int ic_plusone_medium_off_client = 0x7f02004a;
+		public static final int ic_plusone_small_off_client = 0x7f02004b;
+		public static final int ic_plusone_standard_off_client = 0x7f02004c;
+		public static final int ic_plusone_tall_off_client = 0x7f02004d;
+		public static final int powered_by_google_dark = 0x7f020064;
+		public static final int powered_by_google_light = 0x7f020065;
 	}
 	public static final class id {
 		public static final int adjust_height = 0x7f0a0013;
