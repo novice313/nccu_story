@@ -13,6 +13,8 @@ import java.util.List;
 
 import mclab1.service.upload.UploadMediaListActivity;
 import mclab1.sugar.Owner;
+
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -98,6 +100,9 @@ public class UploadPage extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.page_upload);
+    	ActionBar actionBar = getActionBar();
+    	actionBar.setDisplayHomeAsUpEnabled(true);
+    	getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.bar));  //標題配色
 
 		// 讀取手機解析度
 		mPhone = new DisplayMetrics();
@@ -376,6 +381,8 @@ public class UploadPage extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if ((requestCode == CAMERA || requestCode == PHOTO) && data != null) {

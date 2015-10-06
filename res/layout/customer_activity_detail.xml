@@ -18,6 +18,10 @@
         android:layout_below="@+id/customer_activity_image"
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"
+        android:scrollbars="vertical"
+        android:singleLine="false"    
+        android:maxLines="7"
+         android:width="250px"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
    <!--  <Button

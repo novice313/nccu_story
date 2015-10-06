@@ -231,6 +231,7 @@ public class TestWifiScan extends ListActivity {
 		case android.R.id.home:
 			finish();
 			
+			
 		/*case R.id.back:
 			Intent intent2 = new Intent(TestWifiScan.this, GoogleMapFragment.class);  //返回上一頁
 			startActivity(intent2);
