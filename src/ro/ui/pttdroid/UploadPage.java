@@ -41,7 +41,9 @@ import com.parse.SaveCallback;
 
 
 
+
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 //import edu.mclab1.nccu_story.MainActivity;
 //import edu.mclab1.nccu_story.R;
 import android.app.Activity;
@@ -139,7 +141,10 @@ public class UploadPage extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.page_upload_offline);
 		ParseHelper.initParse(this);
-
+		
+		getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.bar));  //標題配色
+    	ActionBar actionBar = getActionBar();
+    	actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		System.out.println("UploadPage");    //conflict過
 		Bundle extras = getIntent().getExtras();
@@ -383,6 +388,9 @@ public class UploadPage extends Activity {
 			startActivityForResult(intent_gallery, PHOTO);
 			
 			break;
+			
+		case android.R.id.home:
+			finish();
 
 		/*
 		case R.id.action_media:

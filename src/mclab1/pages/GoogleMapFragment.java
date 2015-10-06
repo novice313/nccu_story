@@ -103,8 +103,8 @@ public class GoogleMapFragment extends Fragment
 	int initial_zoom_size = 16;
 	SupportMapFragment mapFragment;
 
-	String[] list_uploadType = { "Broadcast", "Upload story" };
-	String[] list_uploadType_client = { "Upload story" }; // 修改給client
+	String[] list_uploadType = { "LIVE導覽","留下足跡" };   
+	String[] list_uploadType_client = { "Upload story"};            //修改給client
 
 	public static final int TYPE_STORY = 1;
 	public static final int TYPE_OFFLINE_STORY = 2;
@@ -568,8 +568,8 @@ public class GoogleMapFragment extends Fragment
 
 	private void ShowAlertDialogAndList(final LatLng point) {
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-		builder.setTitle("Upload");
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle("上傳");
 		// 建立選擇的事件
 		DialogInterface.OnClickListener ListClick = new DialogInterface.OnClickListener() {
 			@Override

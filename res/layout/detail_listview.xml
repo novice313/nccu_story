@@ -15,31 +15,30 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:inputType="textPersonName" />
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="9"/>
-
     </LinearLayout>
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="5"
-       />
+        android:layout_weight="5" />
 
-    <TextView
+    <ScrollView
         android:id="@+id/userContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="3"
         android:layout_weight="4"
-        android:inputType="textMultiLine" >
+        android:ems="3"
+        android:inputType="textMultiLine"
+        android:maxLines="12"
+        android:scrollbars="vertical" >
 
         <requestFocus />
-    </TextView>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

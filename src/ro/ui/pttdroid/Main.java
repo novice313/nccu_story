@@ -26,6 +26,7 @@ import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
 import ro.ui.pttdroid.settings.CommSettings;
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -198,8 +199,8 @@ public class Main extends FragmentActivity implements ChannelListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		getActionBar().setBackgroundDrawable(null);
-		getActionBar().setBackgroundDrawable(getResources().getDrawable(android.R.color.darker_gray));
+
+    	getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.bar));  //標題配色
 		 System.out.println("startmain!!!!!!!!!!");
 		 
 		/* mContext = this.getApplicationContext();
@@ -289,7 +290,7 @@ public class Main extends FragmentActivity implements ChannelListener,
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		CustomerFragment customerFragment = new CustomerFragment();
 		fragmentManager.beginTransaction()
-				.replace(R.id.content_holder, customerFragment)
+				.replace(R.id.outer_layout, customerFragment)
 				.commitAllowingStateLoss();
 	}
 
@@ -442,7 +443,7 @@ public class Main extends FragmentActivity implements ChannelListener,
 			FragmentManager fragmentManager = getSupportFragmentManager();
 			GuiderFragment guiderFragment = new GuiderFragment();
 			fragmentManager.beginTransaction()
-					.replace(R.id.content_holder, guiderFragment)
+					.replace(R.id.outer_layout, guiderFragment)
 					.commitAllowingStateLoss();
 		} else {
 			//change_to_client_offline_fragment();
@@ -466,6 +467,7 @@ public class Main extends FragmentActivity implements ChannelListener,
 		unregisterReceiver(wifiReceiver);
 	}
 
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (if_guider) {
@@ -489,16 +491,13 @@ public class Main extends FragmentActivity implements ChannelListener,
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.btn_change_mode:
-			if (if_client_offline_mode) {
-				if_client_offline_mode = false;
-				change_to_client_online_fragment();
-			} else {
-				if_client_offline_mode = true;
-				//change_to_client_offline_fragment();
-			}
-			invalidateOptionsMenu();
-			return true;
+		case R.id.btn_to_goolemap:
+			finish();
+			
+	 //invalidateOptionsMenu();
+	 //	return true;
+
+
 		/*case R.id.client_to_list:
 			Intent intent3 =new Intent(this,TestWifiScan.class);
 			startActivity(intent3);
@@ -678,7 +677,7 @@ public class Main extends FragmentActivity implements ChannelListener,
 						if_talking = false;
 						EventBus.getDefault().post(new PauseAudioEvent());
 						EventBus.getDefault().postSticky(
-								new DisplayEvent("請注意是否最後一段是否傳成功!!"));
+								new DisplayEvent("上傳中，請導覽員不要離開此頁面!!"));
 					}
 
 				}

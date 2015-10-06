@@ -22,10 +22,9 @@ import java.util.List;
 import ro.ui.pttdroid.codecs.Speex;
 import ro.ui.pttdroid.settings.AudioSettings;
 import ro.ui.pttdroid.settings.CommSettings;
-import android.app.Activity;
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -151,10 +150,15 @@ shutdown();
 @Override
 public void onCreate(Bundle savedInstanceState) {
 super.onCreate(savedInstanceState);
-setContentView(R.layout.main);
-userName=(TextView)findViewById(R.id.userName);
+setContentView(R.layout.client_main);
+userName=(TextView)findViewById(R.id.userName_client);
 title=(TextView)findViewById(R.id.title);
 content=(TextView)findViewById(R.id.content);
+
+
+ActionBar actionBar = getActionBar();
+actionBar.setDisplayHomeAsUpEnabled(true);
+getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.bar));  //標題配色
 
 /*ImageButton ready_image_guide;
 ready_image_guide=(ImageButton)findViewById(R.id.ready_image_guide); 
@@ -171,8 +175,6 @@ ready_image_guide.setOnClickListener(new Button.OnClickListener()
       
 }); */
 //getActionBar().setBackgroundDrawable(null);
-
-getActionBar().setBackgroundDrawable(getResources().getDrawable(android.R.color.darker_gray));  //標題配色
 
 
  System.out.println("start main!!!!!!!!!!"); 
@@ -257,7 +259,7 @@ android.support.v4.app.FragmentManager  fragmentManager = getSupportFragmentMana
 
 CustomerFragment customerFragment = new CustomerFragment();
 fragmentManager.beginTransaction()
-		.replace(R.id.content_holder, customerFragment)
+		.replace(R.id.outer_layout, customerFragment)
 		.commitAllowingStateLoss();
 }
 
@@ -273,7 +275,7 @@ android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction
 
 CustomerFragmentOffline customerFragment = new CustomerFragmentOffline();
 fragmentManager.beginTransaction()
-		.replace(R.id.content_holder, customerFragment)
+		.replace(R.id.outer_layout, customerFragment)
 		.commitAllowingStateLoss();
 
 if(playerIntent!=null){
@@ -288,7 +290,7 @@ private void  change_to_client_Global_online_fragment(){
 	FragmentManager fragmentManager = getSupportFragmentManager();
 	CustomerFragmentGlobal customerFragmentGlobal = new CustomerFragmentGlobal();
 	fragmentManager.beginTransaction()
-			.replace(R.id.content_holder, customerFragmentGlobal)
+			.replace(R.id.outer_layout, customerFragmentGlobal)
 			.commitAllowingStateLoss(); 
 	
 }
@@ -434,7 +436,7 @@ microphoneSwitcher.shutdown();
 public boolean onCreateOptionsMenu(Menu menu) {
 if (if_guider) {
 	//getMenuInflater().inflate(R.menu.action_items, menu);
-} else {
+} else {	
 	if (if_clientL_offline_mode&&if_clientL_offline_mode) {
 		//getMenuInflater().inflate(R.menu.menu_client_offline, menu);
 	} 
@@ -444,6 +446,7 @@ if (if_guider) {
 
 		getMenuInflater().inflate(R.menu.menu_client_local, menu);
 	}*/
+	
 }
 return true;
 }
@@ -458,7 +461,9 @@ return true;
 public boolean onOptionsItemSelected(MenuItem item) {
 switch (item.getItemId()) {
 	
-case R.id.btn_change_mode:
+
+/*
+ * case R.id.btn_change_mode:
 	//Random random = new Random();
 	
 	if(if_Global_local==1){
@@ -500,6 +505,12 @@ case R.id.btn_change_mode:
 			invalidateOptionsMenu();
 			
 		}
+		*/
+case android.R.id.home:
+	finish();
+	
+	
+
 		
 	invalidateOptionsMenu(); 
 	return true;
@@ -602,10 +613,16 @@ private void init() {  //init=> OnResume
 				String contentString  =(String) objects.get(0).get("content");
         		System.out.println("SHow"+userNameString+" "+titleString+" "+contentString);
         		
+
         		if(if_Global_local==1){
-				userName.setText(userNameString);
-				title.setText(titleString);
-				title.append("\t"+contentString);
+        			if(userName!=null){
+        				userNameString=userNameString+"(導覽者)";
+        				userName.setText(userNameString);
+        			}
+        			if(title!=null)
+        				title.setText("#"+titleString);
+        			if(content!=null)
+        				content.setText(contentString);
         		}
 		        if_loading_final=true;
                 dialog.dismiss();      //有字就停止 dialog
@@ -776,7 +793,7 @@ public void init() {
 	System.out.println("if_init");
 	microphoneImage = (ImageView) findViewById(R.id.microphone_image);
 	
-		microphoneImage.setEnabled(true);
+		microphoneImage.setEnabled(false);    //佔時不用回摳
 
 	microphoneImage.setOnClickListener(new OnClickListener() {
 
@@ -785,7 +802,7 @@ public void init() {
 			if (!if_talking&&!Client_Player.if_interrupt) {
 				// start talking
 				System.out.println("Client_Player.if_interrupt"+Client_Player.if_interrupt);
-				microphoneImage.setEnabled(true);
+				microphoneImage.setEnabled(false);   //佔時不用回摳
 								
 					System.out.println("recorder.resumeAudio()2;");
 					recorder.resumeAudio();

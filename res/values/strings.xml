@@ -130,5 +130,8 @@
     <!-- Owner fregment -->
     <string name="remind_login">Login Facebook to unlock!</string>
     <!-- END Owner fregment -->
-
+    
+    <!-- Upload page  -->
+    <string name="title_hint">#請輸入(Keyword)</string>
+	<!-- END Upload page  -->
 </resources>

@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -26,7 +27,8 @@ public class DetailPage extends Activity {
 
 	private final static String tag = "DetailPageTag";
 	private String objectId;
-	TextView userNameTextView, titleTextView, contentTextView;
+	TextView userNameTextView, titleTextView;
+	TextView contentTextView;
 	ImageView imageView;
 	MediaPlayer mp;
 

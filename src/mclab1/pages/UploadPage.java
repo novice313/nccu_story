@@ -52,13 +52,15 @@ public class UploadPage extends Activity {
 	private static final String tag = "UploadPageTag";
 
 	// layout
+	ImageView imageView_profile;
 	TextView userName;
 	EditText title;
 	ImageView imageView;
 	EditText content;
 	TextView music_path;
+	ImageView imageView_camera, imageView_photo, imageView_media;
 	Button btn_upload;
-	Spinner spinner_language;
+	// Spinner spinner_language;
 	boolean LogIn = false;
 	private String[] language = { "Ch", "Eng", "Ja", "Kr" };
 	private ArrayAdapter<String> languageList;
@@ -101,13 +103,78 @@ public class UploadPage extends Activity {
 		mPhone = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(mPhone);
 
+		imageView_profile = (ImageView) findViewById(R.id.imageView_profile);
 		userName = (TextView) findViewById(R.id.userName);
 		title = (EditText) findViewById(R.id.title);
 		imageView = (ImageView) findViewById(R.id.imageView);
 		content = (EditText) findViewById(R.id.content);
 		music_path = (TextView) findViewById(R.id.music_path);
+		imageView_camera = (ImageView) findViewById(R.id.imageView_camera);
+		imageView_photo = (ImageView) findViewById(R.id.imageView_photo);
+		imageView_media = (ImageView) findViewById(R.id.imageView_media);
+
+		imageView_profile.setImageResource(R.drawable.ic_profilephoto);
+		imageView_camera.setImageResource(R.drawable.ic_add_camera_gray);
+		imageView_camera.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Log.d(tag, "imageView_camera onclick");
+
+				String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+						.format(new Date());
+
+				// folder stuff
+				File pathFile = new File(Environment
+						.getExternalStorageDirectory(), "DCIM");
+				File imagesFolder = new File(pathFile, "Camera");
+				imagesFolder.mkdirs();
+
+				File image = new File(imagesFolder, "P_" + timeStamp + ".png");
+				Log.d(tag, "imageFile = " + image);
+				Uri uriSavedImage = Uri.fromFile(image);
+				Intent intent_camera = new Intent(
+						"android.media.action.IMAGE_CAPTURE");
+				// save picture
+				// intent_camera.putExtra(MediaStore.EXTRA_OUTPUT,
+				// uriSavedImage);
+				startActivityForResult(intent_camera, CAMERA);
+			}
+		});
+
+		imageView_photo.setImageResource(R.drawable.ic_add_photo_gray);
+		imageView_photo.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Log.d(tag, "imageView_photo onclick");
+				
+				// 開啟相簿相片集，須由startActivityForResult且帶入requestCode進行呼叫，原因為點選相片後返回程式呼叫onActivityResult
+				Intent intent_gallery = new Intent();
+				intent_gallery.setType("image/*");
+				intent_gallery.setAction(Intent.ACTION_GET_CONTENT);
+				startActivityForResult(intent_gallery, PHOTO);
+			}
+		});
+
+		imageView_media.setImageResource(R.drawable.ic_add_media_gray);
+		imageView_media.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Log.d(tag, "imageView_media onclick");
+				
+				Intent intent_media = new Intent();
+				intent_media.setClass(getApplicationContext(), UploadMediaListActivity.class);
+				startActivityForResult(intent_media, MEDIA);
+			}
+		});
+
 		btn_upload = (Button) findViewById(R.id.btn_upload);
-		spinner_language = (Spinner) findViewById(R.id.language_spinner);
+		// spinner_language = (Spinner) findViewById(R.id.language_spinner);
 
 		Bundle extras = getIntent().getExtras();
 		longitude = extras.getDouble("longitude");
@@ -173,7 +240,7 @@ public class UploadPage extends Activity {
 
 		languageList = new ArrayAdapter<String>(UploadPage.this,
 				android.R.layout.simple_spinner_item, language);
-		spinner_language.setAdapter(languageList);
+		// spinner_language.setAdapter(languageList);
 
 	}
 
@@ -207,9 +274,10 @@ public class UploadPage extends Activity {
 		uploadObject.put("userName", userNameString);
 		uploadObject.put("userUuid", uuidString);
 		uploadObject.put("title", title.getText().toString());
-		uploadObject
-				.put("language", language[spinner_language
-						.getSelectedItemPosition()].toString());
+		// uploadObject
+		// .put("language", language[spinner_language
+		// .getSelectedItemPosition()].toString());
+		uploadObject.put("language", "ch");
 		if (imageFile != null) {
 			uploadObject.put("image", imageFile);
 		}
@@ -255,56 +323,56 @@ public class UploadPage extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_upload_page, menu);
+//		getMenuInflater().inflate(R.menu.menu_upload_page, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// menu item selected
-		switch (item.getItemId()) {
-		case R.id.action_camera:
-			Log.d(tag, "camera icon onclick.");
-
-			String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
-					.format(new Date());
-
-			// folder stuff
-			File pathFile = new File(Environment.getExternalStorageDirectory(),
-					"DCIM");
-			File imagesFolder = new File(pathFile, "Camera");
-			imagesFolder.mkdirs();
-
-			File image = new File(imagesFolder, "P_" + timeStamp + ".png");
-			Log.d(tag, "imageFile = " + image);
-			Uri uriSavedImage = Uri.fromFile(image);
-			Intent intent_camera = new Intent(
-					"android.media.action.IMAGE_CAPTURE");
-			// save picture
-			// intent_camera.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
-			startActivityForResult(intent_camera, CAMERA);
-
-			break;
-		case R.id.action_gallery:
-			Log.d(tag, "gallery icon onClick");
-
-			// 開啟相簿相片集，須由startActivityForResult且帶入requestCode進行呼叫，原因為點選相片後返回程式呼叫onActivityResult
-			Intent intent_gallery = new Intent();
-			intent_gallery.setType("image/*");
-			intent_gallery.setAction(Intent.ACTION_GET_CONTENT);
-			startActivityForResult(intent_gallery, PHOTO);
-
-			break;
-
-		case R.id.action_media:
-			Log.d(tag, "media icon onClick");
-
-			Intent intent_media = new Intent();
-			intent_media.setClass(this, UploadMediaListActivity.class);
-			startActivityForResult(intent_media, MEDIA);
-
-			break;
-		}
+//		switch (item.getItemId()) {
+//		case R.id.action_camera:
+//			Log.d(tag, "camera icon onclick.");
+//
+//			String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+//					.format(new Date());
+//
+//			// folder stuff
+//			File pathFile = new File(Environment.getExternalStorageDirectory(),
+//					"DCIM");
+//			File imagesFolder = new File(pathFile, "Camera");
+//			imagesFolder.mkdirs();
+//
+//			File image = new File(imagesFolder, "P_" + timeStamp + ".png");
+//			Log.d(tag, "imageFile = " + image);
+//			Uri uriSavedImage = Uri.fromFile(image);
+//			Intent intent_camera = new Intent(
+//					"android.media.action.IMAGE_CAPTURE");
+//			// save picture
+//			// intent_camera.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
+//			startActivityForResult(intent_camera, CAMERA);
+//
+//			break;
+//		case R.id.action_gallery:
+//			Log.d(tag, "gallery icon onClick");
+//
+//			// 開啟相簿相片集，須由startActivityForResult且帶入requestCode進行呼叫，原因為點選相片後返回程式呼叫onActivityResult
+//			Intent intent_gallery = new Intent();
+//			intent_gallery.setType("image/*");
+//			intent_gallery.setAction(Intent.ACTION_GET_CONTENT);
+//			startActivityForResult(intent_gallery, PHOTO);
+//
+//			break;
+//
+//		case R.id.action_media:
+//			Log.d(tag, "media icon onClick");
+//
+//			Intent intent_media = new Intent();
+//			intent_media.setClass(this, UploadMediaListActivity.class);
+//			startActivityForResult(intent_media, MEDIA);
+//
+//			break;
+//		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -314,6 +382,8 @@ public class UploadPage extends Activity {
 			// 藉由requestCode判斷是否為開啟相機或開啟相簿而呼叫的，且data不為null
 			if ((requestCode == CAMERA)) {
 				bitmap = (Bitmap) data.getExtras().get("data");
+				imageView_camera.setImageResource(R.drawable.ic_add_camera);
+				imageView_photo.setImageResource(R.drawable.ic_add_photo_gray);
 				// Log.d(tag, "uri = "+data.getExtras().get);
 			} else if (requestCode == PHOTO) {
 				Uri uri = (Uri) data.getData();
@@ -358,6 +428,9 @@ public class UploadPage extends Activity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
+				imageView_photo.setImageResource(R.drawable.ic_add_photo);
+				imageView_camera.setImageResource(R.drawable.ic_add_camera_gray);
 
 			}
 
@@ -379,7 +452,7 @@ public class UploadPage extends Activity {
 			Bitmap mScaleBitmap = Bitmap.createBitmap(bitmap, 0, 0,
 					bitmap.getWidth(), bitmap.getHeight(), mMat, false);
 			imageView.setImageBitmap(mScaleBitmap);
-			mScaleBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 			runOnUiThread(new Runnable() {
 
 				@Override
@@ -395,6 +468,7 @@ public class UploadPage extends Activity {
 			String[] temp_filePathString = musicPath.split("/");
 			music_path
 					.setText(temp_filePathString[temp_filePathString.length - 1]);
+			imageView_media.setImageResource(R.drawable.ic_add_media);
 		}
 
 		super.onActivityResult(requestCode, resultCode, data);

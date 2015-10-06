@@ -13,12 +13,12 @@ public final class R {
 		public static final int loading_view_progress_size = 0x7f09005d;
 	}
 	public static final class id {
-		public static final int loading_view = 0x7f0b00cf;
-		public static final int video_item_image = 0x7f0b00d0;
-		public static final int video_item_label = 0x7f0b00d1;
+		public static final int loading_view = 0x7f0b00d5;
+		public static final int video_item_image = 0x7f0b00d6;
+		public static final int video_item_label = 0x7f0b00d7;
 	}
 	public static final class layout {
-		public static final int loading_view = 0x7f030038;
+		public static final int loading_view = 0x7f030039;
 	}
 	public static final class string {
 		public static final int loading = 0x7f0c0052;

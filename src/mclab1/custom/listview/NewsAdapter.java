@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.orm.Database;
 import com.paging.listview.PagingBaseAdapter;
 
@@ -62,7 +63,7 @@ public class NewsAdapter extends PagingBaseAdapter<News> {
 		LinearLayout banner = (LinearLayout) newsLay.findViewById(R.id.banner);
 		TextView userName = (TextView) newsLay.findViewById(R.id.userName);
 		ImageView image = (ImageView) newsLay.findViewById(R.id.imageView);
-		TextView content = (TextView) newsLay.findViewById(R.id.content);
+		ExpandableTextView content = (ExpandableTextView) newsLay.findViewById(R.id.content);
 		TextView title = (TextView) newsLay.findViewById(R.id.title);
 
 		// set banner background color

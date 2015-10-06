@@ -64,7 +64,7 @@ public class NewsFragment extends Fragment {
 		this.mContext = context;
 		super.onAttach(context);
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -109,14 +109,14 @@ public class NewsFragment extends Fragment {
 				}
 
 				String state = newsList.get(pos).getState();
-				if(state.compareTo(GoogleMapFragment.TYPE[1])==0){
+				if (state.compareTo(GoogleMapFragment.TYPE[1]) == 0) {
 					Intent intent_toDetailPage = new Intent();
 					intent_toDetailPage.putExtra("objectId", newsList.get(pos)
 							.getobjectId());
-					intent_toDetailPage.setClass(getActivity(), DetailPage.class);
+					intent_toDetailPage.setClass(getActivity(),
+							DetailPage.class);
 					startActivity(intent_toDetailPage);
-				}
-				else if(state.compareTo(GoogleMapFragment.TYPE[2])==0){
+				} else if (state.compareTo(GoogleMapFragment.TYPE[2]) == 0) {
 					// dialog
 					dialog = ProgressDialog.show(mContext, "讀取中",
 							"如等待過久請確認網路...", true);
@@ -310,19 +310,16 @@ public class NewsFragment extends Fragment {
 
 														// fix out of memory
 														// problem
-														// BitmapFactory.Options
-														// options = new
-														// BitmapFactory.Options();
-														// options.inSampleSize
-														// = 2;
-														// options.inTempStorage
-														// = new byte[5 * 1024];
+														BitmapFactory.Options options = new BitmapFactory.Options();
+														options.inSampleSize = 2;
+														options.inTempStorage = new byte[5 * 1024];
 
 														Bitmap bmp = BitmapFactory
 																.decodeByteArray(
 																		data,
 																		0,
-																		data.length);
+																		data.length,
+																		options);
 														NewsFragment.newsList
 																.add(new News(
 																		objectIdString,
@@ -418,20 +415,16 @@ public class NewsFragment extends Fragment {
 																// fix out of
 																// memory
 																// problem
-																// BitmapFactory.Options
-																// options = new
-																// BitmapFactory.Options();
-																// options.inSampleSize
-																// = 2;
-																// options.inTempStorage
-																// = new byte[5
-																// * 1024];
+																BitmapFactory.Options options = new BitmapFactory.Options();
+																options.inSampleSize = 2;
+																options.inTempStorage = new byte[5 * 1024];
 
 																Bitmap bmp = BitmapFactory
 																		.decodeByteArray(
 																				data,
 																				0,
-																				data.length);
+																				data.length,
+																				options);
 																NewsFragment.newsList
 																		.add(new News(
 																				objectIdString,

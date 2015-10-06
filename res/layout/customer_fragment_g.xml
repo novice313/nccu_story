@@ -10,7 +10,7 @@
                 android:layout_width="100dip"
                 android:layout_height="100dip"
                 android:contentDescription="@string/ptt"
-                android:src="@drawable/microphone_normal_image" />
+                android:src="@drawable/personal" />
 
 
         <!--

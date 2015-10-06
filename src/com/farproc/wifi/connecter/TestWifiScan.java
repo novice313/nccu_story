@@ -27,17 +27,11 @@ package com.farproc.wifi.connecter;
 
 import java.util.List;
 
+import mclab1.pages.GoogleMapFragment;
 import ro.ui.pttdroid.Globalvariable;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
-
-
-//import ro.ui.pttdroid.Main.MicrophoneSwitcher;
-import edu.mclab1.nccu_story.R;
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.ActivityNotFoundException;
@@ -84,6 +78,11 @@ public class TestWifiScan extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	
+    	ActionBar actionBar = getActionBar();
+    	actionBar.setDisplayHomeAsUpEnabled(true);
+    	getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.bar));  //標題配色
+
+    	
 		Toast.makeText(getApplicationContext(), "您要和身上的無線AP做連接!",
 				Toast.LENGTH_LONG).show();
     	
@@ -97,6 +96,9 @@ public class TestWifiScan extends ListActivity {
     	longitude = extras.getDouble("longitude");
 		latitude = extras.getDouble("latitude");
 	}
+	
+
+
 	
 	@SuppressLint("ShowToast")
 	@Override
@@ -223,8 +225,19 @@ public class TestWifiScan extends ListActivity {
 
 			//intent.putExtras(bundle);
 			startActivity(intent);
+			finish();
 
 			return true;
+		case android.R.id.home:
+			finish();
+			
+		/*case R.id.back:
+			Intent intent2 = new Intent(TestWifiScan.this, GoogleMapFragment.class);  //返回上一頁
+			startActivity(intent2);
+			this.finish();
+			return true;
+			*/
+			
 		default:
 			return super.onOptionsItemSelected(item);
 		}
