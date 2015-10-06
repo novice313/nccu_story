@@ -14,11 +14,14 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import edu.mclab1.nccu_story.R;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,7 +38,11 @@ public class DetailPage extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.detail_listview);
-
+		
+    	ActionBar actionBar = getActionBar();
+    	actionBar.setDisplayHomeAsUpEnabled(true);
+    	getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.bar));  //標題配色
+    	
 		userNameTextView = (TextView) findViewById(R.id.userName);
 		titleTextView = (TextView) findViewById(R.id.title);
 		contentTextView = (TextView) findViewById(R.id.userContent);
@@ -55,6 +62,27 @@ public class DetailPage extends Activity {
 			}
 		});
 
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+				getMenuInflater().inflate(R.menu.detailpage, menu);
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();		
+		}
+		return true;
 	}
 
 	private void startQuery() {

@@ -44,6 +44,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.widget.Toast;
 
 import com.mclab1.palace.guider.DisplayEvent;
 import com.parse.FindCallback;
@@ -188,6 +189,8 @@ public class Client_Player extends Service
 		        	for(int i=0;i<objects.size();i++){
 		        		getIP=(String)objects.get(i).get("ip");
 		        		System.out.println("getIP"+getIP);
+		        		Toast.makeText(getApplicationContext(), "準備播放....",
+		        				Toast.LENGTH_LONG).show();
 		        	}
 		        }
 		        else{
@@ -301,6 +304,7 @@ public class Client_Player extends Service
 							//	@Override
 							//	public void run(){ 
 							if(if_interrupt==false){           //if 遇到沒有data時就測有沒有IP
+
 								//just_one=2;
 								//for(int i=1;i<=255;i++){
 									//getIP="192.168.2."+i;

@@ -30,7 +30,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="下一步" />
+        android:text="下一步" 
+        android:textColor="#1c1f87"
+        />
 
     <TextView
         android:id="@+id/username"
@@ -79,5 +81,21 @@
         android:layout_weight="2"
         android:ems="10"
         android:hint="請輸入內容" />
+
+    <ImageView
+        android:id="@+id/add_camera"
+        android:layout_width="60px"
+        android:layout_height="60px"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/camera_no" />
+
+    <ImageView
+        android:id="@+id/add_photo"
+        android:layout_width="60px"
+        android:layout_height="60px"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/personal"
+        android:src="@drawable/storage_no" />
 
 </RelativeLayout>

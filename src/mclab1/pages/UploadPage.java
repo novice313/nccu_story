@@ -22,6 +22,7 @@ import com.parse.SaveCallback;
 
 import edu.mclab1.nccu_story.MainActivity;
 import edu.mclab1.nccu_story.R;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -96,6 +97,9 @@ public class UploadPage extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.page_upload);
+    	ActionBar actionBar = getActionBar();
+    	actionBar.setDisplayHomeAsUpEnabled(true);
+    	getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.bar));  //標題配色
 
 		// 讀取手機解析度
 		mPhone = new DisplayMetrics();
@@ -303,10 +307,15 @@ public class UploadPage extends Activity {
 			startActivityForResult(intent_media, MEDIA);
 
 			break;
+		case android.R.id.home:
+			finish();
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
+	
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if ((requestCode == CAMERA || requestCode == PHOTO) && data != null) {

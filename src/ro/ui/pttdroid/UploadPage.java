@@ -83,6 +83,9 @@ public class UploadPage extends Activity {
 	EditText title;
 	EditText content;
 	ImageView imageView;
+	ImageView image_add_camera;
+	ImageView image_add_photo;
+
 	TextView music_path;
 	Button btn_upload;
 	Spinner spinner_language;                              //spinner_language for 語言
@@ -158,9 +161,55 @@ public class UploadPage extends Activity {
 		content = (EditText) findViewById(R.id.content);
 		//spinner_language = (Spinner) findViewById(R.id.language_spinner);
 		imageView = (ImageView) findViewById(R.id.imageView);
+		image_add_camera = (ImageView) findViewById(R.id.add_camera);
+		image_add_photo = (ImageView) findViewById(R.id.add_photo);
+
 		//music_path = (TextView) findViewById(R.id.music_path);
 		btn_upload = (Button) findViewById(R.id.btn_upload);
 		
+		image_add_camera.setOnClickListener(new View.OnClickListener() {
+			         public void onClick(View v) {
+			        	 
+			        	 
+			 			Log.d(tag, "camera icon onclick.");
+
+						String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+								.format(new Date());
+
+						// folder stuff
+						File pathFile = new File(Environment.getExternalStorageDirectory(),
+								"DCIM");
+						File imagesFolder = new File(pathFile, "Camera");
+						imagesFolder.mkdirs();
+
+						File image = new File(imagesFolder, "P_" + timeStamp + ".png");
+						Log.d(tag, "imageFile = " + image);
+						Uri uriSavedImage = Uri.fromFile(image);
+						Intent intent_camera = new Intent(
+								"android.media.action.IMAGE_CAPTURE");
+						// save picture
+						// intent_camera.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
+						startActivityForResult(intent_camera, CAMERA);
+			        	 
+
+			         
+			         }
+				
+		});
+		
+		image_add_photo.setOnClickListener(new View.OnClickListener() {
+	         public void onClick(View v) {
+	        	 
+	 			// 開啟相簿相片集，須由startActivityForResult且帶入requestCode進行呼叫，原因為點選相片後返回程式呼叫onActivityResult
+	 			Intent intent_gallery = new Intent();
+	 			intent_gallery.setType("image/*");
+	 			intent_gallery.setAction(Intent.ACTION_GET_CONTENT);
+	 			startActivityForResult(intent_gallery, PHOTO);
+	 			
+	        	 
+	        	 
+	         }
+		});
 		
 		List<Owner> owner = SugarRecord.listAll(Owner.class);   //可用此得知FB的名稱
 
@@ -237,6 +286,8 @@ public class UploadPage extends Activity {
 					Toast.LENGTH_LONG).show();
 			
 		}
+		
+		
 
 		//languageList = new ArrayAdapter<String>(UploadPage.this,
 		//		android.R.layout.simple_spinner_item, language);
@@ -339,7 +390,7 @@ public class UploadPage extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_upload_page_offline, menu);
+		//getMenuInflater().inflate(R.menu.menu_upload_page_offline, menu);
 		return true;
 	}
 	
@@ -415,6 +466,10 @@ public class UploadPage extends Activity {
 			if ((requestCode == CAMERA)) {
 				bitmap = (Bitmap) data.getExtras().get("data");
 				// Log.d(tag, "uri = "+data.getExtras().get);
+				if(bitmap!=null){
+				image_add_camera 
+				.setImageResource(R.drawable.camera_ok);   //選好照片換顏色
+				}
 			} else if (requestCode == PHOTO) {
 				Uri uri = data.getData();
 				Log.d(tag, "uri = " + uri.getPath());
@@ -490,6 +545,9 @@ public class UploadPage extends Activity {
 					uploadImage = stream.toByteArray();
 				}
 			});
+			
+			image_add_photo 
+			.setImageResource(R.drawable.storage_ok);   //選好照片換顏色
 			
 			}
 			else{

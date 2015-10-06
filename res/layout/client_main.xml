@@ -27,6 +27,12 @@
         android:layout_width="80px"
         android:layout_height="80px"
         android:src="@drawable/personal" />
+    
+    <ImageView
+        android:id="@+id/add_camera"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:src="@drawable/personal" />
 
             
 
@@ -93,6 +99,10 @@
                 android:id="@+id/content"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:singleLine="false"    
+                android:maxLines="7"
+                android:width="250px"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/showimage"
                 android:layout_marginTop="69dp" />
