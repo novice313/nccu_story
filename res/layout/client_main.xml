@@ -28,11 +28,6 @@
         android:layout_height="80px"
         android:src="@drawable/personal" />
     
-    <ImageView
-        android:id="@+id/add_camera"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:src="@drawable/personal" />
 
             
 

@@ -84,16 +84,16 @@
 
     <ImageView
         android:id="@+id/add_camera"
-        android:layout_width="60px"
-        android:layout_height="60px"
+        android:layout_width="80px"
+        android:layout_height="80px"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:src="@drawable/camera_no" />
 
     <ImageView
         android:id="@+id/add_photo"
-        android:layout_width="60px"
-        android:layout_height="60px"
+        android:layout_width="80px"
+        android:layout_height="80px"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/personal"
         android:src="@drawable/storage_no" />
