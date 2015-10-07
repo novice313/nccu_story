@@ -10,6 +10,7 @@ import com.paging.listview.PagingBaseAdapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ public class NewsAdapter extends PagingBaseAdapter<News> {
 	// song list and layout
 	private ArrayList<News> news;
 	private LayoutInflater newsInf;
+	private Context mContext;
 
 	private static final int[] COLORS = new int[] { R.color.green_light,
 			R.color.orange_light, R.color.blue_light, R.color.red_light };
@@ -35,6 +37,7 @@ public class NewsAdapter extends PagingBaseAdapter<News> {
 	// constructor
 	public NewsAdapter(Context c, ArrayList<News> theNews) {
 		Collections.sort(theNews, new CustomComparator());
+		mContext = c;
 		news = theNews;
 		newsInf = LayoutInflater.from(c);
 	}
@@ -80,6 +83,11 @@ public class NewsAdapter extends PagingBaseAdapter<News> {
 		title.setText("#Keyword "+currNews.getTitle());
 		Bitmap bmp = currNews.getImage();
 		if (bmp != null) {
+//			DisplayMetrics displayMetrics = mContext.getResources().getDisplayMetrics();
+//			int width = displayMetrics.widthPixels;
+//			int height = displayMetrics.heightPixels;
+//			Bitmap bmp_new = bmp.createScaledBitmap(bmp, width, width, true);
+//			image.setImageBitmap(bmp_new);
 			image.setImageBitmap(bmp);
 		}
 

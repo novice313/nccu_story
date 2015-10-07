@@ -1,5 +1,7 @@
 package mclab1.pages;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -314,12 +316,15 @@ public class NewsFragment extends Fragment {
 														options.inSampleSize = 2;
 														options.inTempStorage = new byte[5 * 1024];
 
-														Bitmap bmp = BitmapFactory
-																.decodeByteArray(
-																		data,
-																		0,
-																		data.length,
-																		options);
+														
+														InputStream inputStream = new ByteArrayInputStream(data);
+														Bitmap bmp = BitmapFactory.decodeStream(inputStream, null, options);
+//														Bitmap bmp = BitmapFactory
+//																.decodeByteArray(
+//																		data,
+//																		0,
+//																		data.length,
+//																		options);
 														NewsFragment.newsList
 																.add(new News(
 																		objectIdString,

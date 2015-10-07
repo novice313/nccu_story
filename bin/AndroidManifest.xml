@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="18" android:minSdkVersion="9"/>
 
     <!-- media player -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -91,7 +91,7 @@
         <!-- google map -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"  
-            android:value="AIzaSyAtdXBrBZ051aQYqKquo1QGCG73OScJXIA" />  <!-- AIzaSyAxUWmJ6ftyh441WQZ39xO86F-1igwN5ms
+            android:value="AIzaSyA9V-nJoc2Y7XZobtoMPk3W-FOak_3XWIw" />  <!-- AIzaSyAxUWmJ6ftyh441WQZ39xO86F-1igwN5ms
 
                                                                              AIzaSyAtdXBrBZ051aQYqKquo1QGCG73OScJXIA 柏 
                                                                               google map沒設好會影響聲音傳不過去

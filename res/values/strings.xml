@@ -133,5 +133,6 @@
     
     <!-- Upload page  -->
     <string name="title_hint">#請輸入(Keyword)</string>
+    <string name="imageview_hint">add picture from below</string>
 	<!-- END Upload page  -->
 </resources>

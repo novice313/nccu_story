@@ -4,26 +4,35 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1" >
 
+        <ImageView
+        android:id="@+id/imageView_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"/>
+        
         <TextView
             android:id="@+id/userName"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:inputType="textPersonName" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/imageView_profile"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="5" />
+        android:layout_below="@+id/header"
+        android:layout_weight="5"
+        android:contentDescription="add picture here" />
 
-    <ScrollView
+    <TextView
         android:id="@+id/userContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,7 +43,7 @@
         android:scrollbars="vertical" >
 
         <requestFocus />
-    </ScrollView>
+    </TextView>
 
     <TextView
         android:id="@+id/title"

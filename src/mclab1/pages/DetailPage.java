@@ -1,8 +1,10 @@
 package mclab1.pages;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.List;
 
 import android.app.Activity;
@@ -23,6 +25,7 @@ import com.parse.ParseQuery;
 
 import edu.mclab1.nccu_story.R;
 import android.app.ActionBar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -32,7 +35,7 @@ public class DetailPage extends Activity {
 	private String objectId;
 	TextView userNameTextView, titleTextView;
 	TextView contentTextView;
-	ImageView imageView;
+	ImageView imageView, imageView_profile;
 	MediaPlayer mp;
 
 	@Override
@@ -46,10 +49,13 @@ public class DetailPage extends Activity {
 		getActionBar().setBackgroundDrawable(
 				getResources().getDrawable(R.color.bar)); // 標題配色
 
+		imageView_profile = (ImageView) findViewById(R.id.imageView_profile);
 		userNameTextView = (TextView) findViewById(R.id.userName);
 		titleTextView = (TextView) findViewById(R.id.title);
 		contentTextView = (TextView) findViewById(R.id.userContent);
 		imageView = (ImageView) findViewById(R.id.imageView);
+
+		imageView_profile.setImageResource(R.drawable.ic_profilephoto);
 
 		//
 		Bundle extras = getIntent().getExtras();
@@ -118,10 +124,18 @@ public class DetailPage extends Activity {
 							@Override
 							public void done(byte[] data, ParseException e) {
 								// TODO Auto-generated method stub
-								Bitmap bmp = BitmapFactory.decodeByteArray(
-										data, 0, data.length);
+								InputStream inputStream = new ByteArrayInputStream(data);
+								Bitmap bmp = BitmapFactory.decodeStream(inputStream, null, null);
+//								Bitmap bmp = BitmapFactory.decodeByteArray(
+//										data, 0, data.length);
 
-								imageView.setImageBitmap(bmp);
+								DisplayMetrics displayMetrics = getApplicationContext()
+										.getResources().getDisplayMetrics();
+								int width = displayMetrics.widthPixels;
+								int height = displayMetrics.heightPixels;
+								Bitmap bmp_new = bmp.createScaledBitmap(bmp,
+										width, width, true);
+								imageView.setImageBitmap(bmp_new);
 							}
 						});
 					}
