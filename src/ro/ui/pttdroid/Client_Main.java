@@ -624,6 +624,14 @@ private void init() {  //init=> OnResume
         			if(content!=null)
         				content.setText(contentString);
         		}
+        		else{
+        			
+        			if(title!=null)
+        				title.setText("#"+titleString);
+        			if(content!=null)
+        				content.setText(contentString);
+        			
+        		}
 		        if_loading_final=true;
                 dialog.dismiss();      //有字就停止 dialog
 
@@ -652,6 +660,11 @@ private void init() {  //init=> OnResume
 			        if(if_Global_local==1){
 			        imageView.setParseFile(image);
 			        imageView.setImageBitmap(bmp);
+			        }
+			        else{
+				        imageView.setParseFile(image);
+				        imageView.setImageBitmap(bmp);
+			        	
 			        }
 			        if_loading_final=true;
 	                dialog.dismiss();      

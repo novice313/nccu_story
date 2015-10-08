@@ -74,7 +74,7 @@ public class CustomerActivityGlobal extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.customer_fragment_g);
+		setContentView(R.layout.client_main);
 		init_view();
 
 
