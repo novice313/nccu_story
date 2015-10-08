@@ -459,6 +459,8 @@ public class UploadPage extends Activity {
 			Bitmap mScaleBitmap = Bitmap.createBitmap(bitmap, 0, 0,
 					bitmap.getWidth(), bitmap.getHeight(), mMat, false);
 			imageView.setImageBitmap(mScaleBitmap);
+			
+			//use source pic to upload
 			bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 			runOnUiThread(new Runnable() {
 

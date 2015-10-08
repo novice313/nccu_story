@@ -13,9 +13,9 @@ public final class R {
 		public static final int loading_view_progress_size = 0x7f09005d;
 	}
 	public static final class id {
-		public static final int loading_view = 0x7f0b00d8;
-		public static final int video_item_image = 0x7f0b00d9;
-		public static final int video_item_label = 0x7f0b00da;
+		public static final int loading_view = 0x7f0b00d7;
+		public static final int video_item_image = 0x7f0b00d8;
+		public static final int video_item_label = 0x7f0b00d9;
 	}
 	public static final class layout {
 		public static final int loading_view = 0x7f030039;

@@ -318,7 +318,7 @@ public class NewsFragment extends Fragment {
 
 														
 														InputStream inputStream = new ByteArrayInputStream(data);
-														Bitmap bmp = BitmapFactory.decodeStream(inputStream, null, options);
+														Bitmap bmp = BitmapFactory.decodeStream(inputStream, null, null);
 //														Bitmap bmp = BitmapFactory
 //																.decodeByteArray(
 //																		data,
