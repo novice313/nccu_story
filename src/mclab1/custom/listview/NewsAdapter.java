@@ -76,14 +76,14 @@ public class NewsAdapter extends PagingBaseAdapter<News> {
 		Log.d(tag, currNews.toString());
 
 		// set banner background color
-//		if (currNews.gettoTop() == true) {
-//			banner.setBackgroundColor(parent.getResources().getColor(
-//					R.color.blond));
-//		} else {
+		if (currNews.gettoTop() == true) {
+			banner.setBackgroundColor(parent.getResources().getColor(
+					R.color.blond));
+		} else {
 			banner.setBackgroundColor(parent.getResources().getColor(
 					R.color.blue_light));
-//		}
-		
+		}
+
 		// get title and artist strings
 		userName.setText(currNews.getuserName());
 		title.setText("#Keyword " + currNews.getTitle());
@@ -134,6 +134,10 @@ public class NewsAdapter extends PagingBaseAdapter<News> {
 class CustomComparator implements Comparator<News> {
 	@Override
 	public int compare(News n1, News n2) {
-		return n1.getCreatedDate().compareTo(n2.getCreatedDate());
+		Boolean b1, b2;
+		b1 = Boolean.valueOf(n1.gettoTop());
+		b2 = Boolean.valueOf(n2.gettoTop());
+		return b1.compareTo(b2);
+		// return n1.getCreatedDate().compareTo(n2.getCreatedDate());
 	}
 }
