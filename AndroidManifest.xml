@@ -5,14 +5,14 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="18"
+        android:minSdkVersion="17"
         android:targetSdkVersion="18" />
 
     <!-- media player -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- END media player -->
 
-
+a
     <!-- file commander -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- END file commander -->
@@ -59,6 +59,7 @@
 	<!-- wifi -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <!-- END wifi -->
     
     <!--READ_PHONE_STATE-->

@@ -40,6 +40,8 @@ import android.content.Intent;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.net.wifi.WifiManager;
+import android.net.wifi.WifiManager.MulticastLock;
 import android.os.Binder;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
@@ -299,6 +301,13 @@ public class Client_Player extends Service
 						
 						while(isPlaying()) 
 						{
+							
+							//設定wifi Multicast 沒的時候 Htc   
+							WifiManager wifi;
+							wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+							MulticastLock ml = wifi.createMulticastLock("just some tag text");
+							ml.acquire();
+							
 							System.out.println("isPlayingInPlayer!!!!");
 							//new Thread(){
 							//	@Override
@@ -352,6 +361,7 @@ public class Client_Player extends Service
 								break;
 								case CommSettings.UNICAST:
 									try{
+										System.out.println("Unicast");
 									socket = new DatagramSocket(CommSettings.getPort());
 									}
 									catch (Exception e) {

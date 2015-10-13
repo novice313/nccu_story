@@ -34,6 +34,7 @@ import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.net.wifi.WifiManager.MulticastLock;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -51,6 +52,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -159,6 +161,15 @@ content=(TextView)findViewById(R.id.content);
 ActionBar actionBar = getActionBar();
 actionBar.setDisplayHomeAsUpEnabled(true);
 getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.bar));  //標題配色
+
+
+//設定保持贏幕
+getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);  
+
+
+
+
+//ml.release();
 
 /*ImageButton ready_image_guide;
 ready_image_guide=(ImageButton)findViewById(R.id.ready_image_guide); 
