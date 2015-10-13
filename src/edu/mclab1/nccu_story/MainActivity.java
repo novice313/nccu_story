@@ -17,9 +17,13 @@ import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -45,6 +49,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import edu.mclab1.appinfo.AppInfo;
+
 public class MainActivity extends FragmentActivity implements
 		ActionBar.TabListener {
 
@@ -54,7 +60,10 @@ public class MainActivity extends FragmentActivity implements
 	private ViewPager viewPager;
 	private ActionBar actionBar;
 	private TabsPagerAdapter mAdapter;
-	public static String[] tabs = { "News", "Googlemap"/*, "Mediaplayer", "Owner" */};
+	public static String[] tabs = { "News", "Googlemap"/*
+														 * , "Mediaplayer",
+														 * "Owner"
+														 */};
 	public static int tabsize = 0;
 
 	// Result codes
@@ -65,10 +74,40 @@ public class MainActivity extends FragmentActivity implements
 	public static AccessToken accessToken;
 	private final static String PASSWORD = "TtsaiLabMcla1";
 
+	// Appinfo
+	private static final String TAG = "AppInfoTAG";
+	public static String EULA_PREFIX = "appinfo";
+	public static PackageInfo versionInfo;
+	
+	private PackageInfo getPackageInfo() {
+		PackageInfo info = null;
+		try {
+			info = getPackageManager().getPackageInfo(
+					getPackageName(), PackageManager.GET_ACTIVITIES);
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		return info;
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		// add App Info
+		versionInfo = getPackageInfo();
+		final String eulaKey = EULA_PREFIX + versionInfo.versionCode;
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+
+		boolean bAlreadyAccepted = prefs.getBoolean(eulaKey, false);
+		Log.d(TAG, "bAlreadyAccepted = " + bAlreadyAccepted);
+		if (bAlreadyAccepted == false) {
+			Intent intent_AppInfo = new Intent();
+			intent_AppInfo.setClass(this, AppInfo.class);
+			startActivity(intent_AppInfo);
+		}
 
 		// test
 		Parse.initialize(this, "wtSFcggR896xMJQUGblYuphkF6EVw4ChcLcpSowP",
@@ -191,8 +230,9 @@ public class MainActivity extends FragmentActivity implements
 										Log.d(tag, "owner= " + NewOwner.size());
 
 										// save to parse
-										 new ParseSaveUserHelper(id, name,
-										 gender, locale, link, PASSWORD).execute();
+										new ParseSaveUserHelper(id, name,
+												gender, locale, link, PASSWORD)
+												.execute();
 
 									}
 								});
@@ -417,18 +457,18 @@ class ParseSaveUserHelper extends AsyncTask<Void, Void, Void> {
 							e1.printStackTrace();
 						}
 					} else {
-//						ParseUser parseUser = objects.get(0);
-//						parseUser.put("userUuid", id);
-//						parseUser.setUsername(name);
-//						parseUser.put("gender", gender);
-//						parseUser.put("locale", locale);
-//						parseUser.put("link", link);
-//						try {
-//							parseUser.save();
-//						} catch (ParseException e1) {
-//							// TODO Auto-generated catch block
-//							e1.printStackTrace();
-//						}
+						// ParseUser parseUser = objects.get(0);
+						// parseUser.put("userUuid", id);
+						// parseUser.setUsername(name);
+						// parseUser.put("gender", gender);
+						// parseUser.put("locale", locale);
+						// parseUser.put("link", link);
+						// try {
+						// parseUser.save();
+						// } catch (ParseException e1) {
+						// // TODO Auto-generated catch block
+						// e1.printStackTrace();
+						// }
 					}
 				} else {
 					e.printStackTrace();

@@ -66,28 +66,35 @@ public class NewsAdapter extends PagingBaseAdapter<News> {
 		LinearLayout banner = (LinearLayout) newsLay.findViewById(R.id.banner);
 		TextView userName = (TextView) newsLay.findViewById(R.id.userName);
 		ImageView image = (ImageView) newsLay.findViewById(R.id.imageView);
-		ExpandableTextView content = (ExpandableTextView) newsLay.findViewById(R.id.content);
+		ExpandableTextView content = (ExpandableTextView) newsLay
+				.findViewById(R.id.content);
 		TextView title = (TextView) newsLay.findViewById(R.id.title);
-
-		// set banner background color
-		banner.setBackgroundColor(parent.getResources().getColor(
-				R.color.blue_light));
 
 		// get song using position
 		News currNews = news.get(position);
 
 		Log.d(tag, currNews.toString());
 
+		// set banner background color
+//		if (currNews.gettoTop() == true) {
+//			banner.setBackgroundColor(parent.getResources().getColor(
+//					R.color.blond));
+//		} else {
+			banner.setBackgroundColor(parent.getResources().getColor(
+					R.color.blue_light));
+//		}
+		
 		// get title and artist strings
 		userName.setText(currNews.getuserName());
-		title.setText("#Keyword "+currNews.getTitle());
+		title.setText("#Keyword " + currNews.getTitle());
 		Bitmap bmp = currNews.getImage();
 		if (bmp != null) {
-//			DisplayMetrics displayMetrics = mContext.getResources().getDisplayMetrics();
-//			int width = displayMetrics.widthPixels;
-//			int height = displayMetrics.heightPixels;
-//			Bitmap bmp_new = bmp.createScaledBitmap(bmp, width, width, true);
-//			image.setImageBitmap(bmp_new);
+			// DisplayMetrics displayMetrics =
+			// mContext.getResources().getDisplayMetrics();
+			// int width = displayMetrics.widthPixels;
+			// int height = displayMetrics.heightPixels;
+			// Bitmap bmp_new = bmp.createScaledBitmap(bmp, width, width, true);
+			// image.setImageBitmap(bmp_new);
 			image.setImageBitmap(bmp);
 		}
 
@@ -121,7 +128,6 @@ public class NewsAdapter extends PagingBaseAdapter<News> {
 		});
 		return newsLay;
 	}
-
 
 }
 

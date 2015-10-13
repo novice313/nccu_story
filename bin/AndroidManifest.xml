@@ -129,6 +129,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name="edu.mclab1.appinfo.AppInfo"
+            android:label="@string/title_activity_AppInfo"
+            android:screenOrientation="portrait"
+             >
+        </activity>
+        
         <activity
             android:name="mclab1.pages.UploadPage"
             android:label="UploadPage"            

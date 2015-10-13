@@ -17,10 +17,11 @@ public class News {
 	private double latitude;
 	private double longitude;
 	private String state;
+	private boolean toTop;
 	private Date createdAt;
 
 	public News(String objectId, String userName,String userUuid, String Title, int score, Bitmap bmp,
-			String content, double latitude, double longitude,String state, Date createdAt) {
+			String content, double latitude, double longitude,String state,boolean toTop, Date createdAt) {
 		this.objectId = objectId;
 		this.userName = userName;
 		this.userUuid = userUuid;
@@ -31,6 +32,7 @@ public class News {
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.state = state;
+		this.toTop = toTop;
 		this.createdAt = createdAt;
 	}
 
@@ -72,6 +74,10 @@ public class News {
 	
 	public String getState(){
 		return state;
+	}
+	
+	public boolean gettoTop(){
+		return toTop;
 	}
 	
 	public Date getCreatedDate(){

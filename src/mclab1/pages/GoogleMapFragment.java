@@ -103,14 +103,15 @@ public class GoogleMapFragment extends Fragment
 	int initial_zoom_size = 16;
 	SupportMapFragment mapFragment;
 
-	String[] list_uploadType = { "LIVE導覽","留下足跡" };   
-	String[] list_uploadType_client = { "Upload story"};            //修改給client
+	String[] list_uploadType = { "LIVE導覽", "留下足跡" };
+	String[] list_uploadType_client = { "Upload story" }; // 修改給client
 
 	public static final int TYPE_STORY = 1;
 	public static final int TYPE_OFFLINE_STORY = 2;
 	public static final int TYPE_ONLINE_BROADCAST = 3;
 	public static final int TYPE_READY = 4;
-	public static final String[] TYPE = { "", "story", "offline", "online", "Ready" };
+	public static final String[] TYPE = { "", "story", "offline", "online",
+			"Ready" };
 
 	public static final int TYPE_NCCU = 98;
 	public static final int TYPE_USER = 99;
@@ -901,6 +902,8 @@ public class GoogleMapFragment extends Fragment
 										.getDouble("longitude");
 								final String stateString = parseObject
 										.getString("State");
+								final boolean toTop = parseObject
+										.getBoolean("toTop");
 								final Date createdAtDate = parseObject
 										.getCreatedAt();
 
@@ -935,6 +938,7 @@ public class GoogleMapFragment extends Fragment
 																latitude,
 																longitude,
 																stateString,
+																toTop,
 																createdAtDate));
 
 														if (bmp != null) {
@@ -950,7 +954,7 @@ public class GoogleMapFragment extends Fragment
 											userNameString, userUuidString,
 											titleString, score, bmp,
 											contentString, latitude, longitude,
-											stateString, createdAtDate));
+											stateString, toTop, createdAtDate));
 								}
 
 								LatLng point = new LatLng(latitude, longitude);
@@ -1022,6 +1026,8 @@ public class GoogleMapFragment extends Fragment
 										.getDouble("longitude");
 								final String stateString = parseObject
 										.getString("State");
+								final boolean toTop = parseObject
+										.getBoolean("toTop");
 								final Date createdAtDate = parseObject
 										.getCreatedAt();
 
@@ -1059,6 +1065,7 @@ public class GoogleMapFragment extends Fragment
 																latitude,
 																longitude,
 																stateString,
+																toTop,
 																createdAtDate));
 
 														if (bmp != null) {
@@ -1074,7 +1081,7 @@ public class GoogleMapFragment extends Fragment
 											userNameString, userUuidString,
 											titleString, score, bmp,
 											contentString, latitude, longitude,
-											stateString, createdAtDate));
+											stateString, toTop, createdAtDate));
 								}
 
 								LatLng point = new LatLng(latitude, longitude);
@@ -1145,6 +1152,8 @@ public class GoogleMapFragment extends Fragment
 										.getDouble("longitude");
 								final String stateString = parseObject
 										.getString("State");
+								final boolean toTop = parseObject
+										.getBoolean("toTop");
 								final Date createdAtDate = parseObject
 										.getCreatedAt();
 
@@ -1182,6 +1191,7 @@ public class GoogleMapFragment extends Fragment
 																latitude,
 																longitude,
 																stateString,
+																toTop,
 																createdAtDate));
 
 														if (bmp != null) {
@@ -1196,7 +1206,7 @@ public class GoogleMapFragment extends Fragment
 											userNameString, userUuidString,
 											titleString, score, bmp,
 											contentString, latitude, longitude,
-											stateString, createdAtDate));
+											stateString, toTop, createdAtDate));
 								}
 								LatLng point = new LatLng(latitude, longitude);
 								addMarker_Story(objectIdString, userNameString,
@@ -1268,6 +1278,8 @@ public class GoogleMapFragment extends Fragment
 										.getDouble("longitude");
 								final String stateString = parseObject
 										.getString("State");
+								final boolean toTop = parseObject
+										.getBoolean("toTop");
 								final Date createdAtDate = parseObject
 										.getCreatedAt();
 
@@ -1304,6 +1316,7 @@ public class GoogleMapFragment extends Fragment
 																latitude,
 																longitude,
 																stateString,
+																toTop,
 																createdAtDate));
 
 														if (bmp != null) {
@@ -1319,7 +1332,7 @@ public class GoogleMapFragment extends Fragment
 											userNameString, userUuidString,
 											titleString, score, bmp,
 											contentString, latitude, longitude,
-											stateString, createdAtDate));
+											stateString, toTop, createdAtDate));
 								}
 								LatLng point = new LatLng(latitude, longitude);
 								addMarker_Broadcast(objectIdString,

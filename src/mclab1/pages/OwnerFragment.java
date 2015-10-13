@@ -228,6 +228,7 @@ public class OwnerFragment extends Fragment {
 								.getDouble("longitude");
 						final String stateString = parseObject
 								.getString("State");
+						final boolean toTop = parseObject.getBoolean("toTop");
 						final Date createdAtDate = parseObject.getCreatedAt();
 
 						ParseFile imageFile = (ParseFile) parseObject
@@ -251,7 +252,7 @@ public class OwnerFragment extends Fragment {
 														titleString, score,
 														bmp, contentString,
 														latitude, longitude,
-														stateString,
+														stateString, toTop, 
 														createdAtDate));
 
 												// redo if data change

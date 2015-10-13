@@ -294,6 +294,8 @@ public class NewsFragment extends Fragment {
 										.getDouble("longitude");
 								final String stateString = parseObject
 										.getString("State");
+								final boolean toTop = parseObject
+										.getBoolean("toTop");
 								final Date createdAt = parseObject
 										.getCreatedAt();
 
@@ -316,15 +318,20 @@ public class NewsFragment extends Fragment {
 														options.inSampleSize = 2;
 														options.inTempStorage = new byte[5 * 1024];
 
-														
-														InputStream inputStream = new ByteArrayInputStream(data);
-														Bitmap bmp = BitmapFactory.decodeStream(inputStream, null, null);
-//														Bitmap bmp = BitmapFactory
-//																.decodeByteArray(
-//																		data,
-//																		0,
-//																		data.length,
-//																		options);
+														InputStream inputStream = new ByteArrayInputStream(
+																data);
+														Bitmap bmp = BitmapFactory
+																.decodeStream(
+																		inputStream,
+																		null,
+																		null);
+														// Bitmap bmp =
+														// BitmapFactory
+														// .decodeByteArray(
+														// data,
+														// 0,
+														// data.length,
+														// options);
 														NewsFragment.newsList
 																.add(new News(
 																		objectIdString,
@@ -337,6 +344,7 @@ public class NewsFragment extends Fragment {
 																		latitude,
 																		longitude,
 																		stateString,
+																		toTop,
 																		createdAt));
 														NewsFragment.newsAdt
 																.notifyDataSetChanged();
@@ -351,7 +359,7 @@ public class NewsFragment extends Fragment {
 												userUuidString, titleString,
 												score, bmp, contentString,
 												latitude, longitude,
-												stateString, createdAt));
+												stateString, toTop, createdAt));
 									}
 								}
 								NewsFragment.newsAdt.notifyDataSetChanged();
@@ -400,6 +408,8 @@ public class NewsFragment extends Fragment {
 												.getDouble("longitude");
 										final String stateString = parseObject
 												.getString("State");
+										final boolean toTop = parseObject
+												.getBoolean("toTop");
 										final Date createdAt = parseObject
 												.getCreatedAt();
 
@@ -442,6 +452,7 @@ public class NewsFragment extends Fragment {
 																				latitude,
 																				longitude,
 																				stateString,
+																				toTop,
 																				createdAt));
 																NewsFragment.newsAdt
 																		.notifyDataSetChanged();
@@ -462,6 +473,7 @@ public class NewsFragment extends Fragment {
 																latitude,
 																longitude,
 																stateString,
+																toTop,
 																createdAt));
 											}
 										}

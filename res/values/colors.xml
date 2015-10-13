@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="blond">#FFD700</color>
     <color name="red_light">#ffff4444</color>
     <color name="green_light">#ff99cc00</color>
     <color name="orange_light">#ffffbb33</color>
     <color name="blue_light">#ff33b5e5</color>
     <color name="blue">#00abea</color>
     <color name="white">#ffffff</color>
+    <color name="yellow">#FFFF00</color>
     <color name="buttons_view_bk">@android:color/darker_gray</color>
     <color name="content_bk">@android:color/background_light</color>
     <color name="primary_light">#B2DFDB</color>

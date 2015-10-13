@@ -8,19 +8,19 @@ package com.paging.listview;
 
 public final class R {
 	public static final class dimen {
-		public static final int loading_view_margin_layout = 0x7f09005e;
-		public static final int loading_view_margin_right = 0x7f09005f;
-		public static final int loading_view_progress_size = 0x7f09005d;
+		public static final int loading_view_margin_layout = 0x7f0a006b;
+		public static final int loading_view_margin_right = 0x7f0a006c;
+		public static final int loading_view_progress_size = 0x7f0a006a;
 	}
 	public static final class id {
-		public static final int loading_view = 0x7f0b00d7;
-		public static final int video_item_image = 0x7f0b00d8;
-		public static final int video_item_label = 0x7f0b00d9;
+		public static final int loading_view = 0x7f0c00d9;
+		public static final int video_item_image = 0x7f0c00da;
+		public static final int video_item_label = 0x7f0c00db;
 	}
 	public static final class layout {
-		public static final int loading_view = 0x7f030039;
+		public static final int loading_view = 0x7f03003f;
 	}
 	public static final class string {
-		public static final int loading = 0x7f0c0052;
+		public static final int loading = 0x7f0d0052;
 	}
 }
