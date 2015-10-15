@@ -24,7 +24,7 @@ public class AppInfo extends FragmentActivity {
 
 	protected static final int[] ICONS = new int[] { R.drawable.appinfo1,
 			R.drawable.appinfo2, R.drawable.appinfo3, R.drawable.appinfo4,
-			R.drawable.appinfo3, R.drawable.appinfo6
+			R.drawable.appinfo5, R.drawable.appinfo6
 	// R.drawable.background1
 	};
 

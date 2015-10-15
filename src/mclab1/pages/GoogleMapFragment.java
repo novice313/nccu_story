@@ -100,10 +100,11 @@ public class GoogleMapFragment extends Fragment
 	private final static String tag = "GoogleMapFragment";
 	private static final String MAP_FRAGMENT_TAG = "map";
 	final LatLng NCCU = new LatLng(24.986233, 121.575843);
+	final LatLng SongShanCulturalPark = new LatLng(25.043668, 121.560497);//25.043668, 121.560497
 	int initial_zoom_size = 16;
 	SupportMapFragment mapFragment;
 
-	String[] list_uploadType = { "LIVE導覽", "留下足跡" };
+	String[] list_uploadType = { /*"LIVE導覽",*/ "留下足跡" };
 	String[] list_uploadType_client = { "Upload story" }; // 修改給client
 
 	public static final int TYPE_STORY = 1;
@@ -467,7 +468,7 @@ public class GoogleMapFragment extends Fragment
 		// .snippet(",,," + TYPE_NCCU)
 		// .icon(BitmapDescriptorFactory
 		// .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(NCCU,
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(SongShanCulturalPark,
 				initial_zoom_size));
 
 		map.setOnMapClickListener(new OnMapClickListener() {
@@ -577,20 +578,20 @@ public class GoogleMapFragment extends Fragment
 			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
 				case 0:// broadcast
-					Log.d(tag, "list_uploadType " + list_uploadType[which]
-							+ " onclick");
-					Intent intent_broadcast = new Intent();
-					intent_broadcast.setClass(mActivity, TestWifiScan.class);
-					Bundle bundle_broadcast = new Bundle();
-					bundle_broadcast.putDouble("longitude", point.longitude);
-					bundle_broadcast.putDouble("latitude", point.latitude);
-					// 將Bundle物件assign給intent
-					intent_broadcast.putExtras(bundle_broadcast);
-
-					// 切換Activity
-					startActivity(intent_broadcast);
-					break;
-				case 1:// upload story
+//					Log.d(tag, "list_uploadType " + list_uploadType[which]
+//							+ " onclick");
+//					Intent intent_broadcast = new Intent();
+//					intent_broadcast.setClass(mActivity, TestWifiScan.class);
+//					Bundle bundle_broadcast = new Bundle();
+//					bundle_broadcast.putDouble("longitude", point.longitude);
+//					bundle_broadcast.putDouble("latitude", point.latitude);
+//					// 將Bundle物件assign給intent
+//					intent_broadcast.putExtras(bundle_broadcast);
+//
+//					// 切換Activity
+//					startActivity(intent_broadcast);
+//					break;
+//				case 1:// upload story
 					Log.d(tag, "list_uploadType " + list_uploadType[which]
 							+ " onclick");
 					Intent intent_uploadStory = new Intent();
