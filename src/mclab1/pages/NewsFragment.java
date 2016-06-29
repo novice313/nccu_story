@@ -13,6 +13,9 @@ import mclab1.custom.listview.NewsAdapter;
 import android.R.integer;
 import android.app.ProgressDialog;
 import android.content.Context;
+import edu.mclab1.nccu_story.R;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -71,6 +74,23 @@ public class NewsFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(tag, "oncreated.");
+		
+		
+        new Novoicedevice(getActivity()).show();
+
+		
+		/*AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        dialog.setTitle("請注意即時廣播會聽不到的機種");
+        dialog.setMessage("HTC One SV+\n"+
+                          "Oppo全系列+\n"+
+        		          "sony xperia m4/m5");
+        dialog.setPositiveButton("OK",
+                new DialogInterface.OnClickListener(){
+                    public void onClick(
+                            DialogInterface dialoginterface, int i){
+                            }
+                    });
+        dialog.show();*/
 	}
 
 	@Override
